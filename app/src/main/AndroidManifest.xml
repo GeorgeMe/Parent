@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dmd.zsb.parent">
+
+    <!-- 访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:name="com.dmd.zsb.TutorApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <!-- 引导页 -->
+        <activity android:name=".activity.LeadActivity" />
+        <!-- launcher -->
+        <activity android:name=".activity.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!-- 注册 -->
+        <activity android:name=".activity.SignUpActivity" />
+        <!-- 登录 -->
+        <activity android:name=".activity.SignInActivity" />
+        <!-- 验证码 -->
+        <!-- 主activity -->
+        <activity android:name=".activity.MainActivity" />
+        <!-- 用户详情 -->
+        <activity android:name=".activity.UserDetailActivity" />
+        <!-- 需求列表 -->
+        <activity android:name=".activity.DemandActivity" />
+        <!-- 搜索 -->
+        <activity android:name=".activity.MaterialSearchActivity" />
+        <!-- 钱包 -->
+        <activity android:name=".activity.WalletActivity" />
+        <!-- 订单 -->
+        <activity android:name=".activity.OrderActivity" />
+        <!-- 评论 -->
+        <activity android:name=".activity.EvaluationActivity" />
+        <!-- 代金券 -->
+        <activity android:name=".activity.VouchersActivity" />
+        <!-- 关于我们 -->
+        <activity android:name=".activity.AboutUsActivity" />
+        <!-- 发布需求 -->
+        <activity android:name=".activity.ReleaseOrderActivity" />
+        <!-- 测试 -->
+        <activity android:name=".activity.TestActivity" />
+
+        <!-- 父母 -->
+        <!-- 设置 -->
+        <activity android:name=".activity.SettingActivity" />
+        <!-- 反馈 -->
+        <activity android:name=".activity.FeedbackActivity" />
+        <!-- 昵称 -->
+        <activity android:name=".activity.NickNameActivity" />
+        <!-- 修改密码 -->
+        <activity android:name=".activity.ChangePasswordActivity" />
+        <!-- 签名 -->
+        <activity android:name=".activity.SignatureActivity" />
+        <!-- 简介 -->
+        <activity android:name=".activity.BriefActivity" />
+        <activity android:name=".activity.DemandDetailActivity" />
+        <activity android:name=".activity.EvaluationDetailActivity" />
+        <activity android:name=".activity.OrderDetailActivity" />
+        <activity android:name=".activity.BankCardActivity" />
+        <activity android:name=".activity.WithDrawalsActivity" />
+        <activity android:name=".activity.RechargeActivity" />
+        <activity android:name=".activity.TransactionDetailActivity"/>
+
+        <activity android:name="com.mob.tools.MobUIShell" />
+    </application>
+
+</manifest>

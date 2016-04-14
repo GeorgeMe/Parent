@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <com.dmd.tutor.rollviewpager.RollPagerView
+        android:id="@+id/fragment_home_list_header_roll_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        app:rollviewpager_hint_mode="point"
+        app:rollviewpager_play_delay="3000"/>
+    <com.dmd.tutor.ninelayout.NineGridlayout
+        android:layout_marginTop="5dp"
+        android:id="@+id/fragment_home_list_header_nine_grid_layout"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="1dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent" />
+</LinearLayout>

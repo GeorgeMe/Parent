@@ -1,0 +1,27 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.HomeFragment">
+    <include layout="@layout/bar_for_home"/>
+    <com.dmd.tutor.widgets.XSwipeRefreshLayout
+        android:id="@+id/fragment_home_list_swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.dmd.zsb.widgets.LoadMoreListView
+            android:id="@+id/fragment_home_list_view"
+            android:background="@color/setting_grey_bg_nor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
+            android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            android:scrollbars="none"/>
+    </com.dmd.tutor.widgets.XSwipeRefreshLayout>
+</LinearLayout>

@@ -6,7 +6,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.dmd.pay.PayDemoActivity;
+import com.dmd.pay.AliPayActivity;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.zsb.api.ApiConstants;
@@ -16,7 +16,6 @@ import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OrderDetailActivity extends BaseActivity {
@@ -124,7 +123,7 @@ public class OrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_confirm_pay:
-                readyGo(PayDemoActivity.class);
+                readyGo(AliPayActivity.class);
                 break;
         }
     }

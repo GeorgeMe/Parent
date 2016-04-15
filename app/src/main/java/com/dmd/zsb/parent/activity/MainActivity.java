@@ -30,6 +30,9 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
     @Bind(android.R.id.tabhost)
     FragmentTabHost tabhost;
 
+    public static final String LOGIN_SUCCESS = "loginSuccess";
+
+
     private static long DOUBLE_CLICK_TIME = 0L;
 
     public static final String TAB_HOME = "home";

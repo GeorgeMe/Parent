@@ -4,7 +4,12 @@
 
     <!-- 访问网络，网络定位需要上网 -->
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <supports-screens
+        android:anyDensity="true"
+        android:largeScreens="true"
+        android:normalScreens="true"
+        android:resizeable="true"
+        android:smallScreens="true" />
     <application
         android:name="com.dmd.zsb.TutorApplication"
         android:allowBackup="true"
@@ -73,6 +78,7 @@
         <activity android:name=".activity.TransactionDetailActivity"/>
 
         <activity android:name="com.mob.tools.MobUIShell" />
+
     </application>
 
 </manifest>

@@ -29,11 +29,6 @@
             android:enabled="true"
             android:process=":remote"></service>
         <activity android:name=".base.BaseWebActivity"/>
-        <activity
-            android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
 
 </manifest>

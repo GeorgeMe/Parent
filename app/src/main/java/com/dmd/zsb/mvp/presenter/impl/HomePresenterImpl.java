@@ -39,6 +39,8 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
         JsonObject jsonObject=new JsonObject();
         String uid=XmlDB.getInstance(mContext).getKeyString("uid","uid");
         String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
+        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
+        jsonObject.addProperty("version", Constants.ZSBVERSION);
         jsonObject.addProperty("uid",uid);
         jsonObject.addProperty("sid",sid);
         jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数

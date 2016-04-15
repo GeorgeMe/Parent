@@ -20,7 +20,12 @@ import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 
+import java.util.HashMap;
+
 import butterknife.Bind;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
+import cn.smssdk.gui.RegisterPage;
 
 public class SignUpActivity extends BaseActivity implements SignUpView, View.OnClickListener {
 
@@ -60,6 +65,23 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
     @Override
     protected void initViewsAndEvents() {
+        // 打开注册页面
+        RegisterPage registerPage = new RegisterPage();
+        registerPage.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                // 解析注册结果
+                if (result == SMSSDK.RESULT_COMPLETE) {
+
+                    HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
+                    String country = (String) phoneMap.get("country");
+                    String phone = (String) phoneMap.get("phone");
+                    // 提交用户信息
+                    showToast("country phone :"+country+phone);
+                    //registerUser(country, phone);
+                }
+            }
+        });
+        registerPage.show(this);
         etNickname.setOnClickListener(this);
         etPassword.setOnClickListener(this);
         etPasswordAgain.setOnClickListener(this);

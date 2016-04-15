@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.SplashPresenterImpl;
 import com.dmd.zsb.mvp.view.SplashView;
@@ -18,6 +19,7 @@ import com.dmd.tutor.utils.XmlDB;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
+import cn.smssdk.SMSSDK;
 
 public class SplashActivity extends BaseActivity implements SplashView {
 
@@ -102,7 +104,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void initializeViews(String versionName, String copyright, int backgroundResId) {
-
+        SMSSDK.initSDK(this, Constants.SMSAPPKEY, Constants.SMSAPPSECRET);
         splashCopyright.setText(copyright);
         splashVersionName.setText(versionName);
         splashImage.setImageResource(backgroundResId);

@@ -78,19 +78,19 @@ public class TitleLayout {
 				arrowParams.rightMargin = SizeHelper.fromPx(14);
 				ImageView backArrow = new ImageView(context);
 				backArrow.setLayoutParams(arrowParams);
-				int res = R.getBitmapRes(context, "smssdk_back_arrow");
+				int res = R.getBitmapRes(context, "smssdk_back_arrow2");
 				backArrow.setBackgroundResource(res);
 
-				LinearLayout.LayoutParams logoParams = new LinearLayout.LayoutParams(SizeHelper.fromPx(30),SizeHelper.fromPx(44));
+/*				LinearLayout.LayoutParams logoParams = new LinearLayout.LayoutParams(SizeHelper.fromPx(30),SizeHelper.fromPx(44));
 				logoParams.gravity = Gravity.CENTER_VERTICAL;
 				logoParams.rightMargin = SizeHelper.fromPx(14);
 				ImageView backLogo = new ImageView(context);
 				backLogo.setLayoutParams(logoParams);
 				res = R.getBitmapRes(context, "smssdk_sharesdk_icon");
-				backLogo.setBackgroundResource(res);
+				backLogo.setBackgroundResource(res);*/
 
 				backLayout.addView(backArrow);
-				backLayout.addView(backLogo);
+				//backLayout.addView(backLogo);
 
 				inLayout.addView(backLayout);
 

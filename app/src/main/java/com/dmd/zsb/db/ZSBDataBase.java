@@ -11,7 +11,7 @@ import com.dmd.zsb.common.TableConstant;
 
 public class ZSBDataBase {
 	private String DB_NAME = "zsb.db";
-	private int DB_VERSION = 8;
+	private int DB_VERSION = 1;
 	private SQLiteDatabase sqlDB;
 	public static ZSBDataBase zsbDataBase;
 

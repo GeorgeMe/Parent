@@ -1,22 +1,56 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/msp_demo_title_bg"
-        android:scaleType="center"
-        android:src="@drawable/msp_demo_title"
-        tools:ignore="ContentDescription" />
+        android:orientation="vertical">
 
-    <fragment
-        android:id="@+id/fragment"
-        android:name="com.dmd.pay.ExternalFragment"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        tools:layout="@layout/pay_external" />
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msp_demo_title_bg"
+            android:scaleType="center"
+            android:src="@drawable/msp_demo_title"
+            tools:ignore="ContentDescription" />
 
-</LinearLayout>
+        <fragment
+            android:id="@+id/fragment"
+            android:name="com.dmd.pay.fragment.ExternalFragment"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/pay_external" />
+    </LinearLayout>
+
+<RelativeLayout
+    android:layout_marginBottom="30dp"
+    android:layout_alignParentBottom="true"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/msp_icon"/>
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/msp_icon"/>
+        <ImageView
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/msp_icon"/>
+    </LinearLayout>
+</RelativeLayout>
+</RelativeLayout>

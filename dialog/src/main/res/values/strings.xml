@@ -5,6 +5,8 @@
     <string name="agree">agree</string>
     <string name="disagree">disagree</string>
 
+    <string name="progress_dialog">Progress Dialog</string>
+    <string name="please_wait">Please wait…</string>
     <string name="md_back_label">Back</string>
     <string name="md_done_label">Done</string>
     <string name="md_cancel_label">Cancel</string>

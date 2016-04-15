@@ -1,4 +1,4 @@
-package com.dmd.pay;
+package com.dmd.pay.utils;
 
 
 import java.io.UnsupportedEncodingException;
@@ -12,27 +12,41 @@ import java.util.Random;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
+import com.dmd.pay.entity.PayInfo;
+
 /**
  * Created by Administrator on 2016/4/12.
  */
 public class Alipay {
 
     // 商户PID
-    public static final String PARTNER = "******";
+    public static final String PARTNER = "2088121368741032";
     // 商户收款账号
-    public static final String SELLER = "***@alipay.com";
+    public static final String SELLER = "656923138@qq.com";
     // 商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE = "*****";
+    public static final String RSA_PRIVATE = "MIICXQIBAAKBgQDKyU4ZZhjvXOV4Qra8Uxpul6MR5epmcenNObX/YKOKHMwoObfV\n" +
+            "cMjTxwO6Dqi+mF8oEfQobOsvYfS4YRWQaccfbPWsudtpAY/coakCNbN7JyFMqYxc\n" +
+            "x2uzCC+xaQNIHARWb9b8w+4luYBWPyXr3jyw8ebVP4BRXdbwwtyF5B7YQwIDAQAB\n" +
+            "AoGARwi/J9yAzZA//aF4+30s3CKYB9P/CQXMPYyCuUNz5hRyW4DkaYsJfk3Pe2RZ\n" +
+            "LfKYGqQ3X9XPiJiKre+sKxsymarOh7nKxafTZ5HIwhjhN4/EbizbmyFXsZiCi8PP\n" +
+            "YiXbVeRi8WgEyISOzFnCYb39rFFP3lJLtVxYctGRM4PghAECQQDrW4Y5y0OM2pyY\n" +
+            "wv3IWRD5igfn2quqKTAZiXrCfps8tVhM/K2XMlBRSnmHEX2xoMFXO30cu+3SYP7/\n" +
+            "3RilyfpDAkEA3JJ2Enwp7podWid84E7psXR0dWZDw/CjsUKHct0maE7OUpIprGQ5\n" +
+            "IRKlv4gnHTc5q9FiqSl9fkJ9k4mlXfTKAQJAKtjHr9/UVWE7HwhooT+tunApjkkd\n" +
+            "9WV4Lz37Dkt0QXIWODXL+Hmda58uTqudgWftqs7WsRN5cVJdOgFrSkth9wJBAKqT\n" +
+            "cVAWSW9GK9DenMny/PLI9o8byOgsnsqkgo8ny137I7/jXOr+jteuzhNyvZzwal8f\n" +
+            "jEb52RzdWrPQTNx+RAECQQCJPX+gU8Kh02w4/cAmpQqFi5WaVF05sGjHixA694t8\n" +
+            "Q3qw98P0ijcdmrNdFq/i1NyhyuYGY3g5pDGsOfDOnXOc";
     // 支付宝公钥
-    public static final String RSA_PUBLIC = "******";
+    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
+
 
     public static final int SDK_PAY_FLAG = 1;
-
-    public static final int SDK_CHECK_FLAG = 2;
 
     private Handler mHandler;
     private Activity activity;
@@ -43,6 +57,13 @@ public class Alipay {
         this.activity = activity;
     }
 
+    public static boolean checkKeyConfiguration(){
+        if (TextUtils.isEmpty(PARTNER) || TextUtils.isEmpty(RSA_PRIVATE) || TextUtils.isEmpty(SELLER)) {
+            return false;
+        }else {
+            return true;
+        }
+    }
     /**
      * call alipay sdk pay. 调用SDK支付
      *
@@ -82,33 +103,6 @@ public class Alipay {
         // 必须异步调用
         Thread payThread = new Thread(payRunnable);
         payThread.start();
-    }
-
-    /**
-     * check whether the device has authentication alipay account.
-     * 查询终端设备是否存在支付宝认证账户
-     *
-     */
-    public void check(View v) {
-        Runnable checkRunnable = new Runnable() {
-
-            @Override
-            public void run() {
-/*                // 构造PayTask 对象
-                PayTask payTask = new PayTask(activity);
-                // 调用查询接口，获取查询结果
-                boolean isExist = payTask.checkAccountIfExist();
-
-                Message msg = new Message();
-                msg.what = SDK_CHECK_FLAG;
-                msg.obj = isExist;
-                mHandler.sendMessage(msg);*/
-            }
-        };
-
-        Thread checkThread = new Thread(checkRunnable);
-        checkThread.start();
-
     }
 
     /**

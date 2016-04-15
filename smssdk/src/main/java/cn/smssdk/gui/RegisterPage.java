@@ -271,7 +271,15 @@ public class RegisterPage extends FakeActivity implements OnClickListener,
 			// 请求发送短信验证码
 			String phone = etPhoneNum.getText().toString().trim().replaceAll("\\s*", "");
 			String code = tvCountryNum.getText().toString().trim();
-			showDialog(phone, code);
+			if (TextUtils.isEmpty(code)){
+				Toast.makeText(getContext(),"请选择国家",Toast.LENGTH_LONG).show();
+			}else if (TextUtils.isEmpty(phone)){
+				Toast.makeText(getContext(),"请填写电话号码",Toast.LENGTH_LONG).show();
+			}else if (TextUtils.isEmpty(phone)&&TextUtils.isEmpty(code)){
+				Toast.makeText(getContext(),"",Toast.LENGTH_LONG).show();
+			}else {
+				showDialog(phone, code);
+			}
 		} else if (id == id_iv_clear) {
 			// 清除电话号码输入框
 			etPhoneNum.getText().clear();

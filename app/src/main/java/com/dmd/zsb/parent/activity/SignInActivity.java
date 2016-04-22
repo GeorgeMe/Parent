@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,20 +20,16 @@ import com.alibaba.mobileim.channel.event.IWxCallback;
 import com.alibaba.mobileim.channel.util.YWLog;
 import com.alibaba.mobileim.login.YWLoginCode;
 import com.alibaba.mobileim.login.YWLoginState;
-import com.alibaba.mobileim.utility.IMPrefsTools;
-import com.dmd.dialog.GravityEnum;
-import com.dmd.dialog.MaterialDialog;
-import com.dmd.pay.utils.Base64;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.CommonUtils;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.api.ApiConstants;
+import com.dmd.tutor.widgets.ProgressDialog;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.openim.LoginSampleHelper;
+import com.dmd.zsb.openim.LoginHelper;
 import com.dmd.zsb.openim.Notification;
-import com.dmd.zsb.openim.NotificationInitSampleHelper;
-import com.dmd.zsb.openim.UserProfileSampleHelper;
+import com.dmd.zsb.openim.NotificationInitHelper;
+import com.dmd.zsb.openim.UserProfileHelper;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.SignInPresenterImpl;
 import com.dmd.zsb.mvp.view.SignInView;
@@ -44,13 +38,7 @@ import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 
-import java.util.HashMap;
-import java.util.Random;
-
 import butterknife.Bind;
-import cn.smssdk.EventHandler;
-import cn.smssdk.SMSSDK;
-import cn.smssdk.gui.RegisterPage;
 
 public class SignInActivity extends BaseActivity implements SignInView, View.OnClickListener {
     private static final String TAG=SignInActivity.class.getSimpleName();
@@ -69,8 +57,8 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     private static final String PASSWORD = "password";
 
     public static final String AUTO_LOGIN_STATE_ACTION = "com.dmd.zsb.parent.autoLoginStateActionn";
-    private MaterialDialog progressDialog=null;
-    private LoginSampleHelper loginHelper;
+    private ProgressDialog progressDialog=null;
+
 
 
     private BroadcastReceiver mAutoLoginStateReceiver = new BroadcastReceiver() {
@@ -107,7 +95,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
 
     @Override
     protected void initViewsAndEvents() {
-        loginHelper = LoginSampleHelper.getInstance();
+
         //初始化 open im
         init(etMobile.getText().toString(), getString(R.string.app_key));
         myRegisterReceiver();
@@ -196,14 +184,13 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                     jsonObject.addProperty("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
                     jsonObject.addProperty("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
                     jsonObject.addProperty("client_type", Constants.PLATFORM);
+                    jsonObject.addProperty("role", Constants.USER_ROLE);
                     jsonObject.addProperty("mobile", mobile);
                     jsonObject.addProperty("password", password);
                     signInPresenter.signIn(jsonObject);
-                    progressDialog=new MaterialDialog.Builder(mContext)
-                            .title(R.string.progress_dialog)
-                            .content(R.string.please_wait)
-                            .progress(true, 0)
-                            .show();
+
+                    progressDialog=new ProgressDialog(mContext,getString(R.string.please_later_on));
+                    progressDialog.show();
                 }
                 break;
         }
@@ -217,7 +204,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     @Override
     public void navigateToHome() {
 
-        loginHelper.login_Sample(etMobile.getText().toString(), etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
+        LoginHelper.getInstance().login_Sample(etMobile.getText().toString(), etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
 
             @Override
             public void onSuccess(Object... arg0) {
@@ -230,6 +217,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                 }
                 Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
                 YWLog.i(TAG, "login success!");
+                XmlDB.getInstance(mContext).saveKey("isLogin", true);
                 Bundle bundle=new Bundle();
                 bundle.putString(MainActivity.LOGIN_SUCCESS,"loginSuccess");
                 readyGo(MainActivity.class,bundle);
@@ -257,12 +245,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                 }
             }
         });
-/*        String mobile = etMobile.getText().toString();
-        String password = etPassword.getText().toString();
-        //加密再存本地
-        XmlDB.getInstance(mContext).saveKey("mobile", mobile);
-        XmlDB.getInstance(mContext).saveKey("password", password);
-        readyGoThenKill(MainActivity.class);*/
     }
 
     @Override
@@ -276,24 +258,14 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
         toast.show();
 
     }
-    //==================================================================================================
-    // 提交用户信息
-private void registerUser(String country, String phone) {
-    Random rnd = new Random();
-    int id = Math.abs(rnd.nextInt());
-    String uid = String.valueOf(id);
-    String nickName = "ZSB_USER_" + uid;
-    String avatar = ApiConstants.Urls.API_IMG_BASE_URLS+"img/header/img_head_for_empty.png";
-    SMSSDK.submitUserInfo(Base64.encode(phone.getBytes()), nickName, avatar, country, phone);
-}
     //=================================================open im========================================================
     private void init(String mobile, String appKey) {
         //初始化imkit
-        LoginSampleHelper.getInstance().initIMKit(mobile, appKey);
+        LoginHelper.getInstance().initIMKit(mobile, appKey);
         //自定义头像和昵称回调初始化(如果不需要自定义头像和昵称，则可以省去)
-        UserProfileSampleHelper.initProfileCallback();
+        UserProfileHelper.initProfileCallback();
         //通知栏相关的初始化
-        NotificationInitSampleHelper.init();
+        NotificationInitHelper.init();
 
     }
     /**
@@ -303,15 +275,14 @@ private void registerUser(String country, String phone) {
      * @param password
      */
     private void saveIdPasswordToLocal(String mobile, String password) {
-        IMPrefsTools.setStringPrefs(mContext, MOBILE, mobile);
-        IMPrefsTools.setStringPrefs(mContext, PASSWORD, password);
-
+        XmlDB.getInstance(mContext).saveKey("mobile", mobile);
+        XmlDB.getInstance(mContext).saveKey("password", password);
     }
     @Override
     protected void onResume() {
         super.onResume();
-        handleAutoLoginState(LoginSampleHelper.getInstance().getAutoLoginState().getValue());
-        YWLog.i(TAG, "onResume, loginState = " + LoginSampleHelper.getInstance().getAutoLoginState().getValue());
+        handleAutoLoginState(LoginHelper.getInstance().getAutoLoginState().getValue());
+        YWLog.i(TAG, "onResume, loginState = " + LoginHelper.getInstance().getAutoLoginState().getValue());
     }
 
     @Override
@@ -338,11 +309,8 @@ private void registerUser(String country, String phone) {
 
         if (loginState == YWLoginState.logining.getValue()) {
             if (progressDialog==null) {
-                progressDialog=new MaterialDialog.Builder(this)
-                        .title(R.string.progress_dialog)
-                        .content(R.string.please_wait)
-                        .progress(true, 0)
-                        .show();
+                progressDialog=new ProgressDialog(mContext,getString(R.string.please_later_on));
+                progressDialog.show();
             }
             btnLogin.setClickable(false);
         } else if (loginState == YWLoginState.success.getValue()) {
@@ -353,9 +321,9 @@ private void registerUser(String country, String phone) {
             }
             readyGoThenKill(MainActivity.class);
         } else {
-            YWIMKit ywimKit = LoginSampleHelper.getInstance().getIMKit();
-            if (ywimKit != null) {
-                if (ywimKit.getIMCore().getLoginState() == YWLoginState.success) {
+            YWIMKit imKit = LoginHelper.getInstance().getIMKit();
+            if (imKit != null) {
+                if (imKit.getIMCore().getLoginState() == YWLoginState.success) {
                     btnLogin.setClickable(true);
                     progressDialog.dismiss();
                     progressDialog=null;

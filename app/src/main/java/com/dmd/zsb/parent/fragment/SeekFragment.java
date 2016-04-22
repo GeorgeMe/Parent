@@ -76,10 +76,10 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     private ListViewDataAdapter<UserEntity> mListViewAdapter;
     private SeekPresenter mSeekPresenter = null;
     private JsonObject gson;
-    private int page = 0;
-    SeekGradeAdapter seekGradeAdapter;
-    SeekSubjectAdapter seekSubjectAdapter;
-    SeekSortAdapter seekSortAdapter;
+    private int page = 1;
+    private SeekGradeAdapter seekGradeAdapter;
+    private SeekSubjectAdapter seekSubjectAdapter;
+    private SeekSortAdapter seekSortAdapter;
 
     private int screenWidth;
     private int screenHeight;

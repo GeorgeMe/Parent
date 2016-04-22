@@ -10,6 +10,7 @@ import java.util.List;
  * Created by Administrator on 2016/3/14.
  */
 public class HomeResponse {
+
     private int total_page;
     private List<UserEntity> users;
 

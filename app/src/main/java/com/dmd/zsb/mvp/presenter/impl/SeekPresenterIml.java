@@ -34,6 +34,8 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<S
         mSeekView.hideLoading();
         if (event==Constants.EVENT_REFRESH_DATA) {
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
+        }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
+            mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
         }
         //提交的参数封装
         JsonObject jsonObject=new JsonObject();

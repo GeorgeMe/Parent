@@ -59,6 +59,7 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
     private MaterialDialog dialog;
     private File file = null;
     private String picturePath=null;
+
     @Override
     protected void getBundleExtras(Bundle extras) {
 

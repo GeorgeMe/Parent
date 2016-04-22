@@ -18,7 +18,7 @@ import java.util.List;
  *
  * 开发者通过设置以上三个值来进行表情的功能的扩展，以上三个值的个数是一致的
  */
-public class SmilyCustomSample {
+public class SmilyCustom {
 
     /**
      * 该方式初始化表情会默认覆盖SDK自带表情包

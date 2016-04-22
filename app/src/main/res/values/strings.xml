@@ -46,6 +46,7 @@
     <string name="nickname_wrong_format_hint">"昵称一般由1-16位字符组成</string>
     <string name="password_wrong_format_hint">"密码必须有6-20位字符组成"</string>
     <string name="two_passwords_differ_hint">"请注意两次密码输入不一致哦"</string>
+    <string name="price_subjects">预约科目</string>
     <string name="price_scope">价格范围</string>
     <string name="appointment_time">预约时间</string>
     <string name="sevice_location">服务地点</string>

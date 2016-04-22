@@ -91,7 +91,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void animateBackgroundImage(Animation animation) {
-        if (XmlDB.getInstance(this).getKeyBooleanValue("isFirstRunLead", true)) {
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isFirstRunLead", true)) {
             //进入引导页
             Intent intent = new Intent(this, LeadActivity.class);
             startActivity(intent);
@@ -119,7 +119,11 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void navigateToHomePage() {
-        redirectto();
+        XmlDB.getInstance(mContext).saveKey("isFirstRunLead", false);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        finish();
     }
 
     @Override
@@ -128,24 +132,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    private void redirectto() {
-
-        if (XmlDB.getInstance(this).getKeyBooleanValue("isLogin", false)) {
-            //进入主页
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
-        } else {
-            XmlDB.getInstance(this).saveKey("isFirstRunLead", false);
-            Intent intent = new Intent(this, SignInActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-            finish();
-        }
-
     }
 
 }

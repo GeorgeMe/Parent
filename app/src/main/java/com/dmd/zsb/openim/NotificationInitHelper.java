@@ -2,7 +2,6 @@ package com.dmd.zsb.openim;
 
 import android.content.Intent;
 
-import com.alibaba.mobileim.YWIMKit;
 import com.alibaba.mobileim.aop.Pointcut;
 import com.alibaba.mobileim.aop.custom.IMNotification;
 import com.alibaba.mobileim.conversation.YWConversation;
@@ -14,19 +13,18 @@ import com.dmd.zsb.parent.R;
  * @author zhaoxu
  *
  */
-public class NotificationInitSampleHelper extends IMNotification{
+public class NotificationInitHelper extends IMNotification{
 
     private static boolean mNeedQuiet;
     private static boolean mNeedVibrator = true;
     private static boolean mNeedSound = true;
 
-    public NotificationInitSampleHelper(Pointcut pointcut) {
+    public NotificationInitHelper(Pointcut pointcut) {
         super(pointcut);
     }
 
     public static void init(){
-		YWIMKit imKit = LoginSampleHelper.getInstance().getIMKit();
-		if (imKit != null){
+		if (LoginHelper.getInstance().getIMKit() != null){
 
             //通知栏显示的名称，此方法已经废弃，请使用自定义方式，具体见当前文件的getAppName
 			//imKit.setAppName("我的OpenIM");
@@ -35,10 +33,10 @@ public class NotificationInitSampleHelper extends IMNotification{
 			//imKit.setResId(R.drawable.aliwx_notification_bg);//通知栏icon
 
             //设置是否开启通知提醒
-            imKit.setEnableNotification(true);
+            LoginHelper.getInstance().getIMKit().setEnableNotification(true);
 
-            mNeedSound = (DemoSimpleKVStore.getNeedSound() == 1);
-            mNeedVibrator = (DemoSimpleKVStore.getNeedVibration() == 1);
+            mNeedSound = (ZSBOpenIMKVStore.getNeedSound() == 1);
+            mNeedVibrator = (ZSBOpenIMKVStore.getNeedVibration() == 1);
 		}
 	}
 

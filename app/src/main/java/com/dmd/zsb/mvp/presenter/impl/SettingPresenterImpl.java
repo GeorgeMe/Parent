@@ -3,6 +3,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.tutor.utils.OnUploadProcessListener;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SettingInteracterImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
@@ -27,12 +28,19 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
 
     @Override
     public void uploadAvatar(int event,JsonObject jsonObject) {
+
         settingInteracter.getCommonListData(event,jsonObject);
     }
 
     @Override
     public void onSuccess(int event,JsonObject data) {
-        settingView.showTip(data.get("msg").getAsString());
+        if (event==1){
+            XmlDB.getInstance(mContext).saveKey("isLogin",false);
+            settingView.showTip(data.get("msg").getAsString());
+        }else {
+
+        }
+
     }
 
     @Override

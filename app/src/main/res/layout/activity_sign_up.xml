@@ -6,10 +6,7 @@
     android:background="@drawable/login_bg"
     android:orientation="vertical"
     tools:context=".activity.SignUpActivity">
-    <FrameLayout
-        android:id="@+id/signup_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -111,5 +108,4 @@
                 android:textColor="#ffffff" />
         </LinearLayout>
     </ScrollView>
-    </FrameLayout>
 </LinearLayout>

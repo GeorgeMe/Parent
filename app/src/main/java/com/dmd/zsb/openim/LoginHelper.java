@@ -12,7 +12,6 @@ import com.alibaba.mobileim.IYWTribePushListener;
 import com.alibaba.mobileim.YWAPI;
 import com.alibaba.mobileim.YWChannel;
 import com.alibaba.mobileim.YWConstants;
-import com.alibaba.mobileim.YWIMCore;
 import com.alibaba.mobileim.YWIMKit;
 import com.alibaba.mobileim.YWLoginParam;
 import com.alibaba.mobileim.channel.LoginParam;
@@ -45,11 +44,11 @@ import java.util.Map;
  *
  * @author jing.huai
  */
-public class LoginSampleHelper {
+public class LoginHelper {
 
-    private static LoginSampleHelper sInstance = new LoginSampleHelper();
+    private static LoginHelper sInstance = new LoginHelper();
 
-    public static LoginSampleHelper getInstance() {
+    public static LoginHelper getInstance() {
         return sInstance;
     }
 
@@ -58,7 +57,6 @@ public class LoginSampleHelper {
 
     // openIM UI解决方案提供的相关API，创建成功后，保存为全局变量使用
     private YWIMKit mIMKit;
-
     private YWConnectionListenerImpl mYWConnectionListenerImpl = new YWConnectionListenerImpl();
     private Application mApp;
 
@@ -102,9 +100,9 @@ public class LoginSampleHelper {
 		final String appkey = IMAutoLoginInfoStoreUtil.getAppkey();
 		if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(appkey)){
 //		final String userId = IMAutoLoginInfoStoreUtil.getLoginUserId();
-			LoginSampleHelper.getInstance().initIMKit(userId, appkey);
+			LoginHelper.getInstance().initIMKit(userId, appkey);
 //		final String appkey = IMAutoLoginInfoStoreUtil.getAppkey();
-			NotificationInitSampleHelper.init();
+			NotificationInitHelper.init();
 		}
 //		if (!TextUtils.isEmpty(userId) && !TextUtils.isEmpty(appkey)){
 
@@ -112,7 +110,7 @@ public class LoginSampleHelper {
         im.init();
 
         //通知栏相关的初始化
-        NotificationInitSampleHelper.init();
+        NotificationInitHelper.init();
         initAutoLoginStateCallback();
 
 
@@ -120,8 +118,8 @@ public class LoginSampleHelper {
         YWSmilyMgr.setSmilyInitNotify(new YWSmilyMgr.SmilyInitNotify() {
             @Override
             public void onDefaultSmilyInitOk() {
-                SmilyCustomSample.addNewEmojiSmiley();
-                SmilyCustomSample.addNewImageSmiley();
+                SmilyCustom.addNewEmojiSmiley();
+                SmilyCustom.addNewImageSmiley();
 
                 //最后要清空通知，防止memory leak
                 YWSmilyMgr.setSmilyInitNotify(null);
@@ -154,10 +152,8 @@ public class LoginSampleHelper {
         }
 
 
-        YWLoginParam loginParam = YWLoginParam.createLoginParam(userId,
-                password);
-        if (TextUtils.isEmpty(appKey) || appKey.equals(YWConstants.YWSDKAppKey)
-                || appKey.equals(YWConstants.YWSDKAppKeyCnHupan)) {
+        YWLoginParam loginParam = YWLoginParam.createLoginParam(userId,password);
+        if (TextUtils.isEmpty(appKey) || appKey.equals(YWConstants.YWSDKAppKey)|| appKey.equals(YWConstants.YWSDKAppKeyCnHupan)) {
             loginParam.setServerType(LoginParam.ACCOUNTTYPE_WANGXIN);
             loginParam.setPwdType(YWPwdType.pwd);
         }
@@ -172,10 +168,8 @@ public class LoginSampleHelper {
         if (mIMKit == null) {
             return;
         }
-
-        YWIMCore imCore = mIMKit.getIMCore();
-        imCore.removeConnectionListener(mYWConnectionListenerImpl);
-        imCore.addConnectionListener(mYWConnectionListenerImpl);
+        mIMKit.getIMCore().removeConnectionListener(mYWConnectionListenerImpl);
+        mIMKit.getIMCore().addConnectionListener(mYWConnectionListenerImpl);
     }
 
     private class YWConnectionListenerImpl implements IYWConnectionListener {
@@ -188,7 +182,7 @@ public class LoginSampleHelper {
         @Override
         public void onReConnected() {
 
-//				YWLog.i("LoginSampleHelper", "onReConnected");
+//				YWLog.i("LoginHelper", "onReConnected");
 
 
         }
@@ -198,9 +192,9 @@ public class LoginSampleHelper {
             if (arg0 == YWLoginCode.LOGON_FAIL_KICKOFF) {
                 sendAutoLoginState(YWLoginState.disconnect);
                 //在其它终端登录，当前用户被踢下线
-                LoginSampleHelper.getInstance().setAutoLoginState(YWLoginState.disconnect);
+                LoginHelper.getInstance().setAutoLoginState(YWLoginState.disconnect);
                 Toast.makeText(TutorApplication.getContext(), "被踢下线", Toast.LENGTH_LONG).show();
-                YWLog.i("LoginSampleHelper", "被踢下线");
+                YWLog.i("LoginHelper", "被踢下线");
                 Intent intent = new Intent(TutorApplication.getContext(), SignInActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 TutorApplication.getContext().startActivity(intent);

@@ -1,5 +1,6 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,16 +8,17 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.mobileim.YWAPI;
+import com.alibaba.mobileim.YWIMKit;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.entity.UserEntity;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.entity.response.UserDetailResponse;
-import com.dmd.zsb.mvp.presenter.impl.UserDetailPresenterImpl;
 import com.dmd.zsb.mvp.view.UserDetailView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
-import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -62,6 +64,8 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView,V
     FrameLayout userLoadingView;
 
     private UserEntity data;
+
+
     @Override
     protected void getBundleExtras(Bundle extras) {
         data=(UserEntity)extras.getSerializable("data");
@@ -95,7 +99,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView,V
         goodSubjects.setText(data.getCurriculum_id());
         teachingPlace.setText(data.getLocation());
         teachingMethods.setText(data.getCurriculum_id());
-        selfEvaluation.setText("000"+data.getComment_count());
+        selfEvaluation.setText(""+data.getComment_count());
         goodSubjects2.setText(data.getSubject_name());
         professionalAccreditation.setText(data.getSubject_name());
 
@@ -142,7 +146,13 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView,V
 
     @Override
     public void userAppointment() {
-        readyGoThenKill(ReleaseOrderActivity.class);
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+            Bundle bundle=new Bundle();
+            bundle.putString("default_receiver_id",data.getUser_id());
+            readyGo(ReleaseOrderActivity.class,bundle);
+        }else {
+            showToast("请登录后进行约课");
+        }
     }
 
     @Override
@@ -152,9 +162,12 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView,V
 
     @Override
     public void sendMsg() {
-        showToast("发消息");
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+            YWIMKit mIMKit = YWAPI.getIMKitInstance(data.getMobile(),"23346330");
+            Intent intent =mIMKit.getChattingActivityIntent(data.getMobile(),"23346330");
+            startActivity(intent);
+        }
     }
-
     @Override
     public void onClick(View v) {
         if (v==userAppointment){

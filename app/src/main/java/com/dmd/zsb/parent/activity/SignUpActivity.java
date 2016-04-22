@@ -7,11 +7,20 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.Toast;
 
+import com.alibaba.mobileim.channel.event.IWxCallback;
+import com.alibaba.mobileim.channel.util.YWLog;
+import com.alibaba.mobileim.login.YWLoginCode;
+import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
+import com.dmd.zsb.openim.LoginHelper;
+import com.dmd.zsb.openim.Notification;
+import com.dmd.zsb.openim.NotificationInitHelper;
+import com.dmd.zsb.openim.UserProfileHelper;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.SignUpPresenterImpl;
 import com.dmd.zsb.mvp.view.SignUpView;
@@ -37,15 +46,15 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
     EditText etPasswordAgain;
     @Bind(R.id.btn_signup_complete)
     Button btnSignupComplete;
-    @Bind(R.id.signup_frame)
-    FrameLayout signupFrame;
 
     private SignUpPresenterImpl signUpPresenter;
     private String mobile;
+    private MaterialDialog progressDialog=null;
+
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        mobile = extras.getString("mobile");
+
     }
 
     @Override
@@ -60,11 +69,12 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
     @Override
     protected View getLoadingTargetView() {
-        return signupFrame;
+        return null;
     }
 
     @Override
     protected void initViewsAndEvents() {
+
         // 打开注册页面
         RegisterPage registerPage = new RegisterPage();
         registerPage.setRegisterCallback(new EventHandler() {
@@ -74,10 +84,10 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
                     HashMap<String,Object> phoneMap = (HashMap<String, Object>) data;
                     String country = (String) phoneMap.get("country");
-                    String phone = (String) phoneMap.get("phone");
-                    // 提交用户信息
-                    showToast("country phone :"+country+phone);
-                    //registerUser(country, phone);
+                    mobile = (String) phoneMap.get("phone");
+
+                    //初始化openIm
+                    init(mobile, getString(R.string.app_key));
                 }
             }
         });
@@ -157,15 +167,26 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
                     etPasswordAgain.requestFocus();
                 } else {
                     CloseKeyBoard();
+                    btnSignupComplete.setClickable(false);
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
                     jsonObject.addProperty("version", Constants.ZSBVERSION);
                     jsonObject.addProperty("client_type", Constants.PLATFORM);
+                    jsonObject.addProperty("location", XmlDB.getInstance(mContext).getKeyString("addr","未取得定位地址"));
+                    jsonObject.addProperty("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
+                    jsonObject.addProperty("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
                     jsonObject.addProperty("role", Constants.USER_ROLE);
                     jsonObject.addProperty("nickname", nickname);
                     jsonObject.addProperty("mobile", mobile);
                     jsonObject.addProperty("password", password);
                     signUpPresenter.signUp(jsonObject);
+                    if (progressDialog==null) {
+                        progressDialog=new MaterialDialog.Builder(this)
+                                .title(R.string.progress_dialog)
+                                .content(R.string.please_wait)
+                                .progress(true, 0)
+                                .show();
+                    }
                 }
                 break;
         }
@@ -173,7 +194,60 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
     @Override
     public void navigateToHome() {
-        readyGoThenKill(MainActivity.class);
+        LoginHelper.getInstance().login_Sample(mobile, etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
+
+            @Override
+            public void onSuccess(Object... arg0) {
+                saveIdPasswordToLocal(mobile, etPassword.getText().toString());
+
+                btnSignupComplete.setClickable(true);
+                if (progressDialog!=null){
+                    progressDialog.dismiss();
+                    progressDialog=null;
+                }
+                Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
+                YWLog.i(TAG_LOG, "login success!");
+                XmlDB.getInstance(mContext).saveKey("isLogin", true);
+                Bundle bundle=new Bundle();
+                bundle.putString(MainActivity.LOGIN_SUCCESS,"loginSuccess");
+                readyGo(MainActivity.class,bundle);
+                finish();
+
+            }
+
+            @Override
+            public void onProgress(int arg0) {
+
+            }
+
+            @Override
+            public void onError(int errorCode, String errorMessage) {
+                if (progressDialog!=null){
+                    progressDialog.dismiss();
+                    progressDialog=null;
+                }
+                if (errorCode == YWLoginCode.LOGON_FAIL_INVALIDUSER) { //若用户不存在，则提示使用游客方式登陆
+                    showTip(errorMessage);
+                } else {
+                    btnSignupComplete.setClickable(true);
+                    YWLog.w(TAG_LOG, "登录失败，错误码：" + errorCode + "  错误信息：" + errorMessage);
+                    Notification.showToastMsg(mContext, errorMessage);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void showTip(String msg) {
+        btnSignupComplete.setClickable(true);
+        if (progressDialog!=null){
+            progressDialog.dismiss();
+            progressDialog=null;
+        }
+        ToastView toast = new ToastView(mContext, msg);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
     }
 
     // 关闭键盘
@@ -181,5 +255,25 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(etNickname.getWindowToken(), 0);
     }
+    //=================================================open im========================================================
+    private void init(String mobile, String appKey) {
+        //初始化imkit
+        LoginHelper.getInstance().initIMKit(mobile, appKey);
+        //自定义头像和昵称回调初始化(如果不需要自定义头像和昵称，则可以省去)
+        UserProfileHelper.initProfileCallback();
+        //通知栏相关的初始化
+        NotificationInitHelper.init();
 
+    }
+
+    /**
+     * 保存登录的用户名密码到本地
+     *
+     * @param mobile
+     * @param password
+     */
+    private void saveIdPasswordToLocal(String mobile, String password) {
+        XmlDB.getInstance(mContext).saveKey("mobile", mobile);
+        XmlDB.getInstance(mContext).saveKey("password", password);
+    }
 }

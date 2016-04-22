@@ -8,7 +8,6 @@ import java.util.Map;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.alibaba.mobileim.YWIMKit;
 import com.alibaba.mobileim.channel.cloud.contact.YWProfileInfo;
 import com.alibaba.mobileim.channel.event.IWxCallback;
 import com.alibaba.mobileim.channel.util.YWLog;
@@ -24,9 +23,9 @@ import com.dmd.zsb.TutorApplication;
  *
  * @author zhaoxu
  */
-public class UserProfileSampleHelper {
+public class UserProfileHelper {
 
-    private static final String TAG = UserProfileSampleHelper.class.getSimpleName();
+    private static final String TAG = UserProfileHelper.class.getSimpleName();
 
     private static boolean enableUseLocalUserProfile = true;
 
@@ -36,11 +35,10 @@ public class UserProfileSampleHelper {
             //目前SDK会自动获取导入到OpenIM的帐户昵称和头像，如果用户设置了回调，则SDK不会从服务器获取昵称和头像
             return;
         }
-        YWIMKit imKit = LoginSampleHelper.getInstance().getIMKit();
-        if(imKit == null) {
+        if(LoginHelper.getInstance().getIMKit() == null) {
             return;
         }
-        final IYWContactService contactManager = imKit.getContactService();
+        final IYWContactService contactManager = LoginHelper.getInstance().getIMKit().getContactService();
 
         //头像点击的回调（开发者可以按需设置）
         contactManager.setContactHeadClickCallback(new IYWContactHeadClickCallback() {

@@ -30,7 +30,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
         }else {
             XmlDB.getInstance(mContext).saveKey("uid",data.get("id").getAsString());
             XmlDB.getInstance(mContext).saveKey("sid",data.get("sid").getAsString());
-            XmlDB.getInstance(mContext).saveKey("isLogin", true);
+
             signInView.navigateToHome();
         }
     }

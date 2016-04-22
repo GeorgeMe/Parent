@@ -5,11 +5,15 @@ import android.content.Context;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 
+import com.alibaba.mobileim.aop.AdviceBinder;
+import com.alibaba.mobileim.aop.PointCutEnum;
 import com.alibaba.wxlib.util.SysUtil;
 import com.dmd.tutor.base.BaseAppManager;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.utils.TLog;
 import com.dmd.tutor.utils.XmlDB;
+import com.dmd.zsb.openim.ChattingUICustom;
+import com.dmd.zsb.openim.ConversationListUICustom;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.umeng.openim.OpenIMAgent;
 
@@ -52,7 +56,10 @@ public class TutorApplication extends Application {
             //todo 如果在":TCMSSevice"进程中，无需进行openIM和app业务的初始化，以节省内存
             return;
         }
-
+        //聊天界面的自定义风格1：［图片、文字小猪气泡］风格
+        AdviceBinder.bindAdvice(PointCutEnum.CHATTING_FRAGMENT_UI_POINTCUT, ChattingUICustom.class);
+        //会话列表UI相关
+        AdviceBinder.bindAdvice(PointCutEnum.CONVERSATION_FRAGMENT_UI_POINTCUT, ConversationListUICustom.class);
         //初始化ImSDK
         OpenIMAgent im = OpenIMAgent.getInstance(this);
         im.init();

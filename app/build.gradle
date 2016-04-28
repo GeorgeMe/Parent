@@ -26,4 +26,5 @@ dependencies {
     compile project(':smssdk')
     compile project(':openimsdk')
     compile project(':pay')
+
 }

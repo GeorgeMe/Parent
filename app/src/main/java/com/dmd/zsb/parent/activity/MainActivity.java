@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -100,6 +101,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
 
     @Override
     protected int getContentViewLayoutID() {
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         return R.layout.activity_main;
     }
     @Subscribe
@@ -187,8 +189,6 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
         indicator = getIndicatorView(TAB_MINE);
         tabhost.addTab(tabhost.newTabSpec(TAB_MINE).setIndicator(indicator), MineFragment.class, null);
 
-        mUnread = (TextView) findViewById(R.id.unread);
-
         tabhost.setOnTabChangedListener(this);
         this.onTabChanged(TAB_HOME);
     }
@@ -207,6 +207,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
             mHomeTab = indicator;
         } else if (tab.equals(TAB_MESSAGE)) {
             indicator.setText("消息");
+            mUnread = (TextView) tabView.findViewById(R.id.unread);
             drawable = getResources().getDrawable(R.drawable.nav_message_normal);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(),drawable.getIntrinsicHeight());
             indicator.setCompoundDrawables(null, drawable, null, null);
@@ -361,9 +362,9 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
      * 自定义会话示例展示系统通知的示例
      */
     private void initCustomConversation() {
-        CustomConversationHelper.addCustomConversation(SYSTEM_TRIBE_CONVERSATION, null);
-        CustomConversationHelper.addCustomConversation(SYSTEM_FRIEND_REQ_CONVERSATION, null);
-        CustomConversationHelper.addCustomViewConversation("myConversation","这个会话的展示布局可以自定义");
+        //CustomConversationHelper.addCustomConversation(SYSTEM_TRIBE_CONVERSATION, null);
+        //CustomConversationHelper.addCustomConversation(SYSTEM_FRIEND_REQ_CONVERSATION, null);
+        //CustomConversationHelper.addCustomViewConversation("myConversation","这个会话的展示布局可以自定义");
     }
     private void initConversationServiceAndListener() {
         mConversationUnreadChangeListener = new IYWConversationUnreadChangeListener() {
@@ -378,6 +379,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
                         //获取当前登录用户的所有未读数
                         int unReadCount = mConversationService.getAllUnreadCount();
                         if (unReadCount > 0) {
+
                             mUnread.setVisibility(View.VISIBLE);
                             if (unReadCount < 100) {
                                 mUnread.setText(unReadCount + "");
@@ -667,4 +669,6 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
         //移除联系人相关的监听
         removeContactListeners();
     }
+
+
 }

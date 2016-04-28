@@ -60,11 +60,9 @@ public class LeadAdapter extends PagerAdapter {
             start.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Intent intent = new Intent(mContext, MainActivity.class);
                     (mContext).startActivity(intent);
-                    ((LeadActivity) mContext).overridePendingTransition(R.anim.right_in, R.anim.right_out);
-
+                   // ((LeadActivity) mContext).overridePendingTransition(R.anim.right_in, R.anim.right_out);
                     XmlDB.getInstance(mContext).saveKey("isFirstRunLead", false);
                     ((LeadActivity) mContext).finish();
                 }

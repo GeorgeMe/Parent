@@ -15,6 +15,7 @@ import com.alibaba.mobileim.conversation.YWConversation;
 import com.alibaba.mobileim.fundamental.widget.refreshlist.YWPullToRefreshBase;
 import com.alibaba.mobileim.fundamental.widget.refreshlist.YWPullToRefreshListView;
 import com.dmd.tutor.eventbus.EventCenter;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.openim.LoginHelper;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
@@ -91,11 +92,12 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         });
         mListView = mPullToRefreshListView.getRefreshableView();
 
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+            mIMKit = LoginHelper.getInstance().getIMKit();
+            mConversationService = mIMKit.getConversationService();
+            //初始化最近联系人列表
+            mConversationList = mConversationService.getConversationList();
 
-        mIMKit = LoginHelper.getInstance().getIMKit();
-        mConversationService = mIMKit.getConversationService();
-        //初始化最近联系人列表
-        mConversationList = mConversationService.getConversationList();
         //初始化最近联系人adpter
         mAdapter = new ConversationListAdapter(mConversationList);
         //设置mListView的adapter
@@ -103,7 +105,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
 
         //添加会话列表变更监听，收到该监听回调时更新adapter就可以刷新页面了
         mConversationService.addConversationListener(mConversationListener);
-
+        }
         messageGroupMenuMessage.setChecked(true);
         messageGroupMenuMessage.setOnClickListener(this);
         messageGroupMenuRecentContacts.setOnClickListener(this);
@@ -144,33 +146,36 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
         }
     };
     private void syncRecentConversations(){
-        mConversationService.syncRecentConversations(new IWxCallback() {
-            @Override
-            public void onSuccess(Object... result) {
-                mUIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mAdapter.notifyDataSetChangedWithAsyncLoad();
-                        mPullToRefreshListView.onRefreshComplete(false, true);
-                    }
-                });
-            }
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+            mConversationService.syncRecentConversations(new IWxCallback() {
+                @Override
+                public void onSuccess(Object... result) {
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mAdapter.notifyDataSetChangedWithAsyncLoad();
+                            mPullToRefreshListView.onRefreshComplete(false, true);
+                        }
+                    });
+                }
 
-            @Override
-            public void onError(int code, String info) {
-                mUIHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPullToRefreshListView.onRefreshComplete(false, false);
-                    }
-                });
-            }
+                @Override
+                public void onError(int code, String info) {
+                    mUIHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            mPullToRefreshListView.onRefreshComplete(false, false);
+                        }
+                    });
+                }
 
-            @Override
-            public void onProgress(int progress) {
+                @Override
+                public void onProgress(int progress) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 
     @Override

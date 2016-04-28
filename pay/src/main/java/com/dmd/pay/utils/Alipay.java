@@ -29,21 +29,25 @@ public class Alipay {
     // 商户收款账号
     public static final String SELLER = "656923138@qq.com";
     // 商户私钥，pkcs8格式
-    public static final String RSA_PRIVATE = "MIICXQIBAAKBgQDKyU4ZZhjvXOV4Qra8Uxpul6MR5epmcenNObX/YKOKHMwoObfV\n" +
-            "cMjTxwO6Dqi+mF8oEfQobOsvYfS4YRWQaccfbPWsudtpAY/coakCNbN7JyFMqYxc\n" +
-            "x2uzCC+xaQNIHARWb9b8w+4luYBWPyXr3jyw8ebVP4BRXdbwwtyF5B7YQwIDAQAB\n" +
-            "AoGARwi/J9yAzZA//aF4+30s3CKYB9P/CQXMPYyCuUNz5hRyW4DkaYsJfk3Pe2RZ\n" +
-            "LfKYGqQ3X9XPiJiKre+sKxsymarOh7nKxafTZ5HIwhjhN4/EbizbmyFXsZiCi8PP\n" +
-            "YiXbVeRi8WgEyISOzFnCYb39rFFP3lJLtVxYctGRM4PghAECQQDrW4Y5y0OM2pyY\n" +
-            "wv3IWRD5igfn2quqKTAZiXrCfps8tVhM/K2XMlBRSnmHEX2xoMFXO30cu+3SYP7/\n" +
-            "3RilyfpDAkEA3JJ2Enwp7podWid84E7psXR0dWZDw/CjsUKHct0maE7OUpIprGQ5\n" +
-            "IRKlv4gnHTc5q9FiqSl9fkJ9k4mlXfTKAQJAKtjHr9/UVWE7HwhooT+tunApjkkd\n" +
-            "9WV4Lz37Dkt0QXIWODXL+Hmda58uTqudgWftqs7WsRN5cVJdOgFrSkth9wJBAKqT\n" +
-            "cVAWSW9GK9DenMny/PLI9o8byOgsnsqkgo8ny137I7/jXOr+jteuzhNyvZzwal8f\n" +
-            "jEb52RzdWrPQTNx+RAECQQCJPX+gU8Kh02w4/cAmpQqFi5WaVF05sGjHixA694t8\n" +
-            "Q3qw98P0ijcdmrNdFq/i1NyhyuYGY3g5pDGsOfDOnXOc";
+    public static final String RSA_PRIVATE = "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBAKniUeAPz8RcnwgA" +
+            "rEXkVmAcRUfXn4blR5XISPJUobgnPAwjRJIflaoA+jAsKMgHwlHuWpiHq17hvOh6" +
+            "Y5yzGBu30ADxcsZZFkUVAdE6kXHIzZRbFbfzUDzdPBNoYwIgIFjZo38IT5uLsuIa" +
+            "5SrXy6xf6tzu3119VFOkG8ZkFQJzAgMBAAECgYEAppY4pVe77BjLFaTbSboL/Tkb" +
+            "ssQ9OaFRng4FgiP9ZUCMAHcBAa0ZLNjCfUSARQ5evcrWaeX35RXFEc8aKQnx43tP" +
+            "WsHutZX9zAVzHJMqOvby/7cJFya/SUwb5bwRD8GpjPnIk420WhAMVmKSohN3BRU+" +
+            "WbL/PdndwM0FDVGLDwkCQQDQ5nBdJhF2op6C+fNqp4nArSKtJB4ci8RLs4x+y2sM" +
+            "ioMC3RCY7k+7y/e4KQT3ilmQiogyDpvol3ukO4CnYam9AkEA0C/muLHv9g6a4cCJ" +
+            "psrxK1As/ufBxzjaV5GL2SIT0jLk+Za5PHmn/SUj41CBzpR5FiZGjxK2MRV5XkYW" +
+            "55bn7wJBAJ8vOmiA3cXdXZTJCyg2ys28ITR21UtDZi2ZgHIOaGCCHBtOgZtH3hJo" +
+            "9zeqalKHZoCyT951K3EuHdWkUgE6drECQEm4XKQUZlukSlYcnuHQRVxIFNbi7GyG" +
+            "hlKx+GqYNZqeaRS0ub1fewwaJb4t2Pl0+/fK7/tj7d4ts3+dpCi3+EMCQQCIz6uq" +
+            "/EXRtNALhe9bcAXG9Mc0dkoabO+y625unEG/7V6L6JZ8SD2zxVVS+h/v7u80BlTu" +
+            "cr5FzLk1Ixnq9yYU";
     // 支付宝公钥
-    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDDI6d306Q8fIfCOaTXyiUeJHkrIvYISRcc73s3vF1ZT7XN8RNPwJxo8pWaJMmvyTn9N4HQ632qJBVHf8sxHi/fEsraprwCtzvzQETrNRwVxLO5jVmRGi60j8Ue1efIlzPXV9je9mkjzOmdssymZkh2QhUrCmZYI/FCEa3/cNMW0QIDAQAB";
+    public static final String RSA_PUBLIC = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCp4lHgD8/EXJ8IAKxF5FZgHEVH" +
+            "15+G5UeVyEjyVKG4JzwMI0SSH5WqAPowLCjIB8JR7lqYh6te4bzoemOcsxgbt9AA" +
+            "8XLGWRZFFQHROpFxyM2UWxW381A83TwTaGMCICBY2aN/CE+bi7LiGuUq18usX+rc" +
+            "7t9dfVRTpBvGZBUCcwIDAQAB";
 
 
     public static final int SDK_PAY_FLAG = 1;
@@ -139,7 +143,7 @@ public class Alipay {
         orderInfo += "&total_fee=" + "\"" + price + "\"";
 
         // 服务器异步通知页面路径
-        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
+        orderInfo += "&notify_url=" + "\"" + "http://www.cqdmd.com/notify_p_android_url.jsp"
                 + "\"";
 
         // 服务接口名称， 固定值

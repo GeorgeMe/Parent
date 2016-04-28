@@ -1,6 +1,8 @@
 package com.dmd.zsb.utils;
 
 
+import android.util.Log;
+
 import com.dmd.tutor.utils.TLog;
 import com.dmd.zsb.api.ApiConstants;
 import com.google.gson.JsonObject;
@@ -11,7 +13,7 @@ import java.util.Date;
 public class UriHelper {
 
     private static volatile UriHelper instance = null;
-
+    private static boolean development=true;
     /**
      * 20 datas per page
      */
@@ -42,7 +44,11 @@ public class UriHelper {
 
     private String urlToString(boolean flag,String action,JsonObject json){
         StringBuffer stringbuffer = new StringBuffer();
-        stringbuffer.append(ApiConstants.Urls.API_BASE_URLS);
+        if (development){
+            stringbuffer.append(ApiConstants.Urls.API_DEVELOPMENT_URLS);
+        }else {
+            stringbuffer.append(ApiConstants.Urls.API_BASE_URLS);
+        }
         stringbuffer.append(action);
         if (flag){
             stringbuffer.append("json=");
@@ -50,7 +56,12 @@ public class UriHelper {
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH时mm分ss秒SSS");
         String time = sdf.format(new Date(System.currentTimeMillis()));
-        TLog.d("UriHelper",time+" 请求 ："+stringbuffer.toString().trim());
+        if (development){
+            Log.e("UriHelper",time+" 调试请求 ："+stringbuffer.toString().trim());
+        }else {
+            Log.e("UriHelper",time+" 正式请求 ："+stringbuffer.toString().trim());
+        }
+
         return stringbuffer.toString().trim();
     }
 

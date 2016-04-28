@@ -95,7 +95,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
             //进入引导页
             Intent intent = new Intent(this, LeadActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             finish();
         } else {
             splashImage.startAnimation(animation);

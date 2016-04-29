@@ -76,7 +76,39 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
      */
     @Override
     protected void onFirstUserVisible() {
-        Log.e(TAG_LOG,"onFirstUserVisible");
+
+
+    }
+
+    /**
+     * 用户可见
+     */
+    @Override
+    protected void onUserVisible() {
+
+    }
+
+    /**
+     * 用户不可见
+     */
+    @Override
+    protected void onUserInvisible() {
+
+    }
+
+    /**
+     * 加载视图的根视图
+     */
+    @Override
+    protected View getLoadingTargetView() {
+        return fragmentHomeListSwipeLayout;
+    }
+
+    /**
+     * 初始化视图事件
+     */
+    @Override
+    protected void initViewsAndEvents() {
         if (mHomePresenter==null){
             mHomePresenter = new HomePresenterImpl(mContext, this);
         }
@@ -116,41 +148,6 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
             });
         }
 
-    }
-
-    /**
-     * 用户可见
-     */
-    @Override
-    protected void onUserVisible() {
-
-        Log.e(TAG_LOG,"onUserVisible");
-    }
-
-    /**
-     * 用户不可见
-     */
-    @Override
-    protected void onUserInvisible() {
-
-        Log.e(TAG_LOG,"onUserInvisible");
-    }
-
-    /**
-     * 加载视图的根视图
-     */
-    @Override
-    protected View getLoadingTargetView() {
-        Log.e(TAG_LOG,"getLoadingTargetView");
-        return fragmentHomeListSwipeLayout;
-    }
-
-    /**
-     * 初始化视图事件
-     */
-    @Override
-    protected void initViewsAndEvents() {
-        Log.e(TAG_LOG,"initViewsAndEvents");
         barHomeAddress.setText(XmlDB.getInstance(mContext).getKeyString("BDLocation","定位"));
         barHomeDemand.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -92,6 +92,26 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     protected void onFirstUserVisible() {
 
+    }
+
+    @Override
+    protected void onUserVisible() {
+
+    }
+
+    @Override
+    protected void onUserInvisible() {
+
+    }
+
+    @Override
+    protected View getLoadingTargetView() {
+        return fragmentSeekListSwipeLayout;
+    }
+
+    @Override
+    protected void initViewsAndEvents() {
+
         gson = new JsonObject();
         gson.addProperty("page", page);
         gson.addProperty("subid", "");//科目id
@@ -115,25 +135,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 }
             });
         }
-    }
-
-    @Override
-    protected void onUserVisible() {
-
-    }
-
-    @Override
-    protected void onUserInvisible() {
-
-    }
-
-    @Override
-    protected View getLoadingTargetView() {
-        return fragmentSeekListSwipeLayout;
-    }
-
-    @Override
-    protected void initViewsAndEvents() {
         topBarBack.setVisibility(View.GONE);
         topBarTitle.setText("找老师");
         initScreenWidth();

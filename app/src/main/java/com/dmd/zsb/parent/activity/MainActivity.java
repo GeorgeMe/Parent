@@ -28,6 +28,7 @@ import com.alibaba.mobileim.conversation.YWMessageChannel;
 import com.alibaba.mobileim.conversation.YWMessageType;
 import com.alibaba.mobileim.conversation.YWPushInfo;
 import com.dmd.tutor.eventbus.EventCenter;
+import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.openim.CustomConversationHelper;
@@ -70,7 +71,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
 
     private YWIMKit mIMKit;
     private IYWConversationService mConversationService;
-    private IYWConversationUnreadChangeListener mConversationUnreadChangeListener;
+   private IYWConversationUnreadChangeListener mConversationUnreadChangeListener;
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     private IYWMessageLifeCycleListener mMessageLifeCycleListener;
@@ -136,6 +137,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
         mainView=new MainViewImpl(this,this);
         mainView.initialized();
 
+        LocationManager.getInstance().refreshLocation();
     }
 
     @Override
@@ -618,12 +620,14 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
                 return;
             }
             mConversationService = LoginHelper.getInstance().getIMKit().getConversationService();
+            if (mConversationUnreadChangeListener!=null){
+                //resume时需要检查全局未读消息数并做处理，因为离开此界面时删除了全局消息监听器
+                mConversationUnreadChangeListener.onUnreadChange();
 
-            //resume时需要检查全局未读消息数并做处理，因为离开此界面时删除了全局消息监听器
-            mConversationUnreadChangeListener.onUnreadChange();
+                //在Tab栏增加会话未读消息变化的全局监听器
+                mConversationService.addTotalUnreadChangeListener(mConversationUnreadChangeListener);
+            }
 
-            //在Tab栏增加会话未读消息变化的全局监听器
-            mConversationService.addTotalUnreadChangeListener(mConversationUnreadChangeListener);
             Intent intent = getIntent();
             if (intent != null && intent.getStringExtra(LOGIN_SUCCESS) != null){
                 tabhost.onTabChanged(TAB_MESSAGE);

@@ -1,6 +1,5 @@
 package com.dmd.zsb.parent.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -91,14 +90,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void animateBackgroundImage(Animation animation) {
-        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isFirstRunLead", true)) {
-            //进入引导页
-            Intent intent = new Intent(this, LeadActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            splashImage.startAnimation(animation);
-        }
+        splashImage.startAnimation(animation);
     }
 
     @Override
@@ -117,12 +109,16 @@ public class SplashActivity extends BaseActivity implements SplashView {
     }
 
     @Override
+    public void navigateToLead() {
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+        readyGoThenKill(LeadActivity.class);
+    }
+
+    @Override
     public void navigateToHomePage() {
         XmlDB.getInstance(mContext).saveKey("isFirstRunLead", false);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
-        finish();
+        readyGoThenKill(MainActivity.class);
     }
 
     @Override

@@ -95,7 +95,9 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         gson = new JsonObject();
         gson.addProperty("page", page);
         gson.addProperty("subid", "");//科目id
-        mSeekPresenter = new SeekPresenterIml(mContext, this);
+        if (mSeekPresenter==null){
+            mSeekPresenter = new SeekPresenterIml(mContext, this);
+        }
         if (NetUtils.isNetworkConnected(mContext)) {
             if (null != fragmentSeekListSwipeLayout) {
                 fragmentSeekListSwipeLayout.postDelayed(new Runnable() {
@@ -286,11 +288,14 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
+            if (fragmentSeekListListView!=null){
+                if (data.getTotal_page() > page){
+                    fragmentSeekListListView.setCanLoadMore(true);
+                }else{
+                    fragmentSeekListListView.setCanLoadMore(false);
+                }
+            }
 
-            if (data.getTotal_page() > page)
-                fragmentSeekListListView.setCanLoadMore(true);
-            else
-                fragmentSeekListListView.setCanLoadMore(false);
         }
     }
 
@@ -303,10 +308,13 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 mListViewAdapter.getDataList().addAll(data.getUsers());
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page() > page)
-                fragmentSeekListListView.setCanLoadMore(true);
-            else
-                fragmentSeekListListView.setCanLoadMore(false);
+            if (fragmentSeekListListView!=null){
+                if (data.getTotal_page() > page){
+                    fragmentSeekListListView.setCanLoadMore(true);
+                }else{
+                    fragmentSeekListListView.setCanLoadMore(false);
+                }
+            }
         }
     }
 

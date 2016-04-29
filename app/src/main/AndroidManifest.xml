@@ -16,9 +16,13 @@
         android:theme="@style/AppTheme">
 
         <!-- 引导页 -->
-        <activity android:name=".activity.LeadActivity" />
+        <activity android:name=".activity.LeadActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"/>
         <!-- launcher -->
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,9 +30,13 @@
             </intent-filter>
         </activity>
         <!-- 注册 -->
-        <activity android:name=".activity.SignUpActivity" />
+        <activity android:name=".activity.SignUpActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"/>
         <!-- 登录 -->
-        <activity android:name=".activity.SignInActivity" />
+        <activity android:name=".activity.SignInActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"/>
         <!-- 主activity -->
         <activity android:name=".activity.MainActivity"
             android:configChanges="keyboardHidden|orientation"

@@ -10,6 +10,8 @@ public interface SplashView {
 
     void initializeUmengConfig();
 
+    void navigateToLead();
+
     void navigateToHomePage();
 
 

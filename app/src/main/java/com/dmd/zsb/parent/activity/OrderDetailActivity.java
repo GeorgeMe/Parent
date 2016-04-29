@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dmd.pay.AliPayActivity;
+import com.dmd.pay.entity.PayInfo;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.zsb.api.ApiConstants;
@@ -123,7 +124,14 @@ public class OrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_confirm_pay:
-                readyGo(AliPayActivity.class);
+                PayInfo payInfo=new PayInfo();
+                payInfo.setName("课时费用");
+                payInfo.setDesc("授课完成，支付费用");
+                payInfo.setPrice(Double.parseDouble("0.1"));
+                payInfo.setRate(1.0);
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("payInfo",payInfo);
+                readyGoForResult(AliPayActivity.class,110,bundle);
                 break;
         }
     }

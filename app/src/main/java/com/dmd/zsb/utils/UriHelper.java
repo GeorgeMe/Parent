@@ -13,7 +13,7 @@ import java.util.Date;
 public class UriHelper {
 
     private static volatile UriHelper instance = null;
-    private static boolean development=true;
+    private static boolean development=false;
     /**
      * 20 datas per page
      */

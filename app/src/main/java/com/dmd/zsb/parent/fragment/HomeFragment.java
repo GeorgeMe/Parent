@@ -3,6 +3,7 @@ package com.dmd.zsb.parent.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,7 +27,6 @@ import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.entity.UserEntity;
 import com.dmd.zsb.entity.response.HomeResponse;
-import com.dmd.zsb.mvp.presenter.HomePresenter;
 import com.dmd.zsb.mvp.presenter.impl.HomePresenterImpl;
 import com.dmd.zsb.mvp.view.HomeView;
 import com.dmd.zsb.parent.activity.ReleaseOrderActivity;
@@ -62,7 +62,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     private ListViewDataAdapter<UserEntity> mListViewAdapter;
     private List<SubjectEntity> subjectList;
     private int page=1;
-    private HomePresenter mHomePresenter=null;
+    private HomePresenterImpl mHomePresenter=null;
     /**
      *
      */
@@ -76,8 +76,10 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
      */
     @Override
     protected void onFirstUserVisible() {
-
-        mHomePresenter = new HomePresenterImpl(mContext, this);
+        Log.e(TAG_LOG,"onFirstUserVisible");
+        if (mHomePresenter==null){
+            mHomePresenter = new HomePresenterImpl(mContext, this);
+        }
         if (NetUtils.isNetworkConnected(mContext)) {
             if (null != fragmentHomeListSwipeLayout) {
                 fragmentHomeListSwipeLayout.postDelayed(new Runnable() {
@@ -113,7 +115,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 }
             });
         }
-        LocationManager.getInstance().refreshLocation();
+
     }
 
     /**
@@ -122,6 +124,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     @Override
     protected void onUserVisible() {
 
+        Log.e(TAG_LOG,"onUserVisible");
     }
 
     /**
@@ -130,6 +133,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     @Override
     protected void onUserInvisible() {
 
+        Log.e(TAG_LOG,"onUserInvisible");
     }
 
     /**
@@ -137,6 +141,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
      */
     @Override
     protected View getLoadingTargetView() {
+        Log.e(TAG_LOG,"getLoadingTargetView");
         return fragmentHomeListSwipeLayout;
     }
 
@@ -145,6 +150,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
      */
     @Override
     protected void initViewsAndEvents() {
+        Log.e(TAG_LOG,"initViewsAndEvents");
         barHomeAddress.setText(XmlDB.getInstance(mContext).getKeyString("BDLocation","定位"));
         barHomeDemand.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -272,10 +278,13 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 subjectList.addAll(data.getSubjects());
                 mNineGridlayout.setAdapter(new HomeCoursesAdapter(mContext, data.getSubjects(), 5));
             }
-            if (data.getTotal_page() > page)
-                fragmentHomeListView.setCanLoadMore(true);
-            else
-                fragmentHomeListView.setCanLoadMore(false);
+            if (fragmentHomeListView!=null){
+                if (data.getTotal_page() > page){
+                    fragmentHomeListView.setCanLoadMore(true);
+                }else {
+                    fragmentHomeListView.setCanLoadMore(false);
+                }
+            }
         }
     }
 
@@ -288,10 +297,13 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 mListViewAdapter.getDataList().addAll(data.getUsers());
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page()> page)
-                fragmentHomeListView.setCanLoadMore(true);
-            else
-                fragmentHomeListView.setCanLoadMore(false);
+            if (fragmentHomeListView!=null){
+                if (data.getTotal_page() > page){
+                    fragmentHomeListView.setCanLoadMore(true);
+                }else {
+                    fragmentHomeListView.setCanLoadMore(false);
+                }
+            }
         }
     }
     //==============================AdapterView.OnItemClickListener=============================================

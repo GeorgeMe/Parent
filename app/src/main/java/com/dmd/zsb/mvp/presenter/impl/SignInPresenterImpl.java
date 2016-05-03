@@ -48,6 +48,17 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
 
     @Override
     public void signIn(JsonObject jsonObject) {
+/*        usersigninRequest request = new usersigninRequest();
+        request.mobile =mobile;
+        request.password = password;
+        request.UUID = TutorApplication.getUUID(mContext);
+        request.platform = "android";
+        request.ver = Constants.ZSBVERSION;
+        LOCATION location = new LOCATION();
+        location.lat = LocationManager.getLatitude();
+        location.lon = LocationManager.getLongitude();
+        request.location=location;
+        request.toJson();*/
         signInInteractor.getCommonSingleData(jsonObject);
     }
 }

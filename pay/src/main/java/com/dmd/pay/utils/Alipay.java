@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -76,7 +77,7 @@ public class Alipay {
         // 订单
         DecimalFormat df = new DecimalFormat("0.00");
         String orderInfo = getOrderInfo(payinfo.getName(), payinfo.getDesc()+ " ", df.format(payinfo.getPrice() * payinfo.getRate()));
-
+        Log.e("Alipay",orderInfo);
         // 对订单做RSA 签名
         String sign = sign(orderInfo);
         try {
@@ -143,7 +144,7 @@ public class Alipay {
         orderInfo += "&total_fee=" + "\"" + price + "\"";
 
         // 服务器异步通知页面路径
-        orderInfo += "&notify_url=" + "\"" + "http://www.cqdmd.com/notify_p_android_url.jsp"
+        orderInfo += "&notify_url=" + "\"" + "http://www.cqdmd.com/v1.0/p_order_testalipay.action"
                 + "\"";
 
         // 服务接口名称， 固定值

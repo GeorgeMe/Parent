@@ -11,6 +11,8 @@ import com.dmd.zsb.mvp.presenter.VouchersPresenter;
 import com.dmd.zsb.mvp.view.VouchersView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/28.
  */
@@ -26,7 +28,7 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
     }
 
     @Override
-    public void onVouchers(int event_tag,JsonObject jsonObject) {
+    public void onVouchers(int event_tag,JSONObject jsonObject) {
         vouchersInteractor.getCommonListData(event_tag,jsonObject);
     }
 

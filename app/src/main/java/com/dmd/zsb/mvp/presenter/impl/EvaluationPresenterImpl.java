@@ -10,6 +10,8 @@ import com.dmd.zsb.mvp.presenter.EvaluationPresenter;
 import com.dmd.zsb.mvp.view.EvaluationView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/29.
  */
@@ -26,7 +28,7 @@ public class EvaluationPresenterImpl implements EvaluationPresenter,BaseMultiLoa
     }
 
     @Override
-    public void onEvaluation(int event_tag,JsonObject jsonObject) {
+    public void onEvaluation(int event_tag,JSONObject jsonObject) {
         evaluationInteractor.getCommonListData(event_tag,jsonObject);
     }
 

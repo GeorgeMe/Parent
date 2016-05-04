@@ -23,9 +23,13 @@ import com.dmd.zsb.parent.activity.SignInActivity;
 import com.dmd.zsb.parent.activity.VouchersActivity;
 import com.dmd.zsb.parent.activity.WalletActivity;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
+import com.dmd.zsb.protocol.response.usermineResponse;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -106,12 +110,7 @@ public class MineFragment extends BaseFragment implements MineView {
             mineSignOutHeader.setVisibility(View.GONE);
             mineLogoutHeader.setVisibility(View.VISIBLE);
             minePresenter=new MinePresenterImpl(mContext,this);
-            JsonObject jsonObject=new JsonObject();
-            jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-            jsonObject.addProperty("version", Constants.ZSBVERSION);
-            jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-            jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-            minePresenter.onMineInfo(1,jsonObject);
+            minePresenter.onMineInfo();
         }else {
             mineSignOutHeader.setVisibility(View.VISIBLE);
             mineLogoutHeader.setVisibility(View.GONE);
@@ -119,16 +118,12 @@ public class MineFragment extends BaseFragment implements MineView {
     }
 
     @Override
-    public void setView(JsonObject data) {
-
-        Log.e(TAG_LOG,data.toString());
-//        Log.e(TAG_LOG,ApiConstants.Urls.API_BASE_URLS+data.get("").getAsString());
-
-        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+data.get("mineHeaderImg").getAsString()).into(mineHeaderImg);
-        mineName.setText(data.get("mineName").getAsString());
-        mineAddress.setText(data.get("mineAddress").getAsString());
-        mineGrade.setText(data.get("mineGrade").getAsString());
-        mineSubjects.setText(data.get("mineSubjects").getAsString());
+    public void setView(usermineResponse response) {
+        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+response.mineHeaderImg).into(mineHeaderImg);
+        mineName.setText(response.mineName);
+        mineAddress.setText(response.mineAddress);
+        mineGrade.setText(response.mineGrade);
+        mineSubjects.setText(response.mineSubjects);
 
     }
 

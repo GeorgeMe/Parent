@@ -18,6 +18,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/1/7.
  */
@@ -30,9 +32,9 @@ public class SeekInteractorImpl implements CommonListInteractor{
     }
 
     @Override
-    public void getCommonListData(final int event,JsonObject data) {
+    public void getCommonListData(final int event,JSONObject json) {
         GsonRequest<SeekResponse> gsonRequest = new GsonRequest<SeekResponse>(
-                UriHelper.getInstance().findteacher(data),
+                UriHelper.getInstance().findteacher(json),
                 null,
                 new TypeToken<SeekResponse>() {
                 }.getType(),

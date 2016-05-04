@@ -14,6 +14,9 @@ import com.dmd.zsb.mvp.view.WalletView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -65,19 +68,23 @@ public class WalletActivity extends BaseActivity implements WalletView{
     protected void initViewsAndEvents() {
         topBarTitle.setText("我的钱包");
         walletPresenter=new WalletPresenterImpl(this,mContext);
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        }catch (JSONException j){
+
+        }
         walletPresenter.onWalletInfo(jsonObject);
     }
 
     @Override
-    public void setView(JsonObject jsonObject) {
-        walletBalance.setText(jsonObject.get("balance").getAsString());
-        walletCumulativeClass.setText(jsonObject.get("total_hours").getAsString());
-        walletEarnMoney.setText(jsonObject.get("total_amount").getAsString());
+    public void setView(JSONObject jsonObject) {
+        walletBalance.setText(jsonObject.optString("balance"));
+        walletCumulativeClass.setText(jsonObject.optString("total_hours"));
+        walletEarnMoney.setText(jsonObject.optString("total_amount"));
     }
 
     @Override

@@ -2,10 +2,9 @@ package com.dmd.zsb.utils;
 
 
 import android.util.Log;
-
-import com.dmd.tutor.utils.TLog;
 import com.dmd.zsb.api.ApiConstants;
-import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,7 +13,7 @@ public class UriHelper {
 
     private static volatile UriHelper instance = null;
     //true开发者模式  false 正式环境
-    private static boolean development=false;
+    private static boolean development=true;
     /**
      * 20 datas per page
      */
@@ -43,7 +42,7 @@ public class UriHelper {
         }
     }
 
-    private String urlToString(boolean flag,String action,JsonObject json){
+    private String urlToString(boolean flag,String action,JSONObject json){
         StringBuffer stringbuffer = new StringBuffer();
         if (development){
             stringbuffer.append(ApiConstants.Urls.API_DEVELOPMENT_URLS);
@@ -67,155 +66,155 @@ public class UriHelper {
     }
 
     //初始化数据
-    public String InitData(JsonObject json){
+    public String InitData(JSONObject json){
         return urlToString(false,ApiConstants.Urls.API_USER_INITDATA,json);
     }
     //注册
-    public String signUp(JsonObject json){
+    public String signUp(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_SIGNUP,json);
     }
     //登陆
-    public String signIn(JsonObject json){
+    public String signIn(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_SIGNIN,json);
     }
     //退出
-    public String signOut(JsonObject json){
+    public String signOut(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_SIGNOUT,json);
     }
 
 
     //首页
-    public String home(JsonObject json){
+    public String home(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_HOME,json);
     }
     //找老师
-    public String findteacher(JsonObject json){
+    public String findteacher(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_FINDTEACHER,json);
     }
     //我的
-    public String mine(JsonObject json){
+    public String mine(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MINE,json);
     }
     //用户详情
-    public String userDetail(JsonObject json){
+    public String userDetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_USERDETAIL,json);
     }
 
 
     //我的钱包
-    public String mywallet(JsonObject json){
+    public String mywallet(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYWALLET,json);
     }
     //我的订单
-    public String myorder(JsonObject json){
+    public String myorder(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYORDER,json);
     }
     //我的评价
-    public String myevaluation(JsonObject json){
+    public String myevaluation(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYEVALUATION,json);
     }
     //我的需求
-    public String mydemand(JsonObject json){
+    public String mydemand(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYDEMAND,json);
     }
     //我的代金券
-    public String myvouchers(JsonObject json){
+    public String myvouchers(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYVOUCHERS,json);
     }
     //交易记录（钱包里面）
-    public String billdetail(JsonObject json){
+    public String billdetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_BILLDETAIL,json);
     }
 
 
     //充值
-    public String recharge(JsonObject json){
+    public String recharge(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_RECHARGE,json);
     }
     //提现
-    public String withdrawals(JsonObject json){
+    public String withdrawals(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_WITHDRAWALS,json);
     }
     //银行卡
-    public String bankcard(JsonObject json){
+    public String bankcard(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_BANKCARD,json);
     }
     //代金券
-    public String vouchers(JsonObject json){
+    public String vouchers(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_VOUCHERS,json);
     }
 
 
     //我的订单详情
-    public String myorderdetail(JsonObject json){
+    public String myorderdetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYORDERDETAIL,json);
     }
     //我的评价详情
-    public String myevaluationdetail(JsonObject json){
+    public String myevaluationdetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYEVALUATIONDETAIL,json);
     }
     //我的需求详情
-    public String mydemanddetail(JsonObject json){
+    public String mydemanddetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYDEMANDDETAIL,json);
     }
     //我的代金券详情
-    public String myvouchersdetail(JsonObject json){
+    public String myvouchersdetail(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_MYVOUCHERSDETAIL,json);
     }
 
     //修改用户简介
-    public String changeprofile(JsonObject json){
+    public String changeprofile(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CHANGEPROFILE,json);
     }
     //修改头像
-    public String changeAvatar(JsonObject json){
+    public String changeAvatar(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CHANGEAVATAR,json);
     }
     //修改密码
-    public String changePassword(JsonObject json){
+    public String changePassword(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CHANGEPASSWORD,json);
     }
     //修改签名
-    public String changesignature(JsonObject json){
+    public String changesignature(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CHANGESIGNATURE,json);
     }
     //修改昵称
-    public String changenickname(JsonObject json){
+    public String changenickname(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CHANGENICKNAME,json);
     }
 
     //上传日志
-    public String logFile(JsonObject json){
+    public String logFile(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_LOGFILE,json);
     }
     //反馈
-    public String seedFeedback(JsonObject json){
+    public String seedFeedback(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_FEEDBACK,json);
     }
     //认证
-    public String certify(JsonObject json){
+    public String certify(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_USER_CERTIFY,json);
     }
 
 
     //保存订单信息
-    public String saveOrder(JsonObject json){
+    public String saveOrder(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_SAVEORDER,json);
     }
     //取消订单
-    public String cancelOrder(JsonObject json){
+    public String cancelOrder(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_CANCEL,json);
     }
     //支付订单
-    public String payOrder(JsonObject json){
+    public String payOrder(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_PAY,json);
     }
     //确认支付
-    public String confirmpay(JsonObject json){
+    public String confirmpay(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_CONFIRMPAY,json);
     }
     //修改订单状态
-    public String updateOrderStatus(JsonObject json){
+    public String updateOrderStatus(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_UPDATEORDERSTATUS,json);
     }
 

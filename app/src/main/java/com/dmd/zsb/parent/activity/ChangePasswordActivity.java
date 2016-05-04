@@ -18,6 +18,9 @@ import com.dmd.zsb.mvp.view.ChangePasswordView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -108,12 +111,17 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
                 }else if (!newPassword.getText().toString().equals(reNewPassword.getText().toString())){
                     showToast("两次密码不一致");
                 }else if (newPassword.getText().toString().equals(reNewPassword.getText().toString())){
-                    JsonObject jsonObject=new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    jsonObject.addProperty("newPassword",newPassword.getText().toString());
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                        jsonObject.put("newPassword",newPassword.getText().toString());
+                    }catch (JSONException j){
+
+                    }
+
                     changePasswordPresenter.onChangePassword(jsonObject);
                 }
 

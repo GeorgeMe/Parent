@@ -10,6 +10,8 @@ import com.dmd.zsb.mvp.presenter.OrderPresenter;
 import com.dmd.zsb.mvp.view.OrderView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/29.
  */
@@ -25,7 +27,7 @@ public class OrderPresenterImpl implements OrderPresenter ,BaseMultiLoadedListen
     }
 
     @Override
-    public void onOrder(int event_tag, JsonObject jsonObject) {
+    public void onOrder(int event_tag, JSONObject jsonObject) {
         orderInteractor.getCommonListData(event_tag,jsonObject);
     }
 

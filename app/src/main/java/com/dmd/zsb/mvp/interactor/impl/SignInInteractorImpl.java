@@ -11,27 +11,29 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.usersigninResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/14.
  */
 public class SignInInteractorImpl implements CommonSingleInteractor{
 
-    private BaseSingleLoadedListener<JsonObject> loadedListener;
+    private BaseSingleLoadedListener<usersigninResponse> loadedListener;
 
-    public SignInInteractorImpl(BaseSingleLoadedListener<JsonObject> loadedListener) {
+    public SignInInteractorImpl(BaseSingleLoadedListener<usersigninResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
-    public void getCommonSingleData(JsonObject gson) {
-        GsonRequest<JsonObject> gsonRequest=new GsonRequest<JsonObject>(UriHelper.getInstance().signIn(gson),null,new TypeToken<JsonObject>(){}.getType(), new Response.Listener<JsonObject>(){
+    public void getCommonSingleData(JSONObject gson) {
+        GsonRequest<usersigninResponse> gsonRequest=new GsonRequest<usersigninResponse>(UriHelper.getInstance().signIn(gson),null,new TypeToken<usersigninResponse>(){}.getType(), new Response.Listener<usersigninResponse>(){
             @Override
-            public void onResponse(JsonObject response) {
+            public void onResponse(usersigninResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

@@ -29,6 +29,9 @@ import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import butterknife.Bind;
@@ -168,17 +171,22 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
                 } else {
                     CloseKeyBoard();
                     btnSignupComplete.setClickable(false);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("client_type", Constants.PLATFORM);
-                    jsonObject.addProperty("location", XmlDB.getInstance(mContext).getKeyString("addr","未取得定位地址"));
-                    jsonObject.addProperty("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
-                    jsonObject.addProperty("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
-                    jsonObject.addProperty("role", Constants.USER_ROLE);
-                    jsonObject.addProperty("nickname", nickname);
-                    jsonObject.addProperty("mobile", mobile);
-                    jsonObject.addProperty("password", password);
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("client_type", Constants.PLATFORM);
+                        jsonObject.put("location", XmlDB.getInstance(mContext).getKeyString("addr","未取得定位地址"));
+                        jsonObject.put("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
+                        jsonObject.put("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
+                        jsonObject.put("role", Constants.USER_ROLE);
+                        jsonObject.put("nickname", nickname);
+                        jsonObject.put("mobile", mobile);
+                        jsonObject.put("password", password);
+                    }catch (JSONException j){
+
+                    }
+
                     signUpPresenter.signUp(jsonObject);
                     if (progressDialog==null) {
                         progressDialog=new MaterialDialog.Builder(this)

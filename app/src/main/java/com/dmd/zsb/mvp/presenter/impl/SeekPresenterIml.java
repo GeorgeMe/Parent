@@ -14,6 +14,9 @@ import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.view.SeekView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 /**
  * Created by Administrator on 2015/12/22.
@@ -30,7 +33,7 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<S
     }
 
     @Override
-    public void loadListData(int event,JsonObject data) {
+    public void loadListData(int event,JSONObject data) {
         mSeekView.hideLoading();
         if (event==Constants.EVENT_REFRESH_DATA) {
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
@@ -38,16 +41,22 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<S
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
         }
         //提交的参数封装
-        JsonObject jsonObject=new JsonObject();
+        JSONObject jsonObject=new JSONObject();
         String uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
         String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("uid",uid);
-        jsonObject.addProperty("sid",sid);
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-        jsonObject.addProperty("page",data.get("page").getAsString());//页码
-        jsonObject.addProperty("subid",data.get("subid").getAsString());//科目id
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("uid",uid);
+            jsonObject.put("sid",sid);
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+            jsonObject.put("page",data.optString("page"));//页码
+            jsonObject.put("subid",data.optString("subid"));//科目id
+        }catch (JSONException j){
+
+        }
+
+
         mCommonListInteractor.getCommonListData(event,jsonObject);
     }
 

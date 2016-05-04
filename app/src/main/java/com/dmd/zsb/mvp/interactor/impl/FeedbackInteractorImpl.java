@@ -16,22 +16,24 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/25.
  */
 public class FeedbackInteractorImpl implements CommonSingleInteractor {
 
-    private BaseSingleLoadedListener<JsonObject> loadedListener;
+    private BaseSingleLoadedListener<JSONObject> loadedListener;
 
-    public FeedbackInteractorImpl(BaseSingleLoadedListener<JsonObject> loadedListener) {
+    public FeedbackInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
-    public void getCommonSingleData(JsonObject gson) {
-        GsonRequest<JsonObject> gsonRequest=new GsonRequest<JsonObject>(UriHelper.getInstance().seedFeedback(gson),null,new TypeToken<JsonObject>(){}.getType(), new Response.Listener<JsonObject>(){
+    public void getCommonSingleData(JSONObject json) {
+        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().seedFeedback(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
             @Override
-            public void onResponse(JsonObject response) {
+            public void onResponse(JSONObject response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

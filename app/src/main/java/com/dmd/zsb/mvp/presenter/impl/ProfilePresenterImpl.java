@@ -8,10 +8,12 @@ import com.dmd.zsb.mvp.presenter.ProfilePresenter;
 import com.dmd.zsb.mvp.view.ProfileView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedListener<JsonObject> {
+public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedListener<JSONObject> {
     private ProfileInteractorImpl briefInteractor;
     private Context mContext;
     private ProfileView briefView;
@@ -23,12 +25,12 @@ public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedLi
     }
 
     @Override
-    public void onChangeProfile(JsonObject jsonObject) {
+    public void onChangeProfile(JSONObject jsonObject) {
         briefInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
-    public void onSuccess(JsonObject data) {
+    public void onSuccess(JSONObject data) {
         briefView.toSettingView();
     }
 

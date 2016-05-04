@@ -38,6 +38,9 @@ import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 
 public class SignInActivity extends BaseActivity implements SignInView, View.OnClickListener {
@@ -177,17 +180,23 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                     CloseKeyBoard();
                     btnLogin.setClickable(false);
                     init(etMobile.getText().toString(), getString(R.string.app_key));
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("location", XmlDB.getInstance(mContext).getKeyString("addr","未取得定位地址"));
-                    jsonObject.addProperty("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
-                    jsonObject.addProperty("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
-                    jsonObject.addProperty("client_type", Constants.PLATFORM);
-                    jsonObject.addProperty("role", Constants.USER_ROLE);
-                    jsonObject.addProperty("mobile", mobile);
-                    jsonObject.addProperty("password", password);
-                    signInPresenter.signIn(jsonObject);
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("location", XmlDB.getInstance(mContext).getKeyString("addr","未取得定位地址"));
+                        jsonObject.put("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0)+"");
+                        jsonObject.put("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0)+"");
+                        jsonObject.put("client_type", Constants.PLATFORM);
+                        jsonObject.put("role", Constants.USER_ROLE);
+                        jsonObject.put("mobile", mobile);
+                        jsonObject.put("password", password);
+
+                    }catch (JSONException j){
+
+                    }
+                    //signInPresenter.signIn(jsonObject);
+                    signInPresenter.signIn(mobile,password);
 
                     progressDialog=new ProgressDialog(mContext,getString(R.string.please_later_on));
                     progressDialog.show();

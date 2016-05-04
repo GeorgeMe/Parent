@@ -29,6 +29,9 @@ import com.dmd.zsb.widgets.LoadMoreListView;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -83,20 +86,25 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                 fragmentEvaluationListSwipeLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                        jsonObject.addProperty("version", Constants.ZSBVERSION);
-                        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                        jsonObject.addProperty("page", page);
-                        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                        if (evaluationGroupMenuIncomplete.isChecked()) {
-                            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
-                        } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                            jsonObject.addProperty("group_menu", "evaluationGroupMenuRecentCompleted");
-                        } else {
-                            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                            jsonObject.put("version", Constants.ZSBVERSION);
+                            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                            jsonObject.put("page", page);
+                            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                            if (evaluationGroupMenuIncomplete.isChecked()) {
+                                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                            } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
+                                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
+                            } else {
+                                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                            }
+                        }catch (JSONException j){
+
                         }
+
                         evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, jsonObject);
                     }
                 }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
@@ -105,20 +113,25 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
             toggleNetworkError(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    jsonObject.addProperty("page", page);
-                    jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    if (evaluationGroupMenuIncomplete.isChecked()) {
-                        jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
-                    } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                        jsonObject.addProperty("group_menu", "evaluationGroupMenuRecentCompleted");
-                    } else {
-                        jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("page", page);
+                        jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                        if (evaluationGroupMenuIncomplete.isChecked()) {
+                            jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                        } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
+                            jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
+                        } else {
+                            jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                        }
+                    }catch (JSONException j){
+
                     }
+
                     evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, jsonObject);
                 }
             });
@@ -226,38 +239,47 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
 
     @Override
     public void onLoadMore() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-        jsonObject.addProperty("page", page);
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-        if (evaluationGroupMenuIncomplete.isChecked()) {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
-        } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuRecentCompleted");
-        } else {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("page", page);
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+            if (evaluationGroupMenuIncomplete.isChecked()) {
+                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+            } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
+                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
+            } else {
+                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+            }
+        }catch (JSONException j){
+
         }
+
         evaluationPresenter.onEvaluation(Constants.EVENT_LOAD_MORE_DATA, jsonObject);
     }
 
     @Override
     public void onRefresh() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-        jsonObject.addProperty("page", page);
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-        if (evaluationGroupMenuIncomplete.isChecked()) {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
-        } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuRecentCompleted");
-        } else {
-            jsonObject.addProperty("group_menu", "evaluationGroupMenuIncomplete");
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("page", page);
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+            if (evaluationGroupMenuIncomplete.isChecked()) {
+                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+            } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
+                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
+            } else {
+                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+            }
+        }catch (JSONException j){
+
         }
         evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, jsonObject);
     }
@@ -311,25 +333,35 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                 finish();
                 break;
             case R.id.evaluation_group_menu_incomplete:
-                JsonObject evaluation_group_menu_incomplete = new JsonObject();
-                evaluation_group_menu_incomplete.addProperty("appkey", Constants.ZSBAPPKEY);
-                evaluation_group_menu_incomplete.addProperty("version", Constants.ZSBVERSION);
-                evaluation_group_menu_incomplete.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                evaluation_group_menu_incomplete.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                evaluation_group_menu_incomplete.addProperty("page", 1);
-                evaluation_group_menu_incomplete.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                evaluation_group_menu_incomplete.addProperty("group_menu", "evaluationGroupMenuIncomplete");
+                JSONObject evaluation_group_menu_incomplete=new JSONObject();
+                try {
+                    evaluation_group_menu_incomplete.put("appkey", Constants.ZSBAPPKEY);
+                    evaluation_group_menu_incomplete.put("version", Constants.ZSBVERSION);
+                    evaluation_group_menu_incomplete.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    evaluation_group_menu_incomplete.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    evaluation_group_menu_incomplete.put("page", 1);
+                    evaluation_group_menu_incomplete.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                    evaluation_group_menu_incomplete.put("group_menu", "evaluationGroupMenuIncomplete");
+                }catch (JSONException j){
+
+                }
+
                 evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, evaluation_group_menu_incomplete);
                 break;
             case R.id.evaluation_group_menu_recent_completed:
-                JsonObject evaluation_group_menu_recent_completed = new JsonObject();
-                evaluation_group_menu_recent_completed.addProperty("appkey", Constants.ZSBAPPKEY);
-                evaluation_group_menu_recent_completed.addProperty("version", Constants.ZSBVERSION);
-                evaluation_group_menu_recent_completed.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                evaluation_group_menu_recent_completed.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                evaluation_group_menu_recent_completed.addProperty("page", 1);
-                evaluation_group_menu_recent_completed.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                evaluation_group_menu_recent_completed.addProperty("group_menu", "evaluationGroupMenuRecentCompleted");
+                JSONObject evaluation_group_menu_recent_completed=new JSONObject();
+                try {
+                    evaluation_group_menu_recent_completed.put("appkey", Constants.ZSBAPPKEY);
+                    evaluation_group_menu_recent_completed.put("version", Constants.ZSBVERSION);
+                    evaluation_group_menu_recent_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    evaluation_group_menu_recent_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    evaluation_group_menu_recent_completed.put("page", 1);
+                    evaluation_group_menu_recent_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                    evaluation_group_menu_recent_completed.put("group_menu", "evaluationGroupMenuRecentCompleted");
+                }catch (JSONException j){
+
+                }
+
                 evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, evaluation_group_menu_recent_completed);
                 break;
         }

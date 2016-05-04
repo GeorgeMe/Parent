@@ -17,6 +17,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 
 /**
  * Created by Administrator on 2016/3/29.
@@ -29,8 +31,8 @@ public class EvaluationInteractorImpl implements CommonListInteractor {
     }
 
     @Override
-    public void getCommonListData(final int event, JsonObject gson) {
-        GsonRequest<EvaluationResponse> gsonRequest =new GsonRequest<EvaluationResponse>(UriHelper.getInstance().myevaluation(gson), null, new TypeToken<EvaluationResponse>() {
+    public void getCommonListData(final int event, JSONObject json) {
+        GsonRequest<EvaluationResponse> gsonRequest =new GsonRequest<EvaluationResponse>(UriHelper.getInstance().myevaluation(json), null, new TypeToken<EvaluationResponse>() {
         }.getType(), new Response.Listener<EvaluationResponse>(){
             @Override
             public void onResponse(EvaluationResponse response) {

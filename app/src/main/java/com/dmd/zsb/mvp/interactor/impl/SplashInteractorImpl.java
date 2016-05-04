@@ -24,6 +24,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.util.Calendar;
 
 public class SplashInteractorImpl implements SplashInteractor {
@@ -35,8 +37,8 @@ public class SplashInteractorImpl implements SplashInteractor {
     }
 
     @Override
-    public void loadingInitData(JsonObject jsonObject) {
-        GsonRequest<SplashResponse> gsonRequest=new GsonRequest<SplashResponse>(UriHelper.getInstance().InitData(jsonObject),null,new TypeToken<SplashResponse>(){}.getType(), new Response.Listener<SplashResponse>(){
+    public void loadingInitData(JSONObject json) {
+        GsonRequest<SplashResponse> gsonRequest=new GsonRequest<SplashResponse>(UriHelper.getInstance().InitData(json),null,new TypeToken<SplashResponse>(){}.getType(), new Response.Listener<SplashResponse>(){
             @Override
             public void onResponse(SplashResponse response) {
                 Log.e("onResponse",""+response.getGradeList().size());

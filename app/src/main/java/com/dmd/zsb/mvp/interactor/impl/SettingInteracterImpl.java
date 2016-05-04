@@ -20,6 +20,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,26 +30,26 @@ import java.util.List;
  * Created by Administrator on 2016/3/25.
  */
 public class SettingInteracterImpl implements CommonListInteractor {
-    private BaseMultiLoadedListener<JsonObject> loadedListener;
+    private BaseMultiLoadedListener<JSONObject> loadedListener;
     private OnUploadProcessListener uploadProcessListener;
 
-    public SettingInteracterImpl(BaseMultiLoadedListener<JsonObject> loadedListener, OnUploadProcessListener uploadProcessListener) {
+    public SettingInteracterImpl(BaseMultiLoadedListener<JSONObject> loadedListener, OnUploadProcessListener uploadProcessListener) {
         this.loadedListener = loadedListener;
         this.uploadProcessListener = uploadProcessListener;
     }
 
     @Override
-    public void getCommonListData(final int event, JsonObject gson) {
+    public void getCommonListData(final int event, JSONObject json) {
         //event  事件标记   changeAvatar修改头像  signOut退出登录
         List<FormFile> fileList=new ArrayList<>();
-        JsonObject file=gson.get("formFile").getAsJsonObject();
-        JsonObject json=gson.get("json").getAsJsonObject();
-        FormFile formFile=new FormFile(file.get("fileName").getAsString(), new File(file.get("filePath").getAsString()), file.get("parameterName").getAsString(), file.get("contentType").getAsString());
+        JSONObject file=json.optJSONObject("formFile");
+        JSONObject params=json.optJSONObject("json");
+        FormFile formFile=new FormFile(file.optString("fileName"), new File(file.optString("filePath")), file.optString("parameterName"), file.optString("contentType"));
         fileList.add(formFile);
-        PostUploadRequest<JsonObject> uploadRequest=new PostUploadRequest<JsonObject>(UriHelper.getInstance().changeAvatar(json), fileList, new TypeToken<JsonObject>() {
-        }.getType(), new Response.Listener<JsonObject>() {
+        PostUploadRequest<JSONObject> uploadRequest=new PostUploadRequest<JSONObject>(UriHelper.getInstance().changeAvatar(params), fileList, new TypeToken<JSONObject>() {
+        }.getType(), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(JsonObject response) {
+            public void onResponse(JSONObject response) {
                 loadedListener.onSuccess(event,response);
             }
         }, new Response.ErrorListener() {
@@ -76,10 +78,10 @@ public class SettingInteracterImpl implements CommonListInteractor {
         VolleyHelper.getInstance().getRequestQueue().add(uploadRequest);
     }
 
-    public void onSignOut(final int event,JsonObject jsonObject) {
-        GsonRequest<JsonObject> gsonRequest=new GsonRequest<JsonObject>(UriHelper.getInstance().signOut(jsonObject),null,new TypeToken<JsonObject>(){}.getType(), new Response.Listener<JsonObject>(){
+    public void onSignOut(final int event,JSONObject json) {
+        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().signOut(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
             @Override
-            public void onResponse(JsonObject response) {
+            public void onResponse(JSONObject response) {
                 loadedListener.onSuccess(event,response);
             }
         },new Response.ErrorListener(){

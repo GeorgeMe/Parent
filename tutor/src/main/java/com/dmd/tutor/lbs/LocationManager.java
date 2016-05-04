@@ -60,7 +60,7 @@ public  class LocationManager implements BDLocationListener
         mLocationClient.requestLocation();
     }
 
-    public BDLocation getLocation()
+    public BDLocation getLocationClient()
     {
         return mLocationClient.getLastKnownLocation();
     }
@@ -133,7 +133,7 @@ public  class LocationManager implements BDLocationListener
     }
 
     
-    public static String getLocation(double lat, double lon) {
+    public static String getDistance(double lat, double lon) {
         String loc = null;
         double s = gps2m(getLatitude(), getLongitude(), lat, lon);
         if(s > 1000) {
@@ -166,6 +166,9 @@ public  class LocationManager implements BDLocationListener
         mLocationClient.stop();
     }
     
+    public static String getLocationAddr() {
+        return XmlDB.getInstance(context).getKeyString("location","");
+    }
     public static double getLatitude() {
     latitude = XmlDB.getInstance(context).getKeyFloatValue("latitude", 0);
     return latitude;

@@ -39,6 +39,9 @@ import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,23 +112,26 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
      */
     @Override
     protected void initViewsAndEvents() {
-        if (mHomePresenter==null){
-            mHomePresenter = new HomePresenterImpl(mContext, this);
-        }
+        mHomePresenter = new HomePresenterImpl(mContext, this);
         if (NetUtils.isNetworkConnected(mContext)) {
             if (null != fragmentHomeListSwipeLayout) {
                 fragmentHomeListSwipeLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         //提交的参数封装
-                        JsonObject jsonObject=new JsonObject();
-                        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                        jsonObject.addProperty("version", Constants.ZSBVERSION);
-                        jsonObject.addProperty("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                        jsonObject.addProperty("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-                        jsonObject.addProperty("page",1);//页码
-                        jsonObject.addProperty("subid","402881e953795aab0153795bffa90005");//科目id
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                            jsonObject.put("version", Constants.ZSBVERSION);
+                            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+                            jsonObject.put("page",1);//页码
+                            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
+                        }catch (JSONException j){
+
+                        }
+
                         mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                     }
                 }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
@@ -135,14 +141,19 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 @Override
                 public void onClick(View v) {
                     //提交的参数封装
-                    JsonObject jsonObject=new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    jsonObject.addProperty("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-                    jsonObject.addProperty("page",1);//页码
-                    jsonObject.addProperty("subid","402881e953795aab0153795bffa90005");//科目id
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                        jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                        jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+                        jsonObject.put("page",1);//页码
+                        jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
+                    }catch (JSONException j){
+
+                    }
+
                     mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                 }
             });
@@ -206,7 +217,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                                 tutor_list_teacher_content.setText(itemData.getSignature());
                                 tutor_list_teacher_one2one.setText("");
                                 tutor_list_teacher_one2more.setText("");
-                                tutor_list_teacher_distance.setText(LocationManager.getLocation(Double.parseDouble(itemData.getLat()),Double.parseDouble(itemData.getLon())));
+                                tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.getLat()),Double.parseDouble(itemData.getLon())));
                     }
                 };
             }
@@ -327,14 +338,19 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     public void onLoadMore() {
         page = 1 + page;
         //提交的参数封装
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-        jsonObject.addProperty("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-        jsonObject.addProperty("page",page);//页码
-        jsonObject.addProperty("subid","402881e953795aab0153795bffa90005");//科目id
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+            jsonObject.put("page",page);//页码
+            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
+        }catch (JSONException j){
+
+        }
+
         mHomePresenter.loadListData(Constants.EVENT_LOAD_MORE_DATA,jsonObject);
     }
     //==============================SwipeRefreshLayout.OnRefreshListener=============================================
@@ -344,14 +360,19 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     public void onRefresh() {
 
         //提交的参数封装
-        JsonObject jsonObject=new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-        jsonObject.addProperty("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-        jsonObject.addProperty("page",1);//页码
-        jsonObject.addProperty("subid","402881e953795aab0153795bffa90005");//科目id
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+            jsonObject.put("page",1);//页码
+            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
+        }catch (JSONException j){
+
+        }
+
         mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
     }
 }

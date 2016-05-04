@@ -14,6 +14,8 @@ import com.dmd.zsb.mvp.presenter.HomePresenter;
 import com.dmd.zsb.mvp.view.HomeView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 
 /**
  * Created by Administrator on 2015/12/15.
@@ -30,7 +32,7 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
         mCommonListInteractor=new HomeInteractorImpl(this);
     }
     @Override
-    public void loadListData(int event,JsonObject data) {
+    public void loadListData(int event,JSONObject data) {
         mHomeView.hideLoading();
         if (event==Constants.EVENT_REFRESH_DATA) {
             mHomeView.showLoading(mContext.getString(R.string.common_loading_message));

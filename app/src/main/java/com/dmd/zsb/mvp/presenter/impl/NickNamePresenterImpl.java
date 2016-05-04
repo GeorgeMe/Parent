@@ -8,10 +8,12 @@ import com.dmd.zsb.mvp.presenter.NickNamePresenter;
 import com.dmd.zsb.mvp.view.NickNameView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoadedListener<JsonObject> {
+public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoadedListener<JSONObject> {
     private NickNameInteractorImpl nickNameInteractor;
     private Context mContext;
     private NickNameView nickNameView;
@@ -23,12 +25,12 @@ public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoaded
     }
 
     @Override
-    public void updateNickName(JsonObject jsonObject) {
+    public void updateNickName(JSONObject jsonObject) {
         nickNameInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
-    public void onSuccess(JsonObject data) {
+    public void onSuccess(JSONObject data) {
         nickNameView.toSettingView();
     }
 

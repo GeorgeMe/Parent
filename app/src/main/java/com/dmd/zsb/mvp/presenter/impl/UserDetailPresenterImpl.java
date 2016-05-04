@@ -10,6 +10,9 @@ import com.dmd.zsb.mvp.presenter.UserDetailPresenter;
 import com.dmd.zsb.mvp.view.UserDetailView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/18.
  */
@@ -25,12 +28,15 @@ public class UserDetailPresenterImpl implements UserDetailPresenter,BaseSingleLo
     }
 
     @Override
-    public void getUserDetail(JsonObject jsonObject) {
+    public void getUserDetail(JSONObject jsonObject) {
         String uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
         String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
-        jsonObject.addProperty("uid",uid);
-        jsonObject.addProperty("sid",sid);
+        try{
+            jsonObject.put("uid",uid);
+            jsonObject.put("sid",sid);
+        }catch (JSONException j){
 
+        }
         userDetailInteractor.getCommonSingleData(jsonObject);
     }
 

@@ -8,10 +8,12 @@ import com.dmd.zsb.mvp.presenter.WalletPresenter;
 import com.dmd.zsb.mvp.view.WalletView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedListener<JsonObject> {
+public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedListener<JSONObject> {
     private WalletView walletView;
     private Context mContext;
     private WalletInteractorImpl walletInteractor;
@@ -23,12 +25,12 @@ public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedList
     }
 
     @Override
-    public void onWalletInfo(JsonObject jsonObject) {
+    public void onWalletInfo(JSONObject jsonObject) {
         walletInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
-    public void onSuccess(JsonObject data) {
+    public void onSuccess(JSONObject data) {
         walletView.setView(data);
     }
 

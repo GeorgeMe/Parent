@@ -41,6 +41,9 @@ import com.dmd.zsb.parent.adapter.SeekSubjectAdapter;
 import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -198,19 +201,24 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                     showToast(getString(R.string.appoint_location_hint));
                 } else {
                     publishOrderPublish.setClickable(false);
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    jsonObject.addProperty("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0));
-                    jsonObject.addProperty("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0));
-                    jsonObject.addProperty("location", publishOrderLocation.getText().toString());
-                    jsonObject.addProperty("offer_price", publishOrderPrice.getText().toString());
-                    jsonObject.addProperty("appointment_time", publishOrderTime.getText().toString());
-                    jsonObject.addProperty("text", publishOrderText.getText().toString());
-                    jsonObject.addProperty("subid", subid);
-                    jsonObject.addProperty("default_receiver_id", default_receiver_id);
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("lon", XmlDB.getInstance(mContext).getKeyFloatValue("longitude", 0));
+                        jsonObject.put("lat", XmlDB.getInstance(mContext).getKeyFloatValue("latitude", 0));
+                        jsonObject.put("location", publishOrderLocation.getText().toString());
+                        jsonObject.put("offer_price", publishOrderPrice.getText().toString());
+                        jsonObject.put("appointment_time", publishOrderTime.getText().toString());
+                        jsonObject.put("text", publishOrderText.getText().toString());
+                        jsonObject.put("subid", subid);
+                        jsonObject.put("default_receiver_id", default_receiver_id);
+                    }catch (JSONException j){
+
+                    }
+
                     releaseOrderPresenter.onReleaseOrder(jsonObject);
                 }
                 break;
@@ -219,9 +227,9 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
 
 
     @Override
-    public void showSuccessView(JsonObject data) {
+    public void showSuccessView(JSONObject data) {
         publishOrderPublish.setClickable(true);
-        if (data.get("errno").getAsInt()==0){
+        if (data.optInt("errno")==0){
             ToastView toast = new ToastView(mContext, "发布成功");
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();

@@ -1,6 +1,6 @@
 package com.dmd.zsb;
 
-import android.app.Application;
+import com.activeandroid.app.Application;
 import android.content.Context;
 import android.os.Environment;
 import android.telephony.TelephonyManager;

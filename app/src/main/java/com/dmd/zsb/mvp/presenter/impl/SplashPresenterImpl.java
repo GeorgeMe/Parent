@@ -16,6 +16,8 @@ import com.dmd.zsb.mvp.presenter.SplashPresenter;
 import com.dmd.zsb.mvp.view.SplashView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 
 public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSingleLoadedListener<SplashResponse> {
 
@@ -69,7 +71,7 @@ public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSing
     }
 
     @Override
-    public void loadingInitData(JsonObject jsonObject) {
+    public void loadingInitData(JSONObject jsonObject) {
         mSplashInteractor.loadingInitData(jsonObject);
     }
 

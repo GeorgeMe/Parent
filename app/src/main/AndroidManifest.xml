@@ -15,6 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="Ban.db"/>
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1"/>
+
         <!-- 引导页 -->
         <activity android:name=".activity.LeadActivity"
             android:configChanges="keyboardHidden|orientation"

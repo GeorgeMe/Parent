@@ -17,6 +17,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/18.
  */
@@ -29,8 +31,8 @@ public class UserDetailInteractorImpl implements CommonSingleInteractor {
     }
 
     @Override
-    public void getCommonSingleData(JsonObject gson) {
-        GsonRequest<UserDetailResponse> gsonRequest=new GsonRequest<UserDetailResponse>(UriHelper.getInstance().userDetail(gson),null,new TypeToken<UserDetailResponse>(){}.getType(), new Response.Listener<UserDetailResponse>(){
+    public void getCommonSingleData(JSONObject json) {
+        GsonRequest<UserDetailResponse> gsonRequest=new GsonRequest<UserDetailResponse>(UriHelper.getInstance().userDetail(json),null,new TypeToken<UserDetailResponse>(){}.getType(), new Response.Listener<UserDetailResponse>(){
             @Override
             public void onResponse(UserDetailResponse response) {
                 loadedListener.onSuccess(response);

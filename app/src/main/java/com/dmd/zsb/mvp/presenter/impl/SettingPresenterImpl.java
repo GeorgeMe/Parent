@@ -11,10 +11,12 @@ import com.dmd.zsb.mvp.presenter.SettingPresenter;
 import com.dmd.zsb.mvp.view.SettingView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/25.
  */
-public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedListener<JsonObject> {
+public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedListener<JSONObject> {
     private Context mContext=null;
     private SettingInteracterImpl settingInteracter;
     private SettingView settingView;
@@ -27,16 +29,16 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
     }
 
     @Override
-    public void uploadAvatar(int event,JsonObject jsonObject) {
+    public void uploadAvatar(int event,JSONObject jsonObject) {
 
         settingInteracter.getCommonListData(event,jsonObject);
     }
 
     @Override
-    public void onSuccess(int event,JsonObject data) {
+    public void onSuccess(int event,JSONObject data) {
         if (event==1){
             XmlDB.getInstance(mContext).saveKey("isLogin",false);
-            settingView.showTip(data.get("msg").getAsString());
+            settingView.showTip(data.optString("msg"));
         }else {
 
         }
@@ -54,7 +56,7 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
     }
 
     @Override
-    public void onSignOut(int event,JsonObject jsonObject) {
+    public void onSignOut(int event,JSONObject jsonObject) {
         settingInteracter.onSignOut(event,jsonObject);
     }
 }

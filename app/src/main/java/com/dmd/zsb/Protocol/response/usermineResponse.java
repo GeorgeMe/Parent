@@ -3,20 +3,26 @@ package com.dmd.zsb.protocol.response;
 import com.activeandroid.DataBaseModel;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.dmd.zsb.protocol.table.CONFIG;
-import com.dmd.zsb.protocol.table.USER;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Table(name = "usersigninResponse")
-public class usersigninResponse  extends DataBaseModel
+@Table(name = "usermineResponse")
+public class usermineResponse extends DataBaseModel
 {
 
-     @Column(name = "sid")
-     public String   sid;
+     @Column(name = "mineHeaderImg")
+     public String   mineHeaderImg;
 
+     @Column(name = "mineName")
+     public String   mineName;
+     @Column(name = "mineAddress")
+     public String   mineAddress;
+     @Column(name = "mineGrade")
+     public String   mineGrade;
+     @Column(name = "mineSubjects")
+     public String   mineSubjects;
      @Column(name = "uid")
      public String   uid;
 
@@ -34,8 +40,11 @@ public class usersigninResponse  extends DataBaseModel
 
           JSONArray subItemArray;
 
-          this.sid = jsonObject.optString("sid");
-          this.uid = jsonObject.optString("uid");
+          this.mineHeaderImg = jsonObject.optString("mineHeaderImg");
+          this.mineName = jsonObject.optString("mineName");
+          this.mineAddress = jsonObject.optString("mineAddress");
+          this.mineGrade = jsonObject.optString("mineGrade");
+          this.mineSubjects = jsonObject.optString("mineSubjects");
           this.succeed = jsonObject.optInt("succeed");
           this.msg = jsonObject.optString("msg");
 
@@ -46,8 +55,11 @@ public class usersigninResponse  extends DataBaseModel
      {
           JSONObject localItemObject = new JSONObject();
           JSONArray itemJSONArray = new JSONArray();
-          localItemObject.put("sid", sid);
-          localItemObject.put("uid", uid);
+          localItemObject.put("mineHeaderImg", mineHeaderImg);
+          localItemObject.put("mineName", mineName);
+          localItemObject.put("mineAddress", mineAddress);
+          localItemObject.put("mineGrade", mineGrade);
+          localItemObject.put("mineSubjects", mineSubjects);
           localItemObject.put("succeed", succeed);
           localItemObject.put("msg", msg);
           return localItemObject;

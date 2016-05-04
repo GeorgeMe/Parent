@@ -49,6 +49,9 @@ import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 import butterknife.Bind;
@@ -75,7 +78,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
     private ListViewDataAdapter<UserEntity> mListViewAdapter;
     private SeekPresenter mSeekPresenter = null;
-    private JsonObject gson;
     private int page = 1;
     private SeekGradeAdapter seekGradeAdapter;
     private SeekSubjectAdapter seekSubjectAdapter;
@@ -112,9 +114,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     protected void initViewsAndEvents() {
 
-        gson = new JsonObject();
-        gson.addProperty("page", page);
-        gson.addProperty("subid", "");//科目id
+
         if (mSeekPresenter==null){
             mSeekPresenter = new SeekPresenterIml(mContext, this);
         }
@@ -123,7 +123,15 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 fragmentSeekListSwipeLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("page", page);
+                            jsonObject.put("subid", "");//科目id
+                        }catch (JSONException j){
+
+                        }
+
+                        mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                     }
                 }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
             }
@@ -131,7 +139,15 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
             toggleNetworkError(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("page", page);
+                        jsonObject.put("subid", "");//科目id
+                    }catch (JSONException j){
+
+                    }
+
+                    mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                 }
             });
         }
@@ -182,7 +198,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                         tutor_list_teacher_content.setText(itemData.getSignature());
                         tutor_list_teacher_one2one.setText("");
                         tutor_list_teacher_one2more.setText("");
-                        tutor_list_teacher_distance.setText(LocationManager.getLocation(Double.parseDouble(itemData.getLat()), Double.parseDouble(itemData.getLon())));
+                        tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.getLat()), Double.parseDouble(itemData.getLon())));
                     }
                 };
             }
@@ -236,9 +252,14 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 onCreateSortPopWindow(seekGroupMenuSort);
             }
         } else if (v == seekGroupMenuAudition) {
-            gson.addProperty("page", 0);
-            gson.addProperty("subid", "");
-            mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+            JSONObject jsonObject=new JSONObject();
+            try {
+                jsonObject.put("page", page);
+                jsonObject.put("subid", "");//科目id
+            }catch (JSONException j){
+
+            }
+            mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
         }
     }
 
@@ -257,17 +278,28 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     public void onLoadMore() {
         page = 1 + page;
-        gson.addProperty("page", page);
-        gson.addProperty("subid", "");
-        mSeekPresenter.loadListData(Constants.EVENT_LOAD_MORE_DATA,gson);
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("page", page);
+            jsonObject.put("subid", "");//科目id
+        }catch (JSONException j){
+
+        }
+
+        mSeekPresenter.loadListData(Constants.EVENT_LOAD_MORE_DATA,jsonObject);
     }
 
     @Override
     public void onRefresh() {
-        gson.addProperty("page", 0);
-        gson.addProperty("subid", "");
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("page", page);
+            jsonObject.put("subid", "");//科目id
+        }catch (JSONException j){
 
-        mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+        }
+
+        mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
     }
 
     @Override
@@ -331,10 +363,15 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //排序
-                gson.addProperty("page", 0);
-                gson.addProperty("subid", parent.getAdapter().getItem(position).toString());
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("page", 0);
+                    jsonObject.put("subid", parent.getAdapter().getItem(position).toString());//科目id
+                }catch (JSONException j){
 
-                mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+                }
+
+                mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                 popupWindow.dismiss();
             }
         });
@@ -381,9 +418,14 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 //请求数据
-                                gson.addProperty("page", 0);
-                                gson.addProperty("subid", ((SubjectEntity) parent.getAdapter().getItem(position)).getSub_id());
-                                mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
+                                JSONObject jsonObject=new JSONObject();
+                                try {
+                                    jsonObject.put("page", 0);
+                                    jsonObject.put("subid", ((SubjectEntity) parent.getAdapter().getItem(position)).getSub_id());//科目id
+                                }catch (JSONException j){
+
+                                }
+                                mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
                                 popupWindow.dismiss();
                             }
                         });
@@ -407,17 +449,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         screenHeight = dm.heightPixels / 10;
         screenWidth = dm.widthPixels;
         TLog.v("屏幕宽高", "宽度" + screenWidth + "高度" + screenHeight);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == MaterialSearchView.RESULT_OK) {
-            gson.addProperty("page", 0);
-            gson.addProperty("subid", data.getStringExtra("search"));
-            mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,gson);
-            //showToast(data.getStringExtra("search"));
-        }
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private List<GradeEntity> getGrades() {

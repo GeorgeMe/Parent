@@ -8,10 +8,12 @@ import com.dmd.zsb.mvp.presenter.ReleaseOrderPresenter;
 import com.dmd.zsb.mvp.view.ReleaseOrderView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSingleLoadedListener<JsonObject>{
+public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSingleLoadedListener<JSONObject>{
 
     private ReleaseOrderInteractorImpl releaseOrderInteractor;
     private Context mContext;
@@ -24,12 +26,12 @@ public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSin
     }
 
     @Override
-    public void onReleaseOrder(JsonObject jsonObject) {
+    public void onReleaseOrder(JSONObject jsonObject) {
         releaseOrderInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
-    public void onSuccess(JsonObject data) {
+    public void onSuccess(JSONObject data) {
         releaseOrderView.showSuccessView(data);
     }
 

@@ -31,6 +31,9 @@ import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -92,22 +95,27 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 fragmentDemandListSwipeLayout.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                        jsonObject.addProperty("version", Constants.ZSBVERSION);
-                        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                        jsonObject.addProperty("page", page);
-                        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                        if (demandLevyConcentration.isChecked()) {
-                            jsonObject.addProperty("group_menu", "demandLevyConcentration");
-                        } else if (demandToBeCompleted.isChecked()) {
-                            jsonObject.addProperty("group_menu", "demandToBeCompleted");
-                        } else if (demandHasBeenCompleted.isChecked()) {
-                            jsonObject.addProperty("group_menu", "demandHasBeenCompleted");
-                        } else {
-                            jsonObject.addProperty("group_menu", "demandLevyConcentration");
+                        JSONObject jsonObject=new JSONObject();
+                        try {
+                            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                            jsonObject.put("version", Constants.ZSBVERSION);
+                            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                            jsonObject.put("page", page);
+                            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                            if (demandLevyConcentration.isChecked()) {
+                                jsonObject.put("group_menu", "demandLevyConcentration");
+                            } else if (demandToBeCompleted.isChecked()) {
+                                jsonObject.put("group_menu", "demandToBeCompleted");
+                            } else if (demandHasBeenCompleted.isChecked()) {
+                                jsonObject.put("group_menu", "demandHasBeenCompleted");
+                            } else {
+                                jsonObject.put("group_menu", "demandLevyConcentration");
+                            }
+                        }catch (JSONException j){
+
                         }
+
                         demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, jsonObject);
                     }
                 }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
@@ -116,20 +124,25 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             toggleNetworkError(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    JsonObject jsonObject = new JsonObject();
-                    jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.addProperty("version", Constants.ZSBVERSION);
-                    jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    jsonObject.addProperty("page", page);
-                    jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    if (demandLevyConcentration.isChecked()) {
-                        jsonObject.addProperty("group_menu", "demandLevyConcentration");
-                    } else if (demandToBeCompleted.isChecked()) {
-                        jsonObject.addProperty("group_menu", "demandToBeCompleted");
-                    } else if (demandHasBeenCompleted.isChecked()) {
-                        jsonObject.addProperty("group_menu", "demandHasBeenCompleted");
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("page", page);
+                        jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                        if (demandLevyConcentration.isChecked()) {
+                            jsonObject.put("group_menu", "demandLevyConcentration");
+                        } else if (demandToBeCompleted.isChecked()) {
+                            jsonObject.put("group_menu", "demandToBeCompleted");
+                        } else if (demandHasBeenCompleted.isChecked()) {
+                            jsonObject.put("group_menu", "demandHasBeenCompleted");
+                        }
+                    }catch (JSONException j){
+
                     }
+
                     demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, jsonObject);
                 }
             });
@@ -307,39 +320,49 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     @Override
     public void onLoadMore() {
         page = page + 1;
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-        jsonObject.addProperty("page", page);
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-        if (demandLevyConcentration.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandLevyConcentration");
-        } else if (demandToBeCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandToBeCompleted");
-        } else if (demandHasBeenCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandHasBeenCompleted");
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("page", page);
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+            if (demandLevyConcentration.isChecked()) {
+                jsonObject.put("group_menu", "demandLevyConcentration");
+            } else if (demandToBeCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandToBeCompleted");
+            } else if (demandHasBeenCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandHasBeenCompleted");
+            }
+        }catch (JSONException j){
+
         }
+
         demandPresenter.onDemand(Constants.EVENT_LOAD_MORE_DATA, jsonObject);
     }
 
     @Override
     public void onRefresh() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-        jsonObject.addProperty("page", 1);
-        jsonObject.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-        if (demandLevyConcentration.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandLevyConcentration");
-        } else if (demandToBeCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandToBeCompleted");
-        } else if (demandHasBeenCompleted.isChecked()) {
-            jsonObject.addProperty("group_menu", "demandHasBeenCompleted");
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("page", 1);
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+            if (demandLevyConcentration.isChecked()) {
+                jsonObject.put("group_menu", "demandLevyConcentration");
+            } else if (demandToBeCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandToBeCompleted");
+            } else if (demandHasBeenCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandHasBeenCompleted");
+            }
+        }catch (JSONException j){
+
         }
+
         demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, jsonObject);
     }
 
@@ -370,36 +393,51 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 finish();
                 break;
             case R.id.demand_levy_concentration:
-                JsonObject demand_levy_concentration = new JsonObject();
-                demand_levy_concentration.addProperty("appkey", Constants.ZSBAPPKEY);
-                demand_levy_concentration.addProperty("version", Constants.ZSBVERSION);
-                demand_levy_concentration.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                demand_levy_concentration.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                demand_levy_concentration.addProperty("page", 1);
-                demand_levy_concentration.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                demand_levy_concentration.addProperty("group_menu", "demandLevyConcentration");
+                JSONObject demand_levy_concentration=new JSONObject();
+                try {
+                    demand_levy_concentration.put("appkey", Constants.ZSBAPPKEY);
+                    demand_levy_concentration.put("version", Constants.ZSBVERSION);
+                    demand_levy_concentration.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    demand_levy_concentration.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    demand_levy_concentration.put("page", 1);
+                    demand_levy_concentration.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                    demand_levy_concentration.put("group_menu", "demandLevyConcentration");
+                }catch (JSONException j){
+
+                }
+
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_levy_concentration);
                 break;
             case R.id.demand_to_be_completed:
-                JsonObject demand_to_be_completed = new JsonObject();
-                demand_to_be_completed.addProperty("appkey", Constants.ZSBAPPKEY);
-                demand_to_be_completed.addProperty("version", Constants.ZSBVERSION);
-                demand_to_be_completed.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                demand_to_be_completed.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                demand_to_be_completed.addProperty("page", 1);
-                demand_to_be_completed.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                demand_to_be_completed.addProperty("group_menu", "demandToBeCompleted");
+                JSONObject demand_to_be_completed=new JSONObject();
+                try {
+                    demand_to_be_completed.put("appkey", Constants.ZSBAPPKEY);
+                    demand_to_be_completed.put("version", Constants.ZSBVERSION);
+                    demand_to_be_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    demand_to_be_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    demand_to_be_completed.put("page", 1);
+                    demand_to_be_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                    demand_to_be_completed.put("group_menu", "demandToBeCompleted");
+                }catch (JSONException j){
+
+                }
+
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_to_be_completed);
                 break;
             case R.id.demand_has_been_completed:
-                JsonObject demand_has_been_completed = new JsonObject();
-                demand_has_been_completed.addProperty("appkey", Constants.ZSBAPPKEY);
-                demand_has_been_completed.addProperty("version", Constants.ZSBVERSION);
-                demand_has_been_completed.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                demand_has_been_completed.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                demand_has_been_completed.addProperty("page", 1);
-                demand_has_been_completed.addProperty("rows", ApiConstants.Integers.PAGE_LIMIT);
-                demand_has_been_completed.addProperty("group_menu", "demandHasBeenCompleted");
+                JSONObject demand_has_been_completed=new JSONObject();
+                try {
+                    demand_has_been_completed.put("appkey", Constants.ZSBAPPKEY);
+                    demand_has_been_completed.put("version", Constants.ZSBVERSION);
+                    demand_has_been_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    demand_has_been_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    demand_has_been_completed.put("page", 1);
+                    demand_has_been_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
+                    demand_has_been_completed.put("group_menu", "demandHasBeenCompleted");
+                }catch (JSONException j){
+
+                }
+
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_has_been_completed);
                 break;
         }

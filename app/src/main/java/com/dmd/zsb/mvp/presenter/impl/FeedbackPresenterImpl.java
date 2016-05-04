@@ -8,10 +8,12 @@ import com.dmd.zsb.mvp.presenter.FeedbackPresenter;
 import com.dmd.zsb.mvp.view.FeedbackView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/25.
  */
-public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoadedListener<JsonObject> {
+public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoadedListener<JSONObject> {
     private Context mContext=null;
     private FeedbackInteractorImpl feedbackInteractor;
     private FeedbackView feedbackView;
@@ -23,12 +25,12 @@ public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoaded
     }
 
     @Override
-    public void seedFeedback(JsonObject jsonObject) {
+    public void seedFeedback(JSONObject jsonObject) {
         feedbackInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
-    public void onSuccess(JsonObject data) {
+    public void onSuccess(JSONObject data) {
         feedbackView.navigateToHome();
     }
 

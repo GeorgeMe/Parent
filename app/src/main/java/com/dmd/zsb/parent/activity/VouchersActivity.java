@@ -27,6 +27,9 @@ import com.dmd.zsb.widgets.LoadMoreListView;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -71,11 +74,16 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     protected void initViewsAndEvents() {
         topBarTitle.setText("代金券");
         vouchersPresenter = new VouchersPresenterImpl(mContext, this);
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-        jsonObject.addProperty("version", Constants.ZSBVERSION);
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        }catch (JSONException j){
+
+        }
+
         vouchersPresenter.onVouchers(Constants.EVENT_REFRESH_DATA, jsonObject);
         mListViewDataAdapter = new ListViewDataAdapter<VouchersEntity>(new ViewHolderCreator<VouchersEntity>() {
             @Override
@@ -153,17 +161,30 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     @Override
     public void onLoadMore() {
         page=page+1;
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        }catch (JSONException j){
+
+        }
         vouchersPresenter.onVouchers(Constants.EVENT_LOAD_MORE_DATA, jsonObject);
     }
 
     @Override
     public void onRefresh() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-        jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+        }catch (JSONException j){
+
+        }
+
         vouchersPresenter.onVouchers(Constants.EVENT_REFRESH_DATA, jsonObject);
     }
 

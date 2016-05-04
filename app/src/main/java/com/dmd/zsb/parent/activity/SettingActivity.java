@@ -25,6 +25,9 @@ import com.dmd.zsb.mvp.view.SettingView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 import butterknife.Bind;
@@ -131,23 +134,29 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
             file = new File(picturePath);
             if (file != null && file.exists()) {
 
-                JsonObject jsonObject=new JsonObject();
-                JsonObject json=new JsonObject();
-                json.addProperty("appkey", Constants.ZSBAPPKEY);
-                json.addProperty("version", Constants.ZSBVERSION);
-                json.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                json.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                json.addProperty("fileName", file.getName());
-                json.addProperty("fileMime", "image/png");
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    JSONObject json=new JSONObject();
+                    json.put("appkey", Constants.ZSBAPPKEY);
+                    json.put("version", Constants.ZSBVERSION);
+                    json.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    json.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    json.put("fileName", file.getName());
+                    json.put("fileMime", "image/png");
 
-                JsonObject formFile=new JsonObject();
-                formFile.addProperty("fileName",file.getName());
-                formFile.addProperty("filePath",file.getAbsolutePath());
-                formFile.addProperty("parameterName","file");
-                formFile.addProperty("contentType","application/octet-stream");
+                    JSONObject formFile=new JSONObject();
+                    formFile.put("fileName",file.getName());
+                    formFile.put("filePath",file.getAbsolutePath());
+                    formFile.put("parameterName","file");
+                    formFile.put("contentType","application/octet-stream");
 
-                jsonObject.add("json",json);
-                jsonObject.add("formFile",formFile);
+                    jsonObject.put("json",json);
+                    jsonObject.put("formFile",formFile);
+
+                }catch (JSONException j){
+
+                }
+
                 settingPresenter.uploadAvatar(1,jsonObject);
             } else {
                 Message msg = Message.obtain();
@@ -188,10 +197,15 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
                 readyGo(AboutUsActivity.class);
                 break;
             case R.id.btn_sign_out:
-                JsonObject json=new JsonObject();
-                json.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                json.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                settingPresenter.onSignOut(1,json);
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    settingPresenter.onSignOut(1,jsonObject);
+                }catch (JSONException j){
+
+                }
+
                 break;
         }
     }

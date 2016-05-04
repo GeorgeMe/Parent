@@ -10,6 +10,8 @@ import com.dmd.zsb.mvp.presenter.DemandPresenter;
 import com.dmd.zsb.mvp.view.DemandView;
 import com.google.gson.JsonObject;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2016/3/29.
  */
@@ -25,7 +27,7 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
     }
 
     @Override
-    public void onDemand(int event_tag, JsonObject jsonObject) {
+    public void onDemand(int event_tag, JSONObject jsonObject) {
         demandInteractor.getCommonListData(event_tag,jsonObject);
     }
 

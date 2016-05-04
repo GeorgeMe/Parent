@@ -16,6 +16,9 @@ import com.dmd.zsb.mvp.view.FeedbackView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -105,13 +108,18 @@ public class FeedbackActivity extends BaseActivity implements FeedbackView {
                 finish();
                 break;
             case R.id.feedback_button:
-                JsonObject json=new JsonObject();
-                json.addProperty("appkey", Constants.ZSBAPPKEY);
-                json.addProperty("version", Constants.ZSBVERSION);
-                json.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                json.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                json.addProperty("feedback",feedbackEdittext.getText().toString());
-                feedbackPresenter.seedFeedback(json);
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                    jsonObject.put("version", Constants.ZSBVERSION);
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    jsonObject.put("feedback",feedbackEdittext.getText().toString());
+                }catch (JSONException j){
+
+                }
+
+                feedbackPresenter.seedFeedback(jsonObject);
                 break;
         }
     }

@@ -18,6 +18,9 @@ import com.dmd.zsb.mvp.view.NickNameView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import butterknife.Bind;
 import butterknife.OnClick;
 
@@ -97,12 +100,17 @@ public class NickNameActivity extends BaseActivity implements NickNameView{
                 finish();
                 break;
             case R.id.btn_save:
-                JsonObject jsonObject=new JsonObject();
-                jsonObject.addProperty("appkey", Constants.ZSBAPPKEY);
-                jsonObject.addProperty("version", Constants.ZSBVERSION);
-                jsonObject.addProperty("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                jsonObject.addProperty("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                jsonObject.addProperty("nickname",etNickname.getText().toString());
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                    jsonObject.put("version", Constants.ZSBVERSION);
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    jsonObject.put("nickname",etNickname.getText().toString());
+                }catch (JSONException j){
+
+                }
+
                 nickNamePresenter.updateNickName(jsonObject);
                 break;
         }

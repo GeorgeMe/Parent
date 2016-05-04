@@ -18,6 +18,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 2015/12/15.
  */
@@ -28,9 +30,9 @@ public class HomeInteractorImpl implements CommonListInteractor {
         this.loadedListener=loadedListener;
     }
     @Override
-    public void getCommonListData(final int event,final JsonObject data) {
+    public void getCommonListData(final int event,JSONObject json) {
         GsonRequest<HomeResponse> gsonRequest = new GsonRequest<HomeResponse>(
-                UriHelper.getInstance().home(data),
+                UriHelper.getInstance().home(json),
                 null,
                 new TypeToken<HomeResponse>() {
                 }.getType(),

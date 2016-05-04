@@ -3,7 +3,8 @@ package com.dmd.zsb.mvp.interactor;
 import android.content.Context;
 import android.view.animation.Animation;
 
-import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 public interface SplashInteractor {
 
@@ -15,5 +16,5 @@ public interface SplashInteractor {
 
     Animation getBackgroundImageAnimation(Context context);
 
-    void loadingInitData(JsonObject jsonObject);
+    void loadingInitData(JSONObject json);
 }

@@ -13,6 +13,7 @@ import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.entity.response.SeekResponse;
 import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
+import com.dmd.zsb.protocol.response.seekResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -25,22 +26,22 @@ import org.json.JSONObject;
  */
 public class SeekInteractorImpl implements CommonListInteractor{
 
-    private BaseMultiLoadedListener<SeekResponse> loadedListener = null;
+    private BaseMultiLoadedListener<seekResponse> loadedListener = null;
 
-    public SeekInteractorImpl(BaseMultiLoadedListener<SeekResponse> loadedListener) {
+    public SeekInteractorImpl(BaseMultiLoadedListener<seekResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonListData(final int event,JSONObject json) {
-        GsonRequest<SeekResponse> gsonRequest = new GsonRequest<SeekResponse>(
+        GsonRequest<seekResponse> gsonRequest = new GsonRequest<seekResponse>(
                 UriHelper.getInstance().findteacher(json),
                 null,
-                new TypeToken<SeekResponse>() {
+                new TypeToken<seekResponse>() {
                 }.getType(),
-                new Response.Listener<SeekResponse>() {
+                new Response.Listener<seekResponse>() {
                     @Override
-                    public void onResponse(SeekResponse response) {
+                    public void onResponse(seekResponse response) {
                         loadedListener.onSuccess(event, response);
                     }
                 },

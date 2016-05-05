@@ -9,9 +9,9 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
-import com.dmd.zsb.entity.response.EvaluationResponse;
 import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
+import com.dmd.zsb.protocol.response.evaluationResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -24,18 +24,18 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/29.
  */
 public class EvaluationInteractorImpl implements CommonListInteractor {
-    private BaseMultiLoadedListener<EvaluationResponse> loadedListener;
+    private BaseMultiLoadedListener<evaluationResponse> loadedListener;
 
-    public EvaluationInteractorImpl(BaseMultiLoadedListener<EvaluationResponse> loadedListener) {
+    public EvaluationInteractorImpl(BaseMultiLoadedListener<evaluationResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonListData(final int event, JSONObject json) {
-        GsonRequest<EvaluationResponse> gsonRequest =new GsonRequest<EvaluationResponse>(UriHelper.getInstance().myevaluation(json), null, new TypeToken<EvaluationResponse>() {
-        }.getType(), new Response.Listener<EvaluationResponse>(){
+        GsonRequest<evaluationResponse> gsonRequest =new GsonRequest<evaluationResponse>(UriHelper.getInstance().myevaluation(json), null, new TypeToken<evaluationResponse>() {
+        }.getType(), new Response.Listener<evaluationResponse>(){
             @Override
-            public void onResponse(EvaluationResponse response) {
+            public void onResponse(evaluationResponse response) {
                 loadedListener.onSuccess(event,response);
             }
         },new Response.ErrorListener(){

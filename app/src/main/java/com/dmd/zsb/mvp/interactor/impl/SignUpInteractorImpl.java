@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.signupResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -22,17 +23,17 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/14.
  */
 public class SignUpInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<signupResponse> loadedListener;
 
-    public SignUpInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public SignUpInteractorImpl(BaseSingleLoadedListener<signupResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().signUp(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
+        GsonRequest<signupResponse> gsonRequest=new GsonRequest<signupResponse>(UriHelper.getInstance().signUp(json),null,new TypeToken<signupResponse>(){}.getType(), new Response.Listener<signupResponse>(){
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(signupResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

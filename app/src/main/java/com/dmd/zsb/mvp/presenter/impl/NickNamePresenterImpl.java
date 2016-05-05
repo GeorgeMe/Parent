@@ -6,14 +6,17 @@ import com.dmd.zsb.mvp.interactor.impl.NickNameInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.NickNamePresenter;
 import com.dmd.zsb.mvp.view.NickNameView;
+import com.dmd.zsb.protocol.request.nicknameRequest;
+import com.dmd.zsb.protocol.response.nicknameResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoadedListener<JSONObject> {
+public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoadedListener<nicknameResponse> {
     private NickNameInteractorImpl nickNameInteractor;
     private Context mContext;
     private NickNameView nickNameView;
@@ -26,11 +29,16 @@ public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoaded
 
     @Override
     public void updateNickName(JSONObject jsonObject) {
-        nickNameInteractor.getCommonSingleData(jsonObject);
+        nicknameRequest request=new nicknameRequest();
+        try {
+            nickNameInteractor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
     }
 
     @Override
-    public void onSuccess(JSONObject data) {
+    public void onSuccess(nicknameResponse response) {
         nickNameView.toSettingView();
     }
 

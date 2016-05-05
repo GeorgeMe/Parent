@@ -4,23 +4,20 @@ import android.content.Context;
 
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.TutorApplication;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.interactor.impl.SignInInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignInPresenter;
 import com.dmd.zsb.mvp.view.SignInView;
-import com.dmd.zsb.protocol.request.usersigninRequest;
-import com.dmd.zsb.protocol.response.usersigninResponse;
-import com.dmd.zsb.protocol.table.LOCATION;
-import com.google.gson.JsonObject;
+import com.dmd.zsb.protocol.request.signinRequest;
+import com.dmd.zsb.protocol.response.signinResponse;
 
 import org.json.JSONException;
 
 /**
  * Created by Administrator on 2016/3/14.
  */
-public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedListener<usersigninResponse>{
+public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedListener<signinResponse>{
     private Context mContext=null;
     private SignInView signInView;
     private SignInInteractorImpl signInInteractor;
@@ -32,7 +29,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
     }
 
     @Override
-    public void onSuccess(usersigninResponse response) {
+    public void onSuccess(signinResponse response) {
         if (response.succeed==0){
             XmlDB.getInstance(mContext).saveKey("uid",response.uid);
             XmlDB.getInstance(mContext).saveKey("sid",response.sid);
@@ -56,7 +53,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
     @Override
     public void signIn(String mobile, String password) {
 
-        usersigninRequest request = new usersigninRequest();
+        signinRequest request = new signinRequest();
         request.appkey =Constants.ZSBAPPKEY;
         request.mobile =mobile;
         request.password = password;

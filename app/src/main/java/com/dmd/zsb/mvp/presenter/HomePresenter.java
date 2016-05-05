@@ -10,7 +10,6 @@ import org.json.JSONObject;
  */
 public interface HomePresenter {
 
-   // void loadListData(String requestTag, int event_tag, String keywords, int page, boolean isSwipeRefresh);
     void loadListData(int event,JSONObject data);
 
 }

@@ -6,14 +6,17 @@ import com.dmd.zsb.mvp.interactor.impl.ProfileInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.ProfilePresenter;
 import com.dmd.zsb.mvp.view.ProfileView;
+import com.dmd.zsb.protocol.request.profileRequest;
+import com.dmd.zsb.protocol.response.profileResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedListener<JSONObject> {
+public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedListener<profileResponse> {
     private ProfileInteractorImpl briefInteractor;
     private Context mContext;
     private ProfileView briefView;
@@ -26,11 +29,17 @@ public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedLi
 
     @Override
     public void onChangeProfile(JSONObject jsonObject) {
-        briefInteractor.getCommonSingleData(jsonObject);
+        profileRequest request=new profileRequest();
+        try {
+            briefInteractor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(JSONObject data) {
+    public void onSuccess(profileResponse response) {
         briefView.toSettingView();
     }
 

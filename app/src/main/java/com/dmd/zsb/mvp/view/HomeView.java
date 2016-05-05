@@ -2,6 +2,7 @@ package com.dmd.zsb.mvp.view;
 
 import com.dmd.zsb.entity.UserEntity;
 import com.dmd.zsb.entity.response.HomeResponse;
+import com.dmd.zsb.protocol.response.homeResponse;
 import com.google.gson.JsonObject;
 
 /**
@@ -11,8 +12,8 @@ public interface HomeView extends BaseView{
 
     void navigateToUserDetail(UserEntity data);
 
-    void refreshListData(HomeResponse data);
+    void refreshListData(homeResponse response);
 
-    void addMoreListData(HomeResponse data);
+    void addMoreListData(homeResponse response);
 
 }

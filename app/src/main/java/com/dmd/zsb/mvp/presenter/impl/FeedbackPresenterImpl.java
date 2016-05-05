@@ -6,14 +6,17 @@ import com.dmd.zsb.mvp.interactor.impl.FeedbackInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.FeedbackPresenter;
 import com.dmd.zsb.mvp.view.FeedbackView;
+import com.dmd.zsb.protocol.request.feedbackRequest;
+import com.dmd.zsb.protocol.response.feedbackResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/25.
  */
-public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoadedListener<JSONObject> {
+public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoadedListener<feedbackResponse> {
     private Context mContext=null;
     private FeedbackInteractorImpl feedbackInteractor;
     private FeedbackView feedbackView;
@@ -26,11 +29,17 @@ public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoaded
 
     @Override
     public void seedFeedback(JSONObject jsonObject) {
-        feedbackInteractor.getCommonSingleData(jsonObject);
+        feedbackRequest request=new feedbackRequest();
+        try {
+            feedbackInteractor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(JSONObject data) {
+    public void onSuccess(feedbackResponse data) {
         feedbackView.navigateToHome();
     }
 

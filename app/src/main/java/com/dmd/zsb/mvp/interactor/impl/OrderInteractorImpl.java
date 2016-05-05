@@ -12,6 +12,7 @@ import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.entity.response.OrderResponse;
 import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
+import com.dmd.zsb.protocol.response.orderResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -23,17 +24,17 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/29.
  */
 public class OrderInteractorImpl implements CommonListInteractor {
-    private BaseMultiLoadedListener<OrderResponse> loadedListener;
-    public OrderInteractorImpl(BaseMultiLoadedListener<OrderResponse> loadedListener) {
+    private BaseMultiLoadedListener<orderResponse> loadedListener;
+    public OrderInteractorImpl(BaseMultiLoadedListener<orderResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonListData(final int event,JSONObject json) {
-        GsonRequest<OrderResponse> gsonRequest = new GsonRequest<OrderResponse>(UriHelper.getInstance().myorder(json),null,new TypeToken<OrderResponse>() {}.getType(),
-                new Response.Listener<OrderResponse>() {
+        GsonRequest<orderResponse> gsonRequest = new GsonRequest<orderResponse>(UriHelper.getInstance().myorder(json),null,new TypeToken<orderResponse>() {}.getType(),
+                new Response.Listener<orderResponse>() {
                     @Override
-                    public void onResponse(OrderResponse response) {
+                    public void onResponse(orderResponse response) {
                         loadedListener.onSuccess(event, response);
                     }
                 },

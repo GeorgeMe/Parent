@@ -9,8 +9,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Table(name = "usersigninRequest")
-public class usersigninRequest  extends DataBaseModel
+@Table(name = "signinRequest")
+public class signinRequest extends DataBaseModel
 {
 
      @Column(name = "appkey")

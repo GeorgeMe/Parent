@@ -1,6 +1,5 @@
 package com.dmd.zsb.parent.fragment;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.mvp.presenter.impl.MinePresenterImpl;
@@ -23,13 +21,9 @@ import com.dmd.zsb.parent.activity.SignInActivity;
 import com.dmd.zsb.parent.activity.VouchersActivity;
 import com.dmd.zsb.parent.activity.WalletActivity;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
-import com.dmd.zsb.protocol.response.usermineResponse;
-import com.google.gson.JsonObject;
+import com.dmd.zsb.protocol.response.mineResponse;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -118,7 +112,7 @@ public class MineFragment extends BaseFragment implements MineView {
     }
 
     @Override
-    public void setView(usermineResponse response) {
+    public void setView(mineResponse response) {
         Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+response.mineHeaderImg).into(mineHeaderImg);
         mineName.setText(response.mineName);
         mineAddress.setText(response.mineAddress);

@@ -11,8 +11,8 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "usermineRequest")
-public class usermineRequest  extends DataBaseModel{
+@Table(name = "vouchersRequest")
+public class vouchersRequest extends DataBaseModel{
     @Column(name = "appkey")
     public String   appkey;
 

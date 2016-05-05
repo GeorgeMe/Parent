@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.walletResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -22,18 +23,18 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/28.
  */
 public class WalletInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<walletResponse> loadedListener;
 
-    public WalletInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public WalletInteractorImpl(BaseSingleLoadedListener<walletResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest = new GsonRequest<JSONObject>(UriHelper.getInstance().mywallet(json), null, new TypeToken<JSONObject>() {
-        }.getType(), new Response.Listener<JSONObject>() {
+        GsonRequest<walletResponse> gsonRequest = new GsonRequest<walletResponse>(UriHelper.getInstance().mywallet(json), null, new TypeToken<walletResponse>() {
+        }.getType(), new Response.Listener<walletResponse>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(walletResponse response) {
                 loadedListener.onSuccess(response);
             }
         }, new Response.ErrorListener() {

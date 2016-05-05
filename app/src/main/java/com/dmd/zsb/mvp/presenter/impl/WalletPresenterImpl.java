@@ -6,14 +6,17 @@ import com.dmd.zsb.mvp.interactor.impl.WalletInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.WalletPresenter;
 import com.dmd.zsb.mvp.view.WalletView;
+import com.dmd.zsb.protocol.request.walletRequest;
+import com.dmd.zsb.protocol.response.walletResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedListener<JSONObject> {
+public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedListener<walletResponse> {
     private WalletView walletView;
     private Context mContext;
     private WalletInteractorImpl walletInteractor;
@@ -26,12 +29,18 @@ public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedList
 
     @Override
     public void onWalletInfo(JSONObject jsonObject) {
-        walletInteractor.getCommonSingleData(jsonObject);
+        walletRequest request=new walletRequest();
+        try {
+            walletInteractor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(JSONObject data) {
-        walletView.setView(data);
+    public void onSuccess(walletResponse response) {
+        walletView.setView(response);
     }
 
     @Override

@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.nicknameResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -23,16 +24,16 @@ import org.json.JSONObject;
  */
 public class NickNameInteractorImpl implements CommonSingleInteractor {
 
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<nicknameResponse> loadedListener;
 
-    public NickNameInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public NickNameInteractorImpl(BaseSingleLoadedListener<nicknameResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().changenickname(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
+        GsonRequest<nicknameResponse> gsonRequest=new GsonRequest<nicknameResponse>(UriHelper.getInstance().changenickname(json),null,new TypeToken<nicknameResponse>(){}.getType(), new Response.Listener<nicknameResponse>(){
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(nicknameResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

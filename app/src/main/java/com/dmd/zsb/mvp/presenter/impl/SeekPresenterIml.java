@@ -12,6 +12,8 @@ import com.dmd.zsb.mvp.interactor.impl.SeekInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.view.SeekView;
+import com.dmd.zsb.protocol.request.seekRequest;
+import com.dmd.zsb.protocol.response.seekResponse;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -21,7 +23,7 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2015/12/22.
  */
-public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<SeekResponse> {
+public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<seekResponse> {
     private Context mContext=null;
     private SeekView mSeekView=null;
     private SeekInteractorImpl mCommonListInteractor = null;
@@ -34,6 +36,12 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<S
 
     @Override
     public void loadListData(int event,JSONObject data) {
+        seekRequest request=new seekRequest();
+        try {
+            mCommonListInteractor.getCommonListData(event,request.toJson());
+        }catch (JSONException j){
+
+        }
         mSeekView.hideLoading();
         if (event==Constants.EVENT_REFRESH_DATA) {
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
@@ -55,19 +63,16 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<S
         }catch (JSONException j){
 
         }
-
-
-        mCommonListInteractor.getCommonListData(event,jsonObject);
     }
 
 
     @Override
-    public void onSuccess(int event_tag, SeekResponse data) {
+    public void onSuccess(int event_tag, seekResponse response) {
         mSeekView.hideLoading();
         if (event_tag == Constants.EVENT_REFRESH_DATA) {
-            mSeekView.refreshListData(data);
+            mSeekView.refreshListData(response);
         } else if (event_tag == Constants.EVENT_LOAD_MORE_DATA) {
-            mSeekView.addMoreListData(data);
+            mSeekView.addMoreListData(response);
         }
     }
 

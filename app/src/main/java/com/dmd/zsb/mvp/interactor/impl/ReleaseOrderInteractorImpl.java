@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.releaseorderResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -22,17 +23,17 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/28.
  */
 public class ReleaseOrderInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<releaseorderResponse> loadedListener;
 
-    public ReleaseOrderInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public ReleaseOrderInteractorImpl(BaseSingleLoadedListener<releaseorderResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().saveOrder(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
+        GsonRequest<releaseorderResponse> gsonRequest=new GsonRequest<releaseorderResponse>(UriHelper.getInstance().saveOrder(json),null,new TypeToken<releaseorderResponse>(){}.getType(), new Response.Listener<releaseorderResponse>(){
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(releaseorderResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

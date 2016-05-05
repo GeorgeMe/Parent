@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.profileResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -22,17 +23,17 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/28.
  */
 public class ProfileInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<profileResponse> loadedListener;
 
-    public ProfileInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public ProfileInteractorImpl(BaseSingleLoadedListener<profileResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest = new GsonRequest<JSONObject>(UriHelper.getInstance().changeprofile(json), null, new TypeToken<JSONObject>() {
-        }.getType(), new Response.Listener<JSONObject>() {
+        GsonRequest<profileResponse> gsonRequest = new GsonRequest<profileResponse>(UriHelper.getInstance().changeprofile(json), null, new TypeToken<profileResponse>() {
+        }.getType(), new Response.Listener<profileResponse>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(profileResponse response) {
                 loadedListener.onSuccess(response);
             }
         }, new Response.ErrorListener() {

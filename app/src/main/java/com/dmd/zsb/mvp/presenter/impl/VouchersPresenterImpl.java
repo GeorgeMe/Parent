@@ -9,14 +9,17 @@ import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.VouchersPresenter;
 import com.dmd.zsb.mvp.view.VouchersView;
+import com.dmd.zsb.protocol.request.vouchersRequest;
+import com.dmd.zsb.protocol.response.vouchersResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedListener<VouchersResponse> {
+public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedListener<vouchersResponse> {
     private Context mContext;
     private VouchersView vouchersView;
     private VouchersInteractorImpl vouchersInteractor;
@@ -29,15 +32,21 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
 
     @Override
     public void onVouchers(int event_tag,JSONObject jsonObject) {
-        vouchersInteractor.getCommonListData(event_tag,jsonObject);
+        vouchersRequest request=new vouchersRequest();
+        try {
+            vouchersInteractor.getCommonListData(event_tag,request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(int event_tag,VouchersResponse data) {
+    public void onSuccess(int event_tag,vouchersResponse response) {
         if (event_tag== Constants.EVENT_REFRESH_DATA){
-            vouchersView.refreshListData(data);
+            vouchersView.refreshListData(response);
         }else if (event_tag==Constants.EVENT_LOAD_MORE_DATA){
-            vouchersView.addMoreListData(data);
+            vouchersView.addMoreListData(response);
         }
     }
 

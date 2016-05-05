@@ -8,14 +8,17 @@ import com.dmd.zsb.mvp.interactor.impl.DemandInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.DemandPresenter;
 import com.dmd.zsb.mvp.view.DemandView;
+import com.dmd.zsb.protocol.request.demandRequest;
+import com.dmd.zsb.protocol.response.demandResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/29.
  */
-public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListener<DemandResponse> {
+public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListener<demandResponse> {
     private DemandInteractorImpl demandInteractor;
     private Context mContext;
     private DemandView demandView;
@@ -28,15 +31,21 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
 
     @Override
     public void onDemand(int event_tag, JSONObject jsonObject) {
-        demandInteractor.getCommonListData(event_tag,jsonObject);
+        demandRequest request=new demandRequest();
+        try {
+            demandInteractor.getCommonListData(event_tag,request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(int event_tag, DemandResponse data) {
+    public void onSuccess(int event_tag, demandResponse response) {
         if (event_tag== Constants.EVENT_REFRESH_DATA){
-            demandView.refreshListData(data);
+            demandView.refreshListData(response);
         }else if (event_tag==Constants.EVENT_LOAD_MORE_DATA){
-            demandView.addMoreListData(data);
+            demandView.addMoreListData(response);
         }
 
     }

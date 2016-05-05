@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.feedbackResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -23,17 +24,17 @@ import org.json.JSONObject;
  */
 public class FeedbackInteractorImpl implements CommonSingleInteractor {
 
-    private BaseSingleLoadedListener<JSONObject> loadedListener;
+    private BaseSingleLoadedListener<feedbackResponse> loadedListener;
 
-    public FeedbackInteractorImpl(BaseSingleLoadedListener<JSONObject> loadedListener) {
+    public FeedbackInteractorImpl(BaseSingleLoadedListener<feedbackResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<JSONObject> gsonRequest=new GsonRequest<JSONObject>(UriHelper.getInstance().seedFeedback(json),null,new TypeToken<JSONObject>(){}.getType(), new Response.Listener<JSONObject>(){
+        GsonRequest<feedbackResponse> gsonRequest=new GsonRequest<feedbackResponse>(UriHelper.getInstance().seedFeedback(json),null,new TypeToken<feedbackResponse>(){}.getType(), new Response.Listener<feedbackResponse>(){
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(feedbackResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

@@ -12,15 +12,18 @@ import com.dmd.zsb.mvp.interactor.impl.HomeInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.HomePresenter;
 import com.dmd.zsb.mvp.view.HomeView;
+import com.dmd.zsb.protocol.request.homeRequest;
+import com.dmd.zsb.protocol.response.homeResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
 /**
  * Created by Administrator on 2015/12/15.
  */
-public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<HomeResponse> {
+public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<homeResponse> {
 //keytool -v -list -keystore keystore.jks
     private Context mContext=null;
     private HomeView mHomeView=null;
@@ -33,21 +36,27 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
     }
     @Override
     public void loadListData(int event,JSONObject data) {
+        homeRequest request=new homeRequest();
+        try {
+            mCommonListInteractor.getCommonListData(event,request.toJson());
+        }catch (JSONException j){
+
+        }
         mHomeView.hideLoading();
         if (event==Constants.EVENT_REFRESH_DATA) {
             mHomeView.showLoading(mContext.getString(R.string.common_loading_message));
         }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
             mHomeView.showLoading(mContext.getString(R.string.common_loading_message));
         }
-        mCommonListInteractor.getCommonListData(event,data);
+
     }
     @Override
-    public void onSuccess(int event_tag, HomeResponse data) {
+    public void onSuccess(int event_tag, homeResponse response) {
         mHomeView.hideLoading();
         if (event_tag == Constants.EVENT_REFRESH_DATA) {
-            mHomeView.refreshListData(data);
+            mHomeView.refreshListData(response);
         } else if (event_tag == Constants.EVENT_LOAD_MORE_DATA) {
-            mHomeView.addMoreListData(data);
+            mHomeView.addMoreListData(response);
         }
     }
 

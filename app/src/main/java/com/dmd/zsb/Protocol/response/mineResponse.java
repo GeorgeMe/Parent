@@ -8,8 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Table(name = "usermineResponse")
-public class usermineResponse extends DataBaseModel
+@Table(name = "mineResponse")
+public class mineResponse extends DataBaseModel
 {
 
      @Column(name = "mineHeaderImg")

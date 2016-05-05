@@ -11,15 +11,11 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
-import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
-import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
-import com.dmd.zsb.protocol.response.usermineResponse;
+import com.dmd.zsb.protocol.response.mineResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -29,18 +25,18 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/4/3.
  */
 public class MinekInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<usermineResponse> loadedListener;
+    private BaseSingleLoadedListener<mineResponse> loadedListener;
 
-    public MinekInteractorImpl(BaseSingleLoadedListener<usermineResponse> loadedListener) {
+    public MinekInteractorImpl(BaseSingleLoadedListener<mineResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<usermineResponse> gsonRequest=new GsonRequest<usermineResponse>(UriHelper.getInstance().mine(json),null,new TypeToken<usermineResponse>(){}.getType(),
-                new Response.Listener<usermineResponse>(){
+        GsonRequest<mineResponse> gsonRequest=new GsonRequest<mineResponse>(UriHelper.getInstance().mine(json),null,new TypeToken<mineResponse>(){}.getType(),
+                new Response.Listener<mineResponse>(){
             @Override
-            public void onResponse(usermineResponse response) {
+            public void onResponse(mineResponse response) {
                 loadedListener.onSuccess(response);
                 try {
                     Log.e("",response.toJson().toString());

@@ -10,8 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-@Table(name = "usersigninResponse")
-public class usersigninResponse  extends DataBaseModel
+@Table(name = "signinResponse")
+public class signinResponse extends DataBaseModel
 {
 
      @Column(name = "sid")

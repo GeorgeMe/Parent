@@ -12,6 +12,7 @@ import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.entity.response.VouchersResponse;
 import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
+import com.dmd.zsb.protocol.response.vouchersResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.JsonObject;
@@ -23,18 +24,18 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/28.
  */
 public class VouchersInteractorImpl implements CommonListInteractor {
-    private BaseMultiLoadedListener<VouchersResponse> loadedListener;
+    private BaseMultiLoadedListener<vouchersResponse> loadedListener;
 
-    public VouchersInteractorImpl(BaseMultiLoadedListener<VouchersResponse> loadedListener) {
+    public VouchersInteractorImpl(BaseMultiLoadedListener<vouchersResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonListData(final int event,JSONObject json) {
-        GsonRequest<VouchersResponse> gsonRequest = new GsonRequest<VouchersResponse>(UriHelper.getInstance().vouchers(json), null, new TypeToken<VouchersResponse>() {
-        }.getType(), new Response.Listener<VouchersResponse>() {
+        GsonRequest<vouchersResponse> gsonRequest = new GsonRequest<vouchersResponse>(UriHelper.getInstance().vouchers(json), null, new TypeToken<vouchersResponse>() {
+        }.getType(), new Response.Listener<vouchersResponse>() {
             @Override
-            public void onResponse(VouchersResponse response) {
+            public void onResponse(vouchersResponse response) {
                 loadedListener.onSuccess(event,response);
             }
         }, new Response.ErrorListener() {

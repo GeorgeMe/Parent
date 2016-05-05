@@ -6,14 +6,17 @@ import com.dmd.zsb.mvp.interactor.impl.ReleaseOrderInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.ReleaseOrderPresenter;
 import com.dmd.zsb.mvp.view.ReleaseOrderView;
+import com.dmd.zsb.protocol.request.releaseorderRequest;
+import com.dmd.zsb.protocol.response.releaseorderResponse;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSingleLoadedListener<JSONObject>{
+public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSingleLoadedListener<releaseorderResponse>{
 
     private ReleaseOrderInteractorImpl releaseOrderInteractor;
     private Context mContext;
@@ -27,12 +30,18 @@ public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSin
 
     @Override
     public void onReleaseOrder(JSONObject jsonObject) {
-        releaseOrderInteractor.getCommonSingleData(jsonObject);
+        releaseorderRequest request=new releaseorderRequest();
+        try {
+            releaseOrderInteractor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
+
     }
 
     @Override
-    public void onSuccess(JSONObject data) {
-        releaseOrderView.showSuccessView(data);
+    public void onSuccess(releaseorderResponse response) {
+        releaseOrderView.showSuccessView(response);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.dmd.zsb.parent.fragment;
 
 
-import android.content.Intent;
 import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -23,7 +22,6 @@ import com.dmd.tutor.adapter.ViewHolderCreator;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
-import com.dmd.tutor.search.MaterialSearchView;
 import com.dmd.tutor.utils.TLog;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.parent.R;
@@ -35,7 +33,6 @@ import com.dmd.zsb.db.dao.SubjectDao;
 import com.dmd.zsb.entity.GradeEntity;
 import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.entity.UserEntity;
-import com.dmd.zsb.entity.response.SeekResponse;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.presenter.impl.SeekPresenterIml;
 import com.dmd.zsb.mvp.view.SeekView;
@@ -44,8 +41,10 @@ import com.dmd.zsb.parent.activity.base.BaseFragment;
 import com.dmd.zsb.parent.adapter.SeekGradeAdapter;
 import com.dmd.zsb.parent.adapter.SeekSortAdapter;
 import com.dmd.zsb.parent.adapter.SeekSubjectAdapter;
+import com.dmd.zsb.protocol.response.seekResponse;
+import com.dmd.zsb.protocol.table.UsersBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
-import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -76,7 +75,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Bind(R.id.top_bar_title)
     TextView topBarTitle;
 
-    private ListViewDataAdapter<UserEntity> mListViewAdapter;
+    private ListViewDataAdapter<UsersBean> mListViewAdapter;
     private SeekPresenter mSeekPresenter = null;
     private int page = 1;
     private SeekGradeAdapter seekGradeAdapter;
@@ -155,11 +154,11 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         topBarTitle.setText("找老师");
         initScreenWidth();
 
-        mListViewAdapter = new ListViewDataAdapter<UserEntity>(new ViewHolderCreator<UserEntity>() {
+        mListViewAdapter = new ListViewDataAdapter<UsersBean>(new ViewHolderCreator<UsersBean>() {
 
             @Override
-            public ViewHolderBase<UserEntity> createViewHolder(int position) {
-                return new ViewHolderBase<UserEntity>() {
+            public ViewHolderBase<UsersBean> createViewHolder(int position) {
+                return new ViewHolderBase<UsersBean>() {
                     ImageView tutor_list_teacher_header_img;
                     TextView tutor_list_teacher_name,
                             tutor_list_teacher_type,
@@ -188,17 +187,17 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                     }
 
                     @Override
-                    public void showData(int position, UserEntity itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.getAvatar()).into(tutor_list_teacher_header_img);
-                        tutor_list_teacher_name.setText(itemData.getUsername());
-                        tutor_list_teacher_type.setText("(" + itemData.getRole() + ")");
-                        tutor_list_teacher_sex.setText(itemData.getGender());
-                        tutor_list_teacher_time.setText(itemData.getTotal_hours() + "");
+                    public void showData(int position, UsersBean itemData) {
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(tutor_list_teacher_header_img);
+                        tutor_list_teacher_name.setText(itemData.user_id);
+                        tutor_list_teacher_type.setText("(" + itemData.role + ")");
+                        tutor_list_teacher_sex.setText(itemData.gender);
+                        tutor_list_teacher_time.setText(itemData.total_hours + "");
                         tutor_list_teacher_Level.setText("未认证");
-                        tutor_list_teacher_content.setText(itemData.getSignature());
+                        tutor_list_teacher_content.setText(itemData.mobile);
                         tutor_list_teacher_one2one.setText("");
                         tutor_list_teacher_one2more.setText("");
-                        tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.getLat()), Double.parseDouble(itemData.getLon())));
+                        tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
                     }
                 };
             }
@@ -242,7 +241,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     public void onClick(View v) {
 
-        // readyGoForResult(MaterialSearchActivity.class, MaterialSearchView.REQUEST_VOICE);
         if (v == seekGroupMenuCourse) {
             if (seekGroupMenuCourse.isChecked()) {
                 onCreateCoursePopWindow(seekGroupMenuCourse);
@@ -263,12 +261,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         }
     }
 
-    /*            new MaterialDialog.Builder(getActivity())
-                        .title(R.string.title)
-                        .content("筛选")
-                        .positiveText(R.string.agree)
-                        .negativeText(R.string.disagree)
-                        .show();*/
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         UserEntity data=(UserEntity)parent.getItemAtPosition(position);
@@ -310,19 +302,19 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     }
 
     @Override
-    public void refreshListData(SeekResponse data) {
+    public void refreshListData(seekResponse response) {
         if (fragmentSeekListSwipeLayout != null)
             fragmentSeekListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getUsers().size() >= 2) {
+        if (response != null) {
+            if (response.users.size() >= 2) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
-                    mListViewAdapter.getDataList().addAll(data.getUsers());
+                    mListViewAdapter.getDataList().addAll(response.users);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
             if (fragmentSeekListListView!=null){
-                if (data.getTotal_page() > page){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
                     fragmentSeekListListView.setCanLoadMore(true);
                 }else{
                     fragmentSeekListListView.setCanLoadMore(false);
@@ -333,16 +325,16 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     }
 
     @Override
-    public void addMoreListData(SeekResponse data) {
+    public void addMoreListData(seekResponse response) {
         if (fragmentSeekListListView != null)
             fragmentSeekListListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewAdapter != null) {
-                mListViewAdapter.getDataList().addAll(data.getUsers());
+                mListViewAdapter.getDataList().addAll(response.users);
                 mListViewAdapter.notifyDataSetChanged();
             }
             if (fragmentSeekListListView!=null){
-                if (data.getTotal_page() > page){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
                     fragmentSeekListListView.setCanLoadMore(true);
                 }else{
                     fragmentSeekListListView.setCanLoadMore(false);

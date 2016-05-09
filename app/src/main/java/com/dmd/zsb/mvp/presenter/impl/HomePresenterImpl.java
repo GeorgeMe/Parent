@@ -35,9 +35,10 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
         mCommonListInteractor=new HomeInteractorImpl(this);
     }
     @Override
-    public void loadListData(int event,JSONObject data) {
+    public void loadListData(int event,JSONObject jsonObject) {
         homeRequest request=new homeRequest();
         try {
+            request.fromJson(jsonObject);
             mCommonListInteractor.getCommonListData(event,request.toJson());
         }catch (JSONException j){
 

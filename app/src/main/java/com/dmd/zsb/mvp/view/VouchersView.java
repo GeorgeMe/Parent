@@ -13,7 +13,7 @@ public interface VouchersView extends BaseView{
 
     void navigateToVouchersDetail(int position, VouchersEntity itemData);
 
-    void refreshListData(vouchersResponse data);
+    void refreshListData(vouchersResponse response);
 
-    void addMoreListData(vouchersResponse data);
+    void addMoreListData(vouchersResponse response);
 }

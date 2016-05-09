@@ -11,6 +11,7 @@ import com.dmd.zsb.api.ApiConstants;
 
 import com.dmd.tutor.ninelayout.NineGridAdapter;
 import com.dmd.zsb.entity.SubjectEntity;
+import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class HomeCoursesAdapter extends NineGridAdapter {
         @Override
         public String getUrl(int positopn) {
             //TODO url没有获取到
-            return getItem(positopn) == null ? null : ((SubjectEntity)getItem(positopn)).getSub_img();
+            return getItem(positopn) == null ? null : ((SubjectsBean)getItem(positopn)).sub_img;
         }
 
         @Override

@@ -32,6 +32,7 @@ public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSin
     public void onReleaseOrder(JSONObject jsonObject) {
         releaseorderRequest request=new releaseorderRequest();
         try {
+            request.fromJson(jsonObject);
             releaseOrderInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

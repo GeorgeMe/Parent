@@ -34,6 +34,7 @@ public class EvaluationPresenterImpl implements EvaluationPresenter,BaseMultiLoa
     public void onEvaluation(int event_tag,JSONObject jsonObject) {
         evaluationRequest request=new evaluationRequest();
         try {
+            request.fromJson(jsonObject);
             evaluationInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
 

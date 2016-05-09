@@ -34,6 +34,7 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
     public void onVouchers(int event_tag,JSONObject jsonObject) {
         vouchersRequest request=new vouchersRequest();
         try {
+            request.fromJson(jsonObject);
             vouchersInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
 

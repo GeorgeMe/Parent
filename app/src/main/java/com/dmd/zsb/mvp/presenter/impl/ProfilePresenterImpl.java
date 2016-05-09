@@ -31,6 +31,7 @@ public class ProfilePresenterImpl implements ProfilePresenter,BaseSingleLoadedLi
     public void onChangeProfile(JSONObject jsonObject) {
         profileRequest request=new profileRequest();
         try {
+            request.fromJson(jsonObject);
             briefInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

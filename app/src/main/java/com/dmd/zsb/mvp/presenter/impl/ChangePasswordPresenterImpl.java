@@ -30,7 +30,10 @@ public class ChangePasswordPresenterImpl implements ChangePasswordPresenter,Base
     @Override
     public void onChangePassword(JSONObject jsonObject) {
         changepasswordRequest request=new changepasswordRequest();
+
+
         try {
+            request.fromJson(jsonObject);
             changePasswordInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

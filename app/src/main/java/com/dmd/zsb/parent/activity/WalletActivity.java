@@ -12,6 +12,7 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.WalletPresenterImpl;
 import com.dmd.zsb.mvp.view.WalletView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.walletResponse;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -81,10 +82,10 @@ public class WalletActivity extends BaseActivity implements WalletView{
     }
 
     @Override
-    public void setView(JSONObject jsonObject) {
-        walletBalance.setText(jsonObject.optString("balance"));
-        walletCumulativeClass.setText(jsonObject.optString("total_hours"));
-        walletEarnMoney.setText(jsonObject.optString("total_amount"));
+    public void setView(walletResponse response) {
+        walletBalance.setText(response.balance);
+        walletCumulativeClass.setText(response.total_hours);
+        walletEarnMoney.setText(response.total_amount);
     }
 
     @Override

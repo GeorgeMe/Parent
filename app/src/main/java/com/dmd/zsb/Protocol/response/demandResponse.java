@@ -3,27 +3,29 @@ package com.dmd.zsb.protocol.response;
 import com.activeandroid.DataBaseModel;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.dmd.zsb.protocol.table.DemandsBean;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "demandResponse")
 public class demandResponse extends DataBaseModel{
-    @Column(name = "appkey")
-    public String   appkey;
 
-    @Column(name = "version")
-    public String version;
+    @Column(name = "errno")
+    public int errno;
+    @Column(name = "msg")
+    public String msg;
+    @Column(name = "total_count")
+    public int total_count;
 
-    @Column(name = "sid")
-    public String   sid;
-
-    @Column(name = "uid")
-    public String   uid;
+    @Column(name = "demands")
+    public List<DemandsBean> demands;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -31,24 +33,32 @@ public class demandResponse extends DataBaseModel{
         }
 
         JSONArray subItemArray;
-
-        this.appkey = jsonObject.optString("appkey");
-        this.version = jsonObject.optString("version");
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
-
-
-        return ;
+        this.errno = jsonObject.optInt("errno");
+        this.total_count = jsonObject.optInt("total_count");
+        this.msg = jsonObject.optString("msg");
+        subItemArray=jsonObject.optJSONArray("demands");
+        if(null != subItemArray) {
+            for (int i = 0; i < subItemArray.length(); i++) {
+                JSONObject subItemObject = subItemArray.getJSONObject(i);
+                DemandsBean subItem = new DemandsBean();
+                subItem.fromJson(subItemObject);
+                this.demands.add(subItem);
+            }
+        }
     }
-    public JSONObject  toJson() throws JSONException{
+    public JSONObject  toJson() throws JSONException {
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
-
-        localItemObject.put("appkey", appkey);
-        localItemObject.put("version", version);
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
-
+        localItemObject.put("errno", errno);
+        localItemObject.put("total_count", total_count);
+        localItemObject.put("msg", msg);
+        for(int i =0; i< demands.size(); i++)
+        {
+            DemandsBean itemData =demands.get(i);
+            JSONObject itemJSONObject = itemData.toJson();
+            itemJSONArray.put(itemJSONObject);
+        }
+        localItemObject.put("demands", itemJSONArray);
         return localItemObject;
     }
 }

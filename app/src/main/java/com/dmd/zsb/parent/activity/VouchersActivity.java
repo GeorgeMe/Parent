@@ -23,8 +23,10 @@ import com.dmd.zsb.entity.response.VouchersResponse;
 import com.dmd.zsb.mvp.presenter.impl.VouchersPresenterImpl;
 import com.dmd.zsb.mvp.view.VouchersView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.vouchersResponse;
+import com.dmd.zsb.protocol.table.VouchersBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
-import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -47,7 +49,7 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
 
 
     private VouchersPresenterImpl vouchersPresenter;
-    private ListViewDataAdapter<VouchersEntity> mListViewDataAdapter;
+    private ListViewDataAdapter<VouchersBean> mListViewDataAdapter;
     private int page =1;
 
     @Override
@@ -85,10 +87,10 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
         }
 
         vouchersPresenter.onVouchers(Constants.EVENT_REFRESH_DATA, jsonObject);
-        mListViewDataAdapter = new ListViewDataAdapter<VouchersEntity>(new ViewHolderCreator<VouchersEntity>() {
+        mListViewDataAdapter = new ListViewDataAdapter<VouchersBean>(new ViewHolderCreator<VouchersBean>() {
             @Override
-            public ViewHolderBase<VouchersEntity> createViewHolder(int position) {
-                return new ViewHolderBase<VouchersEntity>() {
+            public ViewHolderBase<VouchersBean> createViewHolder(int position) {
+                return new ViewHolderBase<VouchersBean>() {
                     ImageView img_vouchers;
 
                     @Override
@@ -99,8 +101,8 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
                     }
 
                     @Override
-                    public void showData(int position, VouchersEntity itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.getImg_path()).into(img_vouchers);
+                    public void showData(int position, VouchersBean itemData) {
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.img_path).into(img_vouchers);
                     }
                 };
             }
@@ -189,18 +191,18 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     }
 
     @Override
-    public void refreshListData(VouchersResponse data) {
+    public void refreshListData(vouchersResponse response) {
         if (vouchersListSwipeLayout != null)
             vouchersListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getVouchersEntities().size() >= 2) {
+        if (response != null) {
+            if (response.vouchers.size() >= 2) {
                 if (mListViewDataAdapter != null) {
                     mListViewDataAdapter.getDataList().clear();
-                    mListViewDataAdapter.getDataList().addAll(data.getVouchersEntities());
+                    mListViewDataAdapter.getDataList().addAll(response.vouchers);
                     mListViewDataAdapter.notifyDataSetChanged();
                 }
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 vouchersListView.setCanLoadMore(true);
             else
                 vouchersListView.setCanLoadMore(false);
@@ -208,15 +210,15 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     }
 
     @Override
-    public void addMoreListData(VouchersResponse data) {
+    public void addMoreListData(vouchersResponse response) {
         if (vouchersListView != null)
             vouchersListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewDataAdapter != null) {
-                mListViewDataAdapter.getDataList().addAll(data.getVouchersEntities());
+                mListViewDataAdapter.getDataList().addAll(response.vouchers);
                 mListViewDataAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 vouchersListView.setCanLoadMore(true);
             else
                 vouchersListView.setCanLoadMore(false);

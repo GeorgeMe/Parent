@@ -11,6 +11,7 @@ import com.dmd.zsb.protocol.request.changeavatarRequest;
 import com.dmd.zsb.protocol.response.changeavatarResponse;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/5/5.
@@ -28,10 +29,10 @@ public class ChangeAvatarPresenterImpl implements ChangeAvatarPresenter,BaseSing
     }
 
     @Override
-    public void ChangeAvatar() {
+    public void onChangeAvatar(JSONObject jsonObject) {
         changeavatarRequest request =new changeavatarRequest();
-
         try {
+            request.fromJson(jsonObject);
             changeAvatarInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

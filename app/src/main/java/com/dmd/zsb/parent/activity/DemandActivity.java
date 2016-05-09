@@ -26,6 +26,9 @@ import com.dmd.zsb.entity.response.DemandResponse;
 import com.dmd.zsb.mvp.presenter.impl.DemandPresenterImpl;
 import com.dmd.zsb.mvp.view.DemandView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.demandResponse;
+import com.dmd.zsb.protocol.table.DemandsBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
 import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
@@ -60,7 +63,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     TextView topBarBack;
 
     private DemandPresenterImpl demandPresenter;
-    private ListViewDataAdapter<DemandEntity> mListViewAdapter;
+    private ListViewDataAdapter<DemandsBean> mListViewAdapter;
     private int page = 1;
 
     @Override
@@ -148,10 +151,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             });
         }
 
-        mListViewAdapter = new ListViewDataAdapter<DemandEntity>(new ViewHolderCreator<DemandEntity>() {
+        mListViewAdapter = new ListViewDataAdapter<DemandsBean>(new ViewHolderCreator<DemandsBean>() {
             @Override
-            public ViewHolderBase<DemandEntity> createViewHolder(int position) {
-                return new ViewHolderBase<DemandEntity>() {
+            public ViewHolderBase<DemandsBean> createViewHolder(int position) {
+                return new ViewHolderBase<DemandsBean>() {
 
                     ImageView img_header;
                     TextView tv_zjz, tv_name, tv_type, tv_sex, tv_sex2, tv_type2, tv_appointed_time, tv_charging, tv_curriculum, tv_address, tv_place, tv_state, tv_mode, tv_praise;
@@ -184,7 +187,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                     }
 
                     @Override
-                    public void showData(int position, DemandEntity itemData) {
+                    public void showData(int position, DemandsBean itemData) {
                         if (demandLevyConcentration.isChecked()) {
                             tv_zjz.setVisibility(View.VISIBLE);
                             img_header.setVisibility(View.GONE);
@@ -194,9 +197,9 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             l_zjh_s.setVisibility(View.GONE);
                             l_zjz.setVisibility(View.VISIBLE);
 
-                            tv_type.setText(itemData.getType());
-                            tv_sex.setText(itemData.getSex());
-                            tv_praise.setText(itemData.getPraise());
+                            tv_type.setText(itemData.type);
+                            tv_sex.setText(itemData.sex);
+                            tv_praise.setText(itemData.praise);
 
                         } else if (demandToBeCompleted.isChecked()) {
                             tv_zjz.setVisibility(View.GONE);
@@ -207,13 +210,13 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             l_zjh_m.setVisibility(View.VISIBLE);
                             l_zjh_s.setVisibility(View.GONE);
 
-                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.getImg_header()).into(img_header);
-                            tv_type2.setText(itemData.getType());
-                            tv_sex2.setText(itemData.getSex());
-                            tv_name.setText(itemData.getName());
-                            if (itemData.getMode().equals("1")) {
+                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                            tv_type2.setText(itemData.type);
+                            tv_sex2.setText(itemData.sex);
+                            tv_name.setText(itemData.name);
+                            if (itemData.mode.equals("1")) {
                                 tv_mode.setText("一对一");
-                            } else if (itemData.getMode().equals("2")) {
+                            } else if (itemData.mode.equals("2")) {
                                 tv_mode.setText("一对多");
                             }
 
@@ -226,22 +229,22 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             l_zjh_m.setVisibility(View.GONE);
                             l_zjh_s.setVisibility(View.VISIBLE);
 
-                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.getImg_header()).into(img_header);
-                            tv_type2.setText(itemData.getType());
-                            tv_sex2.setText(itemData.getSex());
-                            tv_name.setText(itemData.getName());
-                            if (itemData.getState().equals("2")) {
+                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                            tv_type2.setText(itemData.type);
+                            tv_sex2.setText(itemData.sex);
+                            tv_name.setText(itemData.name);
+                            if (itemData.state.equals("2")) {
                                 tv_state.setText("已完成");
-                            } else if (itemData.getState().equals("3")) {
+                            } else if (itemData.state.equals("3")) {
                                 tv_state.setText("已付款");
                             }
 
                         }
-                        tv_appointed_time.setText(itemData.getAppointed_time());
-                        tv_charging.setText(itemData.getCharging());
-                        tv_curriculum.setText(itemData.getCurriculum());
-                        tv_address.setText(itemData.getAddress());
-                        tv_place.setText(itemData.getPlace());
+                        tv_appointed_time.setText(itemData.appointed_time);
+                        tv_charging.setText(itemData.charging);
+                        tv_curriculum.setText(itemData.curriculum);
+                        tv_address.setText(itemData.address);
+                        tv_place.setText(itemData.place);
 
                     }
                 };
@@ -277,18 +280,18 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     }
 
     @Override
-    public void refreshListData(DemandResponse data) {
+    public void refreshListData(demandResponse response) {
         if (fragmentDemandListSwipeLayout != null)
             fragmentDemandListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getDemandEntities().size() >= 2) {
+        if (response != null) {
+            if (response.demands.size() >= 2) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
-                    mListViewAdapter.getDataList().addAll(data.getDemandEntities());
+                    mListViewAdapter.getDataList().addAll(response.demands);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentDemandListView.setCanLoadMore(true);
             else
                 fragmentDemandListView.setCanLoadMore(false);
@@ -296,15 +299,15 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     }
 
     @Override
-    public void addMoreListData(DemandResponse data) {
+    public void addMoreListData(demandResponse response) {
         if (fragmentDemandListView != null)
             fragmentDemandListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewAdapter != null) {
-                mListViewAdapter.getDataList().addAll(data.getDemandEntities());
+                mListViewAdapter.getDataList().addAll(response.demands);
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentDemandListView.setCanLoadMore(true);
             else
                 fragmentDemandListView.setCanLoadMore(false);

@@ -33,6 +33,7 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
     public void onDemand(int event_tag, JSONObject jsonObject) {
         demandRequest request=new demandRequest();
         try {
+            request.fromJson(jsonObject);
             demandInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
 

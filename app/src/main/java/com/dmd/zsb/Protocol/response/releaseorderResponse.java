@@ -13,17 +13,10 @@ import org.json.JSONObject;
  */
 @Table(name = "releaseorderResponse")
 public class releaseorderResponse extends DataBaseModel{
-    @Column(name = "appkey")
-    public String   appkey;
-
-    @Column(name = "version")
-    public String version;
-
-    @Column(name = "sid")
-    public String   sid;
-
-    @Column(name = "uid")
-    public String   uid;
+    @Column(name = "errno")
+    public int errno;
+    @Column(name = "msg")
+    public String msg;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -32,11 +25,8 @@ public class releaseorderResponse extends DataBaseModel{
 
         JSONArray subItemArray;
 
-        this.appkey = jsonObject.optString("appkey");
-        this.version = jsonObject.optString("version");
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
-
+        this.errno = jsonObject.optInt("errno");
+        this.msg = jsonObject.optString("msg");
 
         return ;
     }
@@ -44,10 +34,8 @@ public class releaseorderResponse extends DataBaseModel{
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
 
-        localItemObject.put("appkey", appkey);
-        localItemObject.put("version", version);
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
+        localItemObject.put("errno", errno);
+        localItemObject.put("msg", msg);
 
         return localItemObject;
     }

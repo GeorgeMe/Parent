@@ -13,6 +13,7 @@ import com.android.volley.toolbox.PostUploadRequest;
 import com.dmd.tutor.utils.OnUploadProcessListener;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
+import com.dmd.zsb.protocol.request.changeavatarRequest;
 import com.dmd.zsb.protocol.response.changeavatarResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
@@ -38,12 +39,16 @@ public class ChangeAvatarInteractorImpl implements CommonSingleInteractor {
 
     @Override
     public void getCommonSingleData(JSONObject json) {
+
+        changeavatarRequest request=new changeavatarRequest();
+        //request.fromJson(json);
+
         List<FormFile> fileList=new ArrayList<>();
         JSONObject file=json.optJSONObject("formFile");
-        JSONObject params=json.optJSONObject("json");
         FormFile formFile=new FormFile(file.optString("fileName"), new File(file.optString("filePath")), file.optString("parameterName"), file.optString("contentType"));
         fileList.add(formFile);
-        PostUploadRequest<changeavatarResponse> uploadRequest=new PostUploadRequest<changeavatarResponse>(UriHelper.getInstance().changeAvatar(params), fileList, new TypeToken<changeavatarResponse>() {
+
+        PostUploadRequest<changeavatarResponse> uploadRequest=new PostUploadRequest<changeavatarResponse>(UriHelper.getInstance().changeAvatar(json), fileList, new TypeToken<changeavatarResponse>() {
         }.getType(), new Response.Listener<changeavatarResponse>() {
             @Override
             public void onResponse(changeavatarResponse response) {

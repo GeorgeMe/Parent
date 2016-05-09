@@ -31,6 +31,7 @@ public class OrderPresenterImpl implements OrderPresenter ,BaseMultiLoadedListen
     public void onOrder(int event_tag, JSONObject jsonObject) {
         orderRequest request=new orderRequest();
         try {
+            request.fromJson(jsonObject);
             orderInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
 

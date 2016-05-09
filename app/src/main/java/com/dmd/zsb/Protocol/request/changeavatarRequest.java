@@ -3,6 +3,7 @@ package com.dmd.zsb.protocol.request;
 import com.activeandroid.DataBaseModel;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.dmd.zsb.protocol.table.FORMFILE;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -13,6 +14,8 @@ import org.json.JSONObject;
  */
 @Table(name = "changeavatarRequest")
 public class changeavatarRequest extends DataBaseModel{
+
+
     @Column(name = "appkey")
     public String   appkey;
 
@@ -24,6 +27,9 @@ public class changeavatarRequest extends DataBaseModel{
 
     @Column(name = "uid")
     public String   uid;
+
+    @Column(name = "formfile")
+    public FORMFILE formfile;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -37,7 +43,9 @@ public class changeavatarRequest extends DataBaseModel{
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
 
-
+        FORMFILE formfile=new FORMFILE();
+        formfile.fromJson(jsonObject.optJSONObject("formfile"));
+        this.formfile=formfile;
         return ;
     }
     public JSONObject  toJson() throws JSONException{
@@ -48,7 +56,9 @@ public class changeavatarRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
-
+        if (formfile!=null){
+            localItemObject.put("formfile",formfile.toJson());
+        }
         return localItemObject;
     }
 }

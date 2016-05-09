@@ -35,9 +35,10 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
     }
 
     @Override
-    public void loadListData(int event,JSONObject data) {
+    public void loadListData(int event,JSONObject jsonObject) {
         seekRequest request=new seekRequest();
         try {
+            request.fromJson(jsonObject);
             mCommonListInteractor.getCommonListData(event,request.toJson());
         }catch (JSONException j){
 
@@ -48,7 +49,7 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
         }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
         }
-        //提交的参数封装
+/*        //提交的参数封装
         JSONObject jsonObject=new JSONObject();
         String uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
         String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
@@ -62,7 +63,7 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
             jsonObject.put("subid",data.optString("subid"));//科目id
         }catch (JSONException j){
 
-        }
+        }*/
     }
 
 

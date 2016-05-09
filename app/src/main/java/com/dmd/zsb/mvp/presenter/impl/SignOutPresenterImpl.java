@@ -10,6 +10,7 @@ import com.dmd.zsb.protocol.request.signoutRequest;
 import com.dmd.zsb.protocol.response.signoutResponse;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2016/5/5.
@@ -26,9 +27,10 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
     }
 
     @Override
-    public void onSignOut() {
+    public void onSignOut(JSONObject jsonObject) {
         signoutRequest request=new signoutRequest();
         try {
+            request.fromJson(jsonObject);
             signOutInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

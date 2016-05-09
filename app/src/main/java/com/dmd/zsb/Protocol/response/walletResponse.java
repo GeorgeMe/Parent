@@ -13,17 +13,21 @@ import org.json.JSONObject;
  */
 @Table(name = "walletResponse")
 public class walletResponse extends DataBaseModel{
-    @Column(name = "appkey")
-    public String   appkey;
 
-    @Column(name = "version")
-    public String version;
+    @Column(name = "errno")
+    public int errno;
+    @Column(name = "msg")
+    public String msg;
 
-    @Column(name = "sid")
-    public String   sid;
+    @Column(name = "balance")
+    public String   balance;
 
-    @Column(name = "uid")
-    public String   uid;
+    @Column(name = "total_hours")
+    public String total_hours;
+
+    @Column(name = "total_amount")
+    public String   total_amount;
+
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -32,10 +36,11 @@ public class walletResponse extends DataBaseModel{
 
         JSONArray subItemArray;
 
-        this.appkey = jsonObject.optString("appkey");
-        this.version = jsonObject.optString("version");
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
+        this.errno = jsonObject.optInt("errno");
+        this.msg = jsonObject.optString("msg");
+        this.balance = jsonObject.optString("balance");
+        this.total_hours = jsonObject.optString("total_hours");
+        this.total_amount = jsonObject.optString("total_amount");
 
 
         return ;
@@ -44,10 +49,11 @@ public class walletResponse extends DataBaseModel{
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
 
-        localItemObject.put("appkey", appkey);
-        localItemObject.put("version", version);
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
+        localItemObject.put("errno", errno);
+        localItemObject.put("msg", msg);
+        localItemObject.put("balance", balance);
+        localItemObject.put("total_hours", total_hours);
+        localItemObject.put("total_amount", total_amount);
 
         return localItemObject;
     }

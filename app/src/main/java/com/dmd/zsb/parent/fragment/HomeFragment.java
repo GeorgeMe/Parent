@@ -3,7 +3,6 @@ package com.dmd.zsb.parent.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -24,9 +23,7 @@ import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.entity.UserEntity;
-import com.dmd.zsb.entity.response.HomeResponse;
 import com.dmd.zsb.mvp.presenter.impl.HomePresenterImpl;
 import com.dmd.zsb.mvp.view.HomeView;
 import com.dmd.zsb.parent.activity.ReleaseOrderActivity;
@@ -34,8 +31,11 @@ import com.dmd.zsb.parent.activity.UserDetailActivity;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
 import com.dmd.zsb.parent.adapter.HomeCarouselAdapter;
 import com.dmd.zsb.parent.adapter.HomeCoursesAdapter;
+import com.dmd.zsb.protocol.response.homeResponse;
+import com.dmd.zsb.protocol.table.SubjectsBean;
+import com.dmd.zsb.protocol.table.UsersBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
-import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -62,8 +62,8 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     private View mHeaderView;
     private RollPagerView mRollPagerView;
     private NineGridlayout mNineGridlayout;
-    private ListViewDataAdapter<UserEntity> mListViewAdapter;
-    private List<SubjectEntity> subjectList;
+    private ListViewDataAdapter<UsersBean> mListViewAdapter;
+    private List<SubjectsBean> subjectList;
     private int page=1;
     private HomePresenterImpl mHomePresenter=null;
     /**
@@ -173,11 +173,11 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
         mHeaderView = LayoutInflater.from(mContext).inflate(R.layout.tutor_home_list_header, null);
         mRollPagerView = (RollPagerView) ButterKnife.findById(mHeaderView, R.id.fragment_home_list_header_roll_view_pager);
         mNineGridlayout = (NineGridlayout) ButterKnife.findById(mHeaderView, R.id.fragment_home_list_header_nine_grid_layout);
-        mListViewAdapter = new ListViewDataAdapter<UserEntity>(new ViewHolderCreator<UserEntity>() {
+        mListViewAdapter = new ListViewDataAdapter<UsersBean>(new ViewHolderCreator<UsersBean>() {
 
             @Override
-            public ViewHolderBase<UserEntity> createViewHolder(int position) {
-                return new ViewHolderBase<UserEntity>() {
+            public ViewHolderBase<UsersBean> createViewHolder(int position) {
+                return new ViewHolderBase<UsersBean>() {
                     ImageView tutor_list_teacher_header_img;
                     TextView tutor_list_teacher_name,
                             tutor_list_teacher_type,
@@ -206,18 +206,18 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                     }
 
                     @Override
-                    public void showData(int position, UserEntity itemData) {
+                    public void showData(int position, UsersBean itemData) {
 
-                                Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.getAvatar()).into(tutor_list_teacher_header_img);
-                                tutor_list_teacher_name.setText(itemData.getUsername());
-                                tutor_list_teacher_type.setText("("+itemData.getRole()+")");
-                                tutor_list_teacher_sex.setText(itemData.getGender());
-                                tutor_list_teacher_time.setText(itemData.getTotal_hours()+"");
+                                Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.avatar).into(tutor_list_teacher_header_img);
+                                tutor_list_teacher_name.setText(itemData.user_id);
+                                tutor_list_teacher_type.setText("("+itemData.role+")");
+                                tutor_list_teacher_sex.setText(itemData.gender);
+                                tutor_list_teacher_time.setText(itemData.curriculum_id+"");
                                 tutor_list_teacher_Level.setText("未认证");
-                                tutor_list_teacher_content.setText(itemData.getSignature());
+                                tutor_list_teacher_content.setText(itemData.subject_name);
                                 tutor_list_teacher_one2one.setText("");
                                 tutor_list_teacher_one2more.setText("");
-                                tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.getLat()),Double.parseDouble(itemData.getLon())));
+                                tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat),Double.parseDouble(itemData.lon)));
                     }
                 };
             }
@@ -267,27 +267,27 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     }
 
     @Override
-    public void refreshListData(HomeResponse data) {
+    public void refreshListData(homeResponse response) {
         if (fragmentHomeListSwipeLayout != null)
             fragmentHomeListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getUsers().size() >= 0) {//用户列表
+        if (response != null) {
+            if (response.users.size() >= 0) {//用户列表
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
-                    mListViewAdapter.getDataList().addAll(data.getUsers());
+                    mListViewAdapter.getDataList().addAll(response.users);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
-            if (data.getAdvertisements().size() >= 0) {//广告
-                mRollPagerView.setAdapter(new HomeCarouselAdapter(mContext, data.getAdvertisements()));
+            if (response.advertisements.size() >= 0) {//广告
+                mRollPagerView.setAdapter(new HomeCarouselAdapter(mContext, response.advertisements));
             }
-            if (data.getSubjects().size() >= 0) {//科目
-                subjectList=new ArrayList<SubjectEntity>();
-                subjectList.addAll(data.getSubjects());
-                mNineGridlayout.setAdapter(new HomeCoursesAdapter(mContext, data.getSubjects(), 5));
+            if (response.subjects.size() >= 0) {//科目
+                subjectList=new ArrayList<SubjectsBean>();
+                subjectList.addAll(response.subjects);
+                mNineGridlayout.setAdapter(new HomeCoursesAdapter(mContext, response.subjects, 5));
             }
             if (fragmentHomeListView!=null){
-                if (data.getTotal_page() > page){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
                     fragmentHomeListView.setCanLoadMore(true);
                 }else {
                     fragmentHomeListView.setCanLoadMore(false);
@@ -297,16 +297,16 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     }
 
     @Override
-    public void addMoreListData(HomeResponse data) {
+    public void addMoreListData(homeResponse response) {
         if (fragmentHomeListView != null)
             fragmentHomeListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewAdapter != null) {
-                mListViewAdapter.getDataList().addAll(data.getUsers());
+                mListViewAdapter.getDataList().addAll(response.users);
                 mListViewAdapter.notifyDataSetChanged();
             }
             if (fragmentHomeListView!=null){
-                if (data.getTotal_page() > page){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
                     fragmentHomeListView.setCanLoadMore(true);
                 }else {
                     fragmentHomeListView.setCanLoadMore(false);
@@ -330,7 +330,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 
     @Override
     public void onItemClick(View view, int position) {
-        SubjectEntity entity= subjectList.get(position);
+        SubjectsBean entity= subjectList.get(position);
         BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
     }
     //==============================LoadMoreListView.OnLoadMoreListener=============================================

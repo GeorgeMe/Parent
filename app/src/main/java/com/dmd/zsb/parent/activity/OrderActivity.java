@@ -25,6 +25,9 @@ import com.dmd.zsb.entity.response.OrderResponse;
 import com.dmd.zsb.mvp.presenter.impl.OrderPresenterImpl;
 import com.dmd.zsb.mvp.view.OrderView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.orderResponse;
+import com.dmd.zsb.protocol.table.OrdersBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
@@ -54,7 +57,7 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     TextView topBarTitle;
 
     private OrderPresenterImpl orderPresenter;
-    private ListViewDataAdapter<OrderEntity> mListViewAdapter;
+    private ListViewDataAdapter<OrdersBean> mListViewAdapter;
     private int page = 1;
 
     @Override
@@ -137,10 +140,10 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 }
             });
         }
-        mListViewAdapter = new ListViewDataAdapter<OrderEntity>(new ViewHolderCreator<OrderEntity>() {
+        mListViewAdapter = new ListViewDataAdapter<OrdersBean>(new ViewHolderCreator<OrdersBean>() {
             @Override
-            public ViewHolderBase<OrderEntity> createViewHolder(int position) {
-                return new ViewHolderBase<OrderEntity>() {
+            public ViewHolderBase<OrdersBean> createViewHolder(int position) {
+                return new ViewHolderBase<OrdersBean>() {
                     ImageView img_header;
                     TextView tv_name, tv_type, tv_sex, tv_appointed_time, tv_charging, tv_curriculum, tv_address, tv_place, tv_state;
 
@@ -161,19 +164,19 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                     }
 
                     @Override
-                    public void showData(int position, OrderEntity itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.getImg_header()).into(img_header);
-                        tv_name.setText(itemData.getName());
-                        tv_type.setText(itemData.getType());
-                        tv_sex.setText(itemData.getSex());
-                        tv_appointed_time.setText(itemData.getAppointed_time());
-                        tv_charging.setText(itemData.getCharging());
-                        tv_curriculum.setText(itemData.getCurriculum());
-                        tv_address.setText(itemData.getAddress());
-                        tv_place.setText(itemData.getPlace());
-                        if (itemData.getState().equals("1")) {
+                    public void showData(int position, OrdersBean itemData) {
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                        tv_name.setText(itemData.name);
+                        tv_type.setText(itemData.type);
+                        tv_sex.setText(itemData.sex);
+                        tv_appointed_time.setText(itemData.appointed_time);
+                        tv_charging.setText(itemData.charging);
+                        tv_curriculum.setText(itemData.curriculum);
+                        tv_address.setText(itemData.address);
+                        tv_place.setText(itemData.state);
+                        if (itemData.state.equals("1")) {
                             tv_state.setText("未付款");
-                        } else if (itemData.getState().equals("2")) {
+                        } else if (itemData.state.equals("2")) {
                             tv_state.setText("已付款");
                         }
 
@@ -233,18 +236,18 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     }
 
     @Override
-    public void refreshListData(OrderResponse data) {
+    public void refreshListData(orderResponse response) {
         if (fragmentMyOrderListSwipeLayout != null)
             fragmentMyOrderListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getOrderEntities().size() >= 2) {
+        if (response != null) {
+            if (response.orders.size() >= 2) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
-                    mListViewAdapter.getDataList().addAll(data.getOrderEntities());
+                    mListViewAdapter.getDataList().addAll(response.orders);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentMyOrderListListView.setCanLoadMore(true);
             else
                 fragmentMyOrderListListView.setCanLoadMore(false);
@@ -252,15 +255,15 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     }
 
     @Override
-    public void addMoreListData(OrderResponse data) {
+    public void addMoreListData(orderResponse response) {
         if (fragmentMyOrderListListView != null)
             fragmentMyOrderListListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewAdapter != null) {
-                mListViewAdapter.getDataList().addAll(data.getOrderEntities());
+                mListViewAdapter.getDataList().addAll(response.orders);
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentMyOrderListListView.setCanLoadMore(true);
             else
                 fragmentMyOrderListListView.setCanLoadMore(false);

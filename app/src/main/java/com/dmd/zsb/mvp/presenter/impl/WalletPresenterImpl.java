@@ -31,6 +31,7 @@ public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedList
     public void onWalletInfo(JSONObject jsonObject) {
         walletRequest request=new walletRequest();
         try {
+            request.fromJson(jsonObject);
             walletInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

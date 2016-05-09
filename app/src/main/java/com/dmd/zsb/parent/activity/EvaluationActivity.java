@@ -25,6 +25,9 @@ import com.dmd.zsb.entity.response.EvaluationResponse;
 import com.dmd.zsb.mvp.presenter.impl.EvaluationPresenterImpl;
 import com.dmd.zsb.mvp.view.EvaluationView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.evaluationResponse;
+import com.dmd.zsb.protocol.table.EvaluationsBean;
+import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
 import com.google.gson.JsonObject;
 import com.squareup.picasso.Picasso;
@@ -54,7 +57,7 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
     TextView topBarTitle;
 
     private EvaluationPresenterImpl evaluationPresenter;
-    private ListViewDataAdapter<EvaluationEntity> mListViewAdapter;
+    private ListViewDataAdapter<EvaluationsBean> mListViewAdapter;
     private int page = 1;
 
     @Override
@@ -136,14 +139,14 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                 }
             });
         }
-        mListViewAdapter = new ListViewDataAdapter<EvaluationEntity>(new ViewHolderCreator<EvaluationEntity>() {
+        mListViewAdapter = new ListViewDataAdapter<EvaluationsBean>(new ViewHolderCreator<EvaluationsBean>() {
 
 
             @Override
-            public ViewHolderBase<EvaluationEntity> createViewHolder(int position) {
+            public ViewHolderBase<EvaluationsBean> createViewHolder(int position) {
 
 
-                return new ViewHolderBase<EvaluationEntity>() {
+                return new ViewHolderBase<EvaluationsBean>() {
                     ImageView img_header;
                     TextView tv_name, tv_type, tv_sex, tv_appointed_time, tv_charging, tv_curriculum, tv_note, tv_comment_level;
 
@@ -165,23 +168,23 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                     }
 
                     @Override
-                    public void showData(int position, EvaluationEntity itemData) {
+                    public void showData(int position, EvaluationsBean itemData) {
                         //数据展示set
                         if (evaluationGroupMenuIncomplete.isChecked()) {
                             tv_note.setVisibility(View.GONE);
                             tv_comment_level.setText("评论");
                         } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
                             tv_note.setVisibility(View.VISIBLE);
-                            tv_note.setText(itemData.getNote());
-                            tv_comment_level.setText(itemData.getComment_level());
+                            tv_note.setText(itemData.note);
+                            tv_comment_level.setText(itemData.comment_level);
                         }
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.getImg_header()).into(img_header);
-                        tv_name.setText(itemData.getName());
-                        tv_type.setText(itemData.getType());
-                        tv_sex.setText(itemData.getSex());
-                        tv_appointed_time.setText(itemData.getAppointed_time());
-                        tv_charging.setText(itemData.getCharging());
-                        tv_curriculum.setText(itemData.getCurriculum());
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                        tv_name.setText(itemData.name);
+                        tv_type.setText(itemData.type);
+                        tv_sex.setText(itemData.sex);
+                        tv_appointed_time.setText(itemData.appointed_time);
+                        tv_charging.setText(itemData.charging);
+                        tv_curriculum.setText(itemData.curriculum);
 
                     }
                 };
@@ -291,18 +294,18 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
     }
 
     @Override
-    public void refreshListData(EvaluationResponse data) {
+    public void refreshListData(evaluationResponse response) {
         if (fragmentEvaluationListSwipeLayout != null)
             fragmentEvaluationListSwipeLayout.setRefreshing(false);
-        if (data != null) {
-            if (data.getEvaluationEntities().size() >= 2) {
+        if (response != null) {
+            if (response.evaluations.size() >= 2) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
-                    mListViewAdapter.getDataList().addAll(data.getEvaluationEntities());
+                    mListViewAdapter.getDataList().addAll(response.evaluations);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentEvaluationListListView.setCanLoadMore(true);
             else
                 fragmentEvaluationListListView.setCanLoadMore(false);
@@ -310,15 +313,15 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
     }
 
     @Override
-    public void addMoreListData(EvaluationResponse data) {
+    public void addMoreListData(evaluationResponse response) {
         if (fragmentEvaluationListListView != null)
             fragmentEvaluationListListView.onLoadMoreComplete();
-        if (data != null) {
+        if (response != null) {
             if (mListViewAdapter != null) {
-                mListViewAdapter.getDataList().addAll(data.getEvaluationEntities());
+                mListViewAdapter.getDataList().addAll(response.evaluations);
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (data.getTotal_page() > page)
+            if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page)
                 fragmentEvaluationListListView.setCanLoadMore(true);
             else
                 fragmentEvaluationListListView.setCanLoadMore(false);

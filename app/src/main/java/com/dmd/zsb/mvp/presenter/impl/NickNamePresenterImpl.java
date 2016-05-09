@@ -31,6 +31,7 @@ public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoaded
     public void updateNickName(JSONObject jsonObject) {
         nicknameRequest request=new nicknameRequest();
         try {
+            request.fromJson(jsonObject);
             nickNameInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

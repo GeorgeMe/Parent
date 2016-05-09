@@ -29,9 +29,10 @@ public class SignUpPresenterImpl implements SignUpPresenter,BaseSingleLoadedList
     }
 
     @Override
-    public void signUp(JSONObject data) {
+    public void signUp(JSONObject jsonObject) {
         signupRequest request=new signupRequest();
         try {
+            request.fromJson(jsonObject);
             signUpInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

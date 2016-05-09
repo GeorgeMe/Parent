@@ -11,8 +11,8 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "feedbackRequest")
-public class feedbackRequest extends DataBaseModel{
+@Table(name = "changepasswordRequest")
+public class changepasswordRequest extends DataBaseModel{
     @Column(name = "appkey")
     public String   appkey;
 
@@ -25,8 +25,8 @@ public class feedbackRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
-    @Column(name = "feedback")
-    public String   feedback;
+    @Column(name = "newPassword")
+    public String   newPassword;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -39,8 +39,7 @@ public class feedbackRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
-        this.feedback = jsonObject.optString("feedback");
-
+        this.newPassword = jsonObject.optString("newPassword");
 
         return ;
     }
@@ -52,7 +51,7 @@ public class feedbackRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
-        localItemObject.put("feedback", feedback);
+        localItemObject.put("newPassword", newPassword);
 
         return localItemObject;
     }

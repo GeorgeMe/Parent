@@ -25,6 +25,9 @@ public class nicknameRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
+    @Column(name = "nickname")
+    public String   nickname;
+
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
             return;
@@ -36,6 +39,7 @@ public class nicknameRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
+        this.nickname = jsonObject.optString("nickname");
 
 
         return ;
@@ -48,6 +52,7 @@ public class nicknameRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
+        localItemObject.put("nickname", nickname);
 
         return localItemObject;
     }

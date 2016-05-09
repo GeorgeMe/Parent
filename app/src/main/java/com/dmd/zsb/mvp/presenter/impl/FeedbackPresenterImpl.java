@@ -31,6 +31,7 @@ public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoaded
     public void seedFeedback(JSONObject jsonObject) {
         feedbackRequest request=new feedbackRequest();
         try {
+            request.fromJson(jsonObject);
             feedbackInteractor.getCommonSingleData(request.toJson());
         }catch (JSONException j){
 

@@ -25,6 +25,15 @@ public class homeRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
+    @Column(name = "page")
+    public String   page;
+
+    @Column(name = "rows")
+    public String   rows;
+
+    @Column(name = "subid")
+    public String   subid;
+
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
             return;
@@ -36,7 +45,9 @@ public class homeRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
-
+        this.page = jsonObject.optString("page");
+        this.rows = jsonObject.optString("rows");
+        this.subid = jsonObject.optString("subid");
 
         return ;
     }
@@ -48,7 +59,9 @@ public class homeRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
-
+        localItemObject.put("page", page);
+        localItemObject.put("rows", rows);
+        localItemObject.put("subid", subid);
         return localItemObject;
     }
 }

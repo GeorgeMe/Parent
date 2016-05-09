@@ -38,6 +38,7 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.parent.adapter.SeekGradeAdapter;
 import com.dmd.zsb.parent.adapter.SeekSubjectAdapter;
+import com.dmd.zsb.protocol.response.releaseorderResponse;
 import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 
@@ -227,9 +228,9 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
 
 
     @Override
-    public void showSuccessView(JSONObject data) {
+    public void showSuccessView(releaseorderResponse response) {
         publishOrderPublish.setClickable(true);
-        if (data.optInt("errno")==0){
+        if (response.errno==0){
             ToastView toast = new ToastView(mContext, "发布成功");
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();

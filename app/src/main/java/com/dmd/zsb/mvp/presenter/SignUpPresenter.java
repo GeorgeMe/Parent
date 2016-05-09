@@ -8,5 +8,5 @@ import org.json.JSONObject;
  * Created by Administrator on 2016/3/14.
  */
 public interface SignUpPresenter {
-    void signUp(JSONObject data);
+    void signUp(JSONObject jsonObject);
 }

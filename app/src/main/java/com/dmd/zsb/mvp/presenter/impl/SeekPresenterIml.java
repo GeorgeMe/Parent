@@ -38,7 +38,14 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
     public void loadListData(int event,JSONObject jsonObject) {
         seekRequest request=new seekRequest();
         try {
-            request.fromJson(jsonObject);
+            //request.fromJson(jsonObject);
+            request.appkey=Constants.ZSBAPPKEY;
+            request.version=Constants.ZSBVERSION;
+            request.uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
+            request.sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
+            request.page=1;
+            request.rows=1;
+            request.subid="";
             mCommonListInteractor.getCommonListData(event,request.toJson());
         }catch (JSONException j){
 

@@ -3,8 +3,6 @@ package com.dmd.zsb.protocol.response;
 import com.activeandroid.DataBaseModel;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.dmd.zsb.protocol.table.CONFIG;
-import com.dmd.zsb.protocol.table.USER;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,8 +18,8 @@ public class signinResponse extends DataBaseModel
      @Column(name = "uid")
      public String   uid;
 
-     @Column(name = "succeed")
-     public int succeed;
+     @Column(name = "errno")
+     public int errno;
 
      @Column(name = "msg")
      public String msg;
@@ -36,7 +34,7 @@ public class signinResponse extends DataBaseModel
 
           this.sid = jsonObject.optString("sid");
           this.uid = jsonObject.optString("uid");
-          this.succeed = jsonObject.optInt("succeed");
+          this.errno = jsonObject.optInt("errno");
           this.msg = jsonObject.optString("msg");
 
           return ;
@@ -48,7 +46,7 @@ public class signinResponse extends DataBaseModel
           JSONArray itemJSONArray = new JSONArray();
           localItemObject.put("sid", sid);
           localItemObject.put("uid", uid);
-          localItemObject.put("succeed", succeed);
+          localItemObject.put("errno", errno);
           localItemObject.put("msg", msg);
           return localItemObject;
      }

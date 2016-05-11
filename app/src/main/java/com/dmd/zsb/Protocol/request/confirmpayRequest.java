@@ -3,7 +3,6 @@ package com.dmd.zsb.protocol.request;
 import com.activeandroid.DataBaseModel;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
-import com.dmd.zsb.utils.UriHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,8 +11,9 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "seekRequest")
-public class seekRequest extends DataBaseModel{
+@Table(name = "confirmpayRequest")
+public class confirmpayRequest extends DataBaseModel{
+
     @Column(name = "appkey")
     public String   appkey;
 
@@ -26,14 +26,8 @@ public class seekRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
-    @Column(name = "page")
-    public int  page;
-
-    @Column(name = "rows")
-    public int  rows;
-
-    @Column(name = "subid")
-    public String  subid;
+    @Column(name = "oid")
+    public String   oid;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -46,9 +40,7 @@ public class seekRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
-        this.page = jsonObject.optInt("page");
-        this.rows = jsonObject.optInt("rows");
-        this.subid = jsonObject.optString("subid");
+        this.oid = jsonObject.optString("oid");
 
 
         return ;
@@ -61,9 +53,7 @@ public class seekRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
-        localItemObject.put("page", page);
-        localItemObject.put("rows", UriHelper.getInstance().PAGE_LIMIT);
-        localItemObject.put("subid", subid);
+        localItemObject.put("oid", oid);
 
         return localItemObject;
     }

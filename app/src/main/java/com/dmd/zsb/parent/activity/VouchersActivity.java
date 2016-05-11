@@ -194,8 +194,8 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     public void refreshListData(vouchersResponse response) {
         if (vouchersListSwipeLayout != null)
             vouchersListSwipeLayout.setRefreshing(false);
-        if (response != null) {
-            if (response.vouchers.size() >= 2) {
+        if (response.vouchers != null) {
+            if (response.vouchers.size() >= 1) {
                 if (mListViewDataAdapter != null) {
                     mListViewDataAdapter.getDataList().clear();
                     mListViewDataAdapter.getDataList().addAll(response.vouchers);
@@ -213,7 +213,7 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     public void addMoreListData(vouchersResponse response) {
         if (vouchersListView != null)
             vouchersListView.onLoadMoreComplete();
-        if (response != null) {
+        if (response.vouchers != null) {
             if (mListViewDataAdapter != null) {
                 mListViewDataAdapter.getDataList().addAll(response.vouchers);
                 mListViewDataAdapter.notifyDataSetChanged();

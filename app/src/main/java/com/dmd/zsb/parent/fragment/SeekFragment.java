@@ -263,7 +263,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        UserEntity data=(UserEntity)parent.getItemAtPosition(position);
+        UsersBean data=(UsersBean)parent.getItemAtPosition(position);
         navigateToUserDetail(data);
     }
 
@@ -295,7 +295,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     }
 
     @Override
-    public void navigateToUserDetail(UserEntity itemData) {
+    public void navigateToUserDetail(UsersBean itemData) {
         Bundle bundle=new Bundle();
         bundle.putSerializable("data",itemData);
         readyGo(UserDetailActivity.class,bundle);
@@ -305,8 +305,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     public void refreshListData(seekResponse response) {
         if (fragmentSeekListSwipeLayout != null)
             fragmentSeekListSwipeLayout.setRefreshing(false);
-        if (response != null) {
-            if (response.users.size() >= 2) {
+        if (response.users != null) {
+            if (response.users.size() >= 1) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
                     mListViewAdapter.getDataList().addAll(response.users);

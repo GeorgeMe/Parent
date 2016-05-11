@@ -28,8 +28,8 @@ public class changeavatarRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
-    @Column(name = "formfile")
-    public FORMFILE formfile;
+    @Column(name = "fileMime")
+    public String   fileMime;
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
@@ -42,10 +42,7 @@ public class changeavatarRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
-
-        FORMFILE formfile=new FORMFILE();
-        formfile.fromJson(jsonObject.optJSONObject("formfile"));
-        this.formfile=formfile;
+        this.fileMime = jsonObject.optString("fileMime");
         return ;
     }
     public JSONObject  toJson() throws JSONException{
@@ -56,9 +53,7 @@ public class changeavatarRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
-        if (formfile!=null){
-            localItemObject.put("formfile",formfile.toJson());
-        }
+        localItemObject.put("fileMime", fileMime);
         return localItemObject;
     }
 }

@@ -153,6 +153,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:visibility="gone"
                     android:id="@+id/mine_modify_data"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -316,7 +317,7 @@
             android:background="@color/app_line_view_bg" />
 
         <TextView
-            android:id="@+id/mine_sign_out"
+            android:id="@+id/mine_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/list_telescopic_more"
@@ -324,7 +325,7 @@
             android:paddingLeft="55dp"
             android:paddingRight="22dp"
             android:paddingTop="10dp"
-            android:text="退出" />
+            android:text="设置" />
     </LinearLayout>
 
 </LinearLayout>

@@ -8,9 +8,11 @@ import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -20,6 +22,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.dmd.dialog.AlertDialogWrapper;
+import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.timepicker.ScreenInfo;
@@ -106,6 +109,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
 
     @Override
     protected void initViewsAndEvents() {
+
         initScreenWidth();
         topBarTitle.setText(getResources().getText(R.string.home_bar_demand));
         releaseOrderPresenter = new ReleaseOrderPresenterImpl(mContext, this);
@@ -124,7 +128,10 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
             Spannable spanText = (Spannable) charSequenceLocation;
             Selection.setSelection(spanText, charSequenceLocation.length());
         }
-        publishOrderPrice.clearFocus();
+        //publishOrderText.clearFocus();
+        Log.e(TAG_LOG,publishOrderSubject.requestFocus()+"  publishOrderSubject");
+        Log.e(TAG_LOG,publishOrderText.requestFocus()+"  publishOrderText");
+        //closeKeyBoard();
     }
 
     @Override
@@ -164,7 +171,18 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                 finish();
                 break;
             case R.id.publish_order_subject:
-                appointmentSubject();
+                new MaterialDialog.Builder(this)
+                        .title("年级")
+                        .items(R.array.socialNetworks)
+                        .itemsCallback(new MaterialDialog.ListCallback() {
+                            @Override
+                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                showToast(which + ": " + text);
+                            }
+                        })
+                        .show();
+
+               // appointmentSubject();
                 break;
             case R.id.publish_order_time:
                 appointmentTime();
@@ -245,7 +263,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
 
     // 关闭键盘
     public void closeKeyBoard() {
-        publishOrderPrice.clearFocus();
+        //publishOrderPrice.clearFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(publishOrderPrice.getWindowToken(), 0);
     }

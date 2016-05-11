@@ -240,10 +240,10 @@ public class ChattingUICustom extends IMChattingPageUI {
         }
         textView.setText(title);
         textView.setTextColor(Color.parseColor("#FFFFFF"));
-        textView.setTextSize(15);
+        textView.setTextSize(20);
         TextView backView = (TextView) view.findViewById(R.id.back);
         backView.setTextColor(Color.parseColor("#FFFFFF"));
-        backView.setTextSize(15);
+        backView.setTextSize(16);
         backView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.open_im_common_back_btn_white, 0, 0, 0);
         backView.setGravity(Gravity.CENTER_VERTICAL);
         backView.setOnClickListener(new View.OnClickListener() {

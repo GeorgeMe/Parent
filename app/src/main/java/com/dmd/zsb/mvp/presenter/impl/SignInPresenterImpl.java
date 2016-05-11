@@ -30,7 +30,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
 
     @Override
     public void onSuccess(signinResponse response) {
-        if (response.succeed==0){
+        if (response.errno==0){
             XmlDB.getInstance(mContext).saveKey("uid",response.uid);
             XmlDB.getInstance(mContext).saveKey("sid",response.sid);
             signInView.navigateToHome();

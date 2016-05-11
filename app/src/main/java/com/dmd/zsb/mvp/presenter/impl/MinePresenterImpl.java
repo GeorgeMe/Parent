@@ -17,6 +17,7 @@ import org.json.JSONException;
  * Created by Administrator on 2016/4/3.
  */
 public class MinePresenterImpl implements MinePresenter,BaseSingleLoadedListener<mineResponse> {
+
     private Context mContext;
     private MinekInteractorImpl minekInteractor;
     private MineView mineView;
@@ -32,7 +33,6 @@ public class MinePresenterImpl implements MinePresenter,BaseSingleLoadedListener
         if (response.succeed==0){
             mineView.setView(response);
         }
-
     }
 
     @Override

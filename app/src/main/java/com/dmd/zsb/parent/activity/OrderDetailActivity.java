@@ -10,16 +10,24 @@ import com.dmd.pay.AliPayActivity;
 import com.dmd.pay.entity.PayInfo;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.api.ApiConstants;
+import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.OrderEntity;
+import com.dmd.zsb.mvp.presenter.impl.ConfirmPayPresenterImpl;
+import com.dmd.zsb.mvp.view.ConfirmPayView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.confirmpayResponse;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class OrderDetailActivity extends BaseActivity {
+public class OrderDetailActivity extends BaseActivity implements ConfirmPayView {
     @Bind(R.id.top_bar_back)
     TextView topBarBack;
     @Bind(R.id.top_bar_title)
@@ -46,8 +54,9 @@ public class OrderDetailActivity extends BaseActivity {
     TextView tvState;
     @Bind(R.id.btn_confirm_pay)
     Button btnConfirmPay;
-    private OrderEntity data;
 
+    private OrderEntity data;
+    private ConfirmPayPresenterImpl confirmPayPresenter;
     @Override
     protected void getBundleExtras(Bundle extras) {
         data = (OrderEntity) extras.getSerializable("data");
@@ -70,6 +79,7 @@ public class OrderDetailActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndEvents() {
+        confirmPayPresenter=new ConfirmPayPresenterImpl(mContext,this);
         Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + data.getImg_header()).into(imgHeader);
         tvName.setText(data.getName());
         tvType.setText(data.getType());
@@ -124,15 +134,42 @@ public class OrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_confirm_pay:
-                PayInfo payInfo=new PayInfo();
-                payInfo.setName("课时费用");
-                payInfo.setDesc("授课完成，支付费用");
-                payInfo.setPrice(Double.parseDouble("0.1"));
-                payInfo.setRate(1.0);
-                Bundle bundle=new Bundle();
-                bundle.putSerializable("payInfo",payInfo);
-                readyGoForResult(AliPayActivity.class,110,bundle);
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                    jsonObject.put("version", Constants.ZSBVERSION);
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    jsonObject.put("oid","");
+                }catch (JSONException j){
+
+                }
+
+                confirmPayPresenter.onConfirmPay(jsonObject);
+
+
                 break;
         }
+    }
+
+    @Override
+    public void setConfirmPayView(confirmpayResponse response) {
+        if (response.errno==0){
+            PayInfo payInfo=new PayInfo();
+            payInfo.setName("课时费用");
+            payInfo.setDesc("授课完成，支付费用");
+            payInfo.setPrice(Double.parseDouble("0.1"));
+            payInfo.setRate(1.0);
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("payInfo",payInfo);
+            readyGoForResult(AliPayActivity.class,110,bundle);
+        }else {
+            showTip(response.msg);
+        }
+    }
+
+    @Override
+    public void showTip(String msg) {
+        showToast(msg);
     }
 }

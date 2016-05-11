@@ -25,6 +25,16 @@ public class orderRequest extends DataBaseModel{
     @Column(name = "uid")
     public String   uid;
 
+    @Column(name = "page")
+    public String   page;
+
+    @Column(name = "rows")
+    public String   rows;
+
+    @Column(name = "order_status")
+    public int   order_status;
+
+
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {
             return;
@@ -36,6 +46,10 @@ public class orderRequest extends DataBaseModel{
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
+        this.page = jsonObject.optString("page");
+        this.rows = jsonObject.optString("rows");
+        this.order_status = jsonObject.optInt("order_status");
+
 
 
         return ;
@@ -48,6 +62,9 @@ public class orderRequest extends DataBaseModel{
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
+        localItemObject.put("page", page);
+        localItemObject.put("rows", rows);
+        localItemObject.put("order_status", order_status);
 
         return localItemObject;
     }

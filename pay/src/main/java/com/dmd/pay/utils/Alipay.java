@@ -144,7 +144,7 @@ public class Alipay {
         orderInfo += "&total_fee=" + "\"" + price + "\"";
 
         // 服务器异步通知页面路径
-        orderInfo += "&notify_url=" + "\"" + "http://www.cqdmd.com/v1.0/p_order_testalipay.action"
+        orderInfo += "&notify_url=" + "\"" + "http://www.cqdmd.com/v1.0/p_order_android_alipay.action"
                 + "\"";
 
         // 服务接口名称， 固定值

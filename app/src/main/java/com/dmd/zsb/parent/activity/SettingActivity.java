@@ -19,6 +19,8 @@ import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.OnUploadProcessListener;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
+import com.dmd.zsb.mvp.presenter.impl.ChangeAvatarPresenterImpl;
+import com.dmd.zsb.mvp.view.ChangeAvatarView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.SettingPresenterImpl;
 import com.dmd.zsb.mvp.view.SettingView;
@@ -33,7 +35,7 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class SettingActivity extends BaseActivity implements SettingView,OnUploadProcessListener{
+public class SettingActivity extends BaseActivity implements ChangeAvatarView,OnUploadProcessListener{
 
     private final static int ACTION_PHOTOGRAPH=1;
     private final static int ACTION_ALBUM=2;
@@ -59,6 +61,7 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
     @Bind(R.id.btn_sign_out)
     Button btnSignOut;
     private SettingPresenterImpl settingPresenter;
+    private ChangeAvatarPresenterImpl changeAvatarPresenter;
     private MaterialDialog dialog;
     private File file = null;
     private String picturePath=null;
@@ -85,8 +88,14 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
 
     @Override
     protected void initViewsAndEvents() {
-        settingPresenter=new SettingPresenterImpl(SettingActivity.this,this,this);
+        changeAvatarPresenter=new ChangeAvatarPresenterImpl(this,mContext,this);
+        ///settingPresenter=new SettingPresenterImpl(SettingActivity.this,this,this);
         topBarTitle.setText(getResources().getText(R.string.setting_title));
+    }
+
+    @Override
+    public void showTip(String msg) {
+        showToast(msg);
     }
 
     @Override
@@ -135,29 +144,24 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
             if (file != null && file.exists()) {
 
                 JSONObject jsonObject=new JSONObject();
+                JSONObject formFile=new JSONObject();
                 try {
-                    JSONObject json=new JSONObject();
-                    json.put("appkey", Constants.ZSBAPPKEY);
-                    json.put("version", Constants.ZSBVERSION);
-                    json.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    json.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    json.put("fileName", file.getName());
-                    json.put("fileMime", "image/png");
+                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                    jsonObject.put("version", Constants.ZSBVERSION);
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                    jsonObject.put("fileMime", "image/png");
 
-                    JSONObject formFile=new JSONObject();
                     formFile.put("fileName",file.getName());
                     formFile.put("filePath",file.getAbsolutePath());
                     formFile.put("parameterName","file");
                     formFile.put("contentType","application/octet-stream");
 
-                    jsonObject.put("json",json);
-                    jsonObject.put("formFile",formFile);
 
                 }catch (JSONException j){
 
                 }
-
-                settingPresenter.uploadAvatar(1,jsonObject);
+                changeAvatarPresenter.onChangeAvatar(jsonObject,formFile);
             } else {
                 Message msg = Message.obtain();
                 msg.what = 3;
@@ -236,10 +240,6 @@ public class SettingActivity extends BaseActivity implements SettingView,OnUploa
         handler.sendMessage(msg);
     }
 
-    @Override
-    public void showTip(String msg) {
-        showToast(msg);
-    }
 
     @Override
     public void showError(String msg) {

@@ -63,6 +63,7 @@ public class DemandsBean extends DataBaseModel {
         return ;
     }
     public JSONObject  toJson() throws JSONException{
+
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
 

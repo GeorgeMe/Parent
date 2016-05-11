@@ -66,6 +66,7 @@ public class UsersBean  extends DataBaseModel {
         this.role = jsonObject.optString("role");
         this.grade_name = jsonObject.optString("grade_name");
         this.subject_name = jsonObject.optString("subject_name");
+
         return ;
     }
     public JSONObject toJson() throws JSONException
@@ -83,9 +84,9 @@ public class UsersBean  extends DataBaseModel {
         localItemObject.put("gender", gender);
         localItemObject.put("location", location);
         localItemObject.put("lon", lon);
+        localItemObject.put("lat", lat);
         localItemObject.put("mobile", mobile);
         localItemObject.put("role", role);
-        localItemObject.put("mobile", mobile);
         localItemObject.put("grade_name", grade_name);
         localItemObject.put("subject_name", subject_name);
 

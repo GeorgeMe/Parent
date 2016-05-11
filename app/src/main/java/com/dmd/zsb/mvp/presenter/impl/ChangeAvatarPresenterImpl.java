@@ -9,6 +9,7 @@ import com.dmd.zsb.mvp.presenter.ChangeAvatarPresenter;
 import com.dmd.zsb.mvp.view.ChangeAvatarView;
 import com.dmd.zsb.protocol.request.changeavatarRequest;
 import com.dmd.zsb.protocol.response.changeavatarResponse;
+import com.dmd.zsb.protocol.table.FORMFILE;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,28 +30,22 @@ public class ChangeAvatarPresenterImpl implements ChangeAvatarPresenter,BaseSing
     }
 
     @Override
-    public void onChangeAvatar(JSONObject jsonObject) {
-        changeavatarRequest request =new changeavatarRequest();
-        try {
-            request.fromJson(jsonObject);
-            changeAvatarInteractor.getCommonSingleData(request.toJson());
-        }catch (JSONException j){
-
-        }
+    public void onChangeAvatar(JSONObject jsonObject,JSONObject file) {
+        changeAvatarInteractor.getCommonSingleData(jsonObject,file);
     }
 
     @Override
     public void onSuccess(changeavatarResponse response) {
-
+        onError(response.msg);
     }
 
     @Override
     public void onError(String msg) {
-
+        changeAvatarView.showTip(msg);
     }
 
     @Override
     public void onException(String msg) {
-
+        onError(msg);
     }
 }

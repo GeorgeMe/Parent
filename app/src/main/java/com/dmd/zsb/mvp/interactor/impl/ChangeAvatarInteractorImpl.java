@@ -12,13 +12,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.PostUploadRequest;
 import com.dmd.tutor.utils.OnUploadProcessListener;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
-import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.protocol.request.changeavatarRequest;
 import com.dmd.zsb.protocol.response.changeavatarResponse;
+import com.dmd.zsb.protocol.table.FORMFILE;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -28,7 +29,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/5.
  */
-public class ChangeAvatarInteractorImpl implements CommonSingleInteractor {
+public class ChangeAvatarInteractorImpl{
 
     private BaseSingleLoadedListener<changeavatarResponse> loadedListener;
     private OnUploadProcessListener uploadProcessListener;
@@ -37,18 +38,21 @@ public class ChangeAvatarInteractorImpl implements CommonSingleInteractor {
         this.uploadProcessListener = uploadProcessListener;
     }
 
-    @Override
-    public void getCommonSingleData(JSONObject json) {
-
-        changeavatarRequest request=new changeavatarRequest();
-        //request.fromJson(json);
-
+    public void getCommonSingleData(JSONObject jsonObject,JSONObject file) {
         List<FormFile> fileList=new ArrayList<>();
-        JSONObject file=json.optJSONObject("formFile");
-        FormFile formFile=new FormFile(file.optString("fileName"), new File(file.optString("filePath")), file.optString("parameterName"), file.optString("contentType"));
+        changeavatarRequest request=new changeavatarRequest();
+        FORMFILE formfile=new FORMFILE();
+
+        try {
+            formfile.fromJson(file);
+            request.fromJson(jsonObject);
+        }catch (JSONException j){
+
+        }
+        FormFile formFile=new FormFile(formfile.fileName, new File(formfile.filePath), formfile.parameterName, formfile.contentType);
         fileList.add(formFile);
 
-        PostUploadRequest<changeavatarResponse> uploadRequest=new PostUploadRequest<changeavatarResponse>(UriHelper.getInstance().changeAvatar(json), fileList, new TypeToken<changeavatarResponse>() {
+        PostUploadRequest<changeavatarResponse> uploadRequest=new PostUploadRequest<changeavatarResponse>(UriHelper.getInstance().changeAvatar(jsonObject), fileList, new TypeToken<changeavatarResponse>() {
         }.getType(), new Response.Listener<changeavatarResponse>() {
             @Override
             public void onResponse(changeavatarResponse response) {

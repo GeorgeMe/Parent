@@ -67,8 +67,8 @@ public class MineFragment extends BaseFragment implements MineView {
     TextView mineAboutUs;
     @Bind(R.id.mine_switch_account)
     TextView mineSwitchAccount;
-    @Bind(R.id.mine_sign_out)
-    TextView mineSignOut;
+    @Bind(R.id.mine_setting)
+    TextView mineSetting;
 
     private MinePresenterImpl minePresenter;
     @Override
@@ -113,10 +113,15 @@ public class MineFragment extends BaseFragment implements MineView {
 
     @Override
     public void setView(mineResponse response) {
+        if (mineHeaderImg!=null)
         Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+response.mineHeaderImg).into(mineHeaderImg);
+        if (mineName!=null)
         mineName.setText(response.mineName);
+        if (mineAddress!=null)
         mineAddress.setText(response.mineAddress);
+        if (mineGrade!=null)
         mineGrade.setText(response.mineGrade);
+        if (mineSubjects!=null)
         mineSubjects.setText(response.mineSubjects);
 
     }
@@ -137,7 +142,7 @@ public class MineFragment extends BaseFragment implements MineView {
 
     }
 
-    @OnClick({R.id.mine_sign_in, R.id.mine_modify_data, R.id.mine_wallet, R.id.mine_order, R.id.mine_evaluation, R.id.mine_demand, R.id.mine_vouchers, R.id.mine_about_us, R.id.mine_switch_account, R.id.mine_sign_out})
+    @OnClick({R.id.mine_sign_in, R.id.mine_modify_data, R.id.mine_wallet, R.id.mine_order, R.id.mine_evaluation, R.id.mine_demand, R.id.mine_vouchers, R.id.mine_about_us, R.id.mine_switch_account, R.id.mine_setting})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mine_sign_in:
@@ -172,13 +177,8 @@ public class MineFragment extends BaseFragment implements MineView {
                         .negativeText(R.string.disagree)
                         .show();
                 break;
-            case R.id.mine_sign_out:
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.title)
-                        .content("退出登录")
-                        .positiveText(R.string.agree)
-                        .negativeText(R.string.disagree)
-                        .show();
+            case R.id.mine_setting:
+                readyGo(SettingActivity.class);
                 break;
         }
     }

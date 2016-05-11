@@ -260,7 +260,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 //===============================HomeView============================================
 
     @Override
-    public void navigateToUserDetail(UserEntity data) {
+    public void navigateToUserDetail(UsersBean data) {
         Bundle bundle=new Bundle();
         bundle.putSerializable("data",data);
         readyGo(UserDetailActivity.class,bundle);
@@ -321,7 +321,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
         if (mListViewAdapter != null) {
             int j = position + -1;
             if (j >= 0 && j < mListViewAdapter.getDataList().size()){
-                UserEntity data=(UserEntity)parent.getItemAtPosition(position);
+                UsersBean data=(UsersBean)parent.getItemAtPosition(position);
                 navigateToUserDetail(data);
             }
         }

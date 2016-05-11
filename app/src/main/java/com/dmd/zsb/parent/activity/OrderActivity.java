@@ -239,18 +239,20 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     public void refreshListData(orderResponse response) {
         if (fragmentMyOrderListSwipeLayout != null)
             fragmentMyOrderListSwipeLayout.setRefreshing(false);
-        if (response != null) {
-            if (response.orders.size() >= 2) {
+        if (response.orders != null) {
+            if (response.orders.size() >= 1) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
                     mListViewAdapter.getDataList().addAll(response.orders);
                     mListViewAdapter.notifyDataSetChanged();
                 }
             }
-            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
-                fragmentMyOrderListListView.setCanLoadMore(true);
-            else
-                fragmentMyOrderListListView.setCanLoadMore(false);
+            if (fragmentMyOrderListListView!=null){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
+                    fragmentMyOrderListListView.setCanLoadMore(true);
+                else
+                    fragmentMyOrderListListView.setCanLoadMore(false);
+            }
         }
     }
 
@@ -258,15 +260,17 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     public void addMoreListData(orderResponse response) {
         if (fragmentMyOrderListListView != null)
             fragmentMyOrderListListView.onLoadMoreComplete();
-        if (response != null) {
+        if (response.orders != null) {
             if (mListViewAdapter != null) {
                 mListViewAdapter.getDataList().addAll(response.orders);
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
-                fragmentMyOrderListListView.setCanLoadMore(true);
-            else
-                fragmentMyOrderListListView.setCanLoadMore(false);
+            if (fragmentMyOrderListListView!=null){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
+                    fragmentMyOrderListListView.setCanLoadMore(true);
+                else
+                    fragmentMyOrderListListView.setCanLoadMore(false);
+            }
         }
     }
 
@@ -344,7 +348,6 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 }catch (JSONException j){
 
                 }
-
                 orderPresenter.onOrder(Constants.EVENT_REFRESH_DATA, incomplete);
                 break;
             case R.id.my_order_group_menu_recent_completed:

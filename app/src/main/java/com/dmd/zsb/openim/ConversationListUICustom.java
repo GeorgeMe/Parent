@@ -78,6 +78,7 @@ public class ConversationListUICustom extends IMConversationListUI {
         //title.setText(mIMKit.getIMCore().getShowName());
         title.setText("消息");
         title.setTextColor(Color.WHITE);
+        title.setTextSize(20);
         final String loginUserId = LoginHelper.getInstance().getIMKit().getIMCore().getLoginUserId();
         final String appKey = LoginHelper.getInstance().getIMKit().getIMCore().getAppKey();
         if(TextUtils.isEmpty(loginUserId)||TextUtils.isEmpty(appKey)){

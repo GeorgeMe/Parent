@@ -19,7 +19,6 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.VouchersEntity;
-import com.dmd.zsb.entity.response.VouchersResponse;
 import com.dmd.zsb.mvp.presenter.impl.VouchersPresenterImpl;
 import com.dmd.zsb.mvp.view.VouchersView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;

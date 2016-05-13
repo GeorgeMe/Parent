@@ -7,6 +7,7 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.utils.CheckBankCard;
 
 public class BankCardActivity extends BaseActivity {
 
@@ -32,7 +33,10 @@ public class BankCardActivity extends BaseActivity {
 
     @Override
     protected void initViewsAndEvents() {
+        //校验银行卡号码
+        if (CheckBankCard.checkBankCard("")){
 
+        }
     }
 
     @Override

@@ -13,7 +13,6 @@ import com.dmd.zsb.mvp.presenter.impl.WalletPresenterImpl;
 import com.dmd.zsb.mvp.view.WalletView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.protocol.response.walletResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -45,6 +44,11 @@ public class WalletActivity extends BaseActivity implements WalletView{
     TextView walletVouchers;
 
     private WalletPresenterImpl walletPresenter;
+
+    public String   buyer_id;
+    public String   balance;
+    public String   bank_card;
+
     @Override
     protected void getBundleExtras(Bundle extras) {
 
@@ -83,9 +87,14 @@ public class WalletActivity extends BaseActivity implements WalletView{
 
     @Override
     public void setView(walletResponse response) {
-        walletBalance.setText(response.balance);
-        walletCumulativeClass.setText(response.total_hours);
-        walletEarnMoney.setText(response.total_amount);
+        balance=response.balance;
+        bank_card=response.bank_card;
+        buyer_id=response.buyer_id;
+        walletBalance.setText(response.balance+" ￥");
+
+        walletCumulativeClass.setText(response.total_hours+" 小时");
+        walletEarnMoney.setText(response.total_amount+" ￥");
+
     }
 
     @Override
@@ -130,13 +139,18 @@ public class WalletActivity extends BaseActivity implements WalletView{
                 finish();
                 break;
             case R.id.wallet_transaction_detail:
-                readyGo(TransactionDetailActivity.class);
+                Bundle transaction=new Bundle();
+                transaction.putString("buyer_id",buyer_id);
+                readyGo(TransactionDetailActivity.class,transaction);
                 break;
             case R.id.wallet_recharge:
                 readyGo(RechargeActivity.class);
                 break;
             case R.id.wallet_withdrawals:
-                readyGo(WithDrawalsActivity.class);
+                Bundle withdrawals=new Bundle();
+                withdrawals.putString("bank_card",bank_card);
+                withdrawals.putString("transfer_amount",balance);
+                readyGo(WithDrawalsActivity.class,withdrawals);
                 break;
             case R.id.wallet_bank_card:
                 readyGo(BankCardActivity.class);

@@ -1,12 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="#dfdfdf"
-android:orientation="vertical"
-tools:context=".activity.TransactionDetailActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#dfdfdf"
+    android:orientation="vertical"
+    tools:context=".activity.TransactionDetailActivity">
 
-<include layout="@layout/top_view" />
+    <include layout="@layout/top_view" />
 
+    <com.dmd.tutor.widgets.XSwipeRefreshLayout
+        android:id="@+id/transaction_detail_list_swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.dmd.zsb.widgets.LoadMoreListView
+            android:id="@+id/transaction_detail_list_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/setting_grey_bg_nor"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:dividerHeight="5dp"
+            android:layout_marginTop="5dp"
+            android:fadingEdge="none"
+            android:fadingEdgeLength="0dp"
+            android:listSelector="@android:color/transparent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </com.dmd.tutor.widgets.XSwipeRefreshLayout>
 </LinearLayout>

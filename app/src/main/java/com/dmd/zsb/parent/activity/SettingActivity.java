@@ -56,8 +56,6 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
     TextView tvSettingChangePassword;
     @Bind(R.id.tv_setting_feedback)
     TextView tvSettingFeedback;
-    @Bind(R.id.tv_setting_about_us)
-    TextView tvSettingAboutUs;
     @Bind(R.id.btn_sign_out)
     Button btnSignOut;
     private SettingPresenterImpl settingPresenter;
@@ -172,7 +170,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
         }
     }
 
-    @OnClick({R.id.top_bar_back, R.id.tv_setting_nickname, R.id.tv_setting_avatar, R.id.tv_setting_signature, R.id.tv_setting_brief, R.id.tv_setting_change_password, R.id.tv_setting_feedback, R.id.tv_setting_about_us, R.id.btn_sign_out})
+    @OnClick({R.id.top_bar_back, R.id.tv_setting_nickname, R.id.tv_setting_avatar, R.id.tv_setting_signature, R.id.tv_setting_brief, R.id.tv_setting_change_password, R.id.tv_setting_feedback, R.id.btn_sign_out})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.top_bar_back:
@@ -196,9 +194,6 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
                 break;
             case R.id.tv_setting_feedback:
                 readyGo(FeedbackActivity.class);
-                break;
-            case R.id.tv_setting_about_us:
-                readyGo(AboutUsActivity.class);
                 break;
             case R.id.btn_sign_out:
                 JSONObject jsonObject=new JSONObject();

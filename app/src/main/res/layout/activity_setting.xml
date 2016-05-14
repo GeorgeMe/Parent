@@ -100,31 +100,18 @@
             android:background="@color/app_line_view_bg"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
-        <TextView
-            android:id="@+id/tv_setting_about_us"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:gravity="center|left"
-            android:drawableRight="@drawable/list_telescopic_more"
-            android:text="@string/aboutus"/>
-        <View
-            android:background="@color/app_line_view_bg"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
-        <Button
-            android:id="@+id/btn_sign_out"
-            android:layout_width="fill_parent"
-            android:layout_height="45dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/c1_apply_btn_select"
-            android:gravity="center"
-            android:text="@string/exit"
-            android:textColor="#ffffff" />
+
+
     </LinearLayout>
+    <Button
+        android:id="@+id/btn_sign_out"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/c1_apply_btn_select"
+        android:gravity="center"
+        android:text="@string/exit"
+        android:textColor="#ffffff" />
 </LinearLayout>

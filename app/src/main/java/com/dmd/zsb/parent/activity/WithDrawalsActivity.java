@@ -18,13 +18,11 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.protocol.response.withdrawalResponse;
 import com.dmd.zsb.utils.CheckBankCard;
-import com.dmd.zsb.utils.UriHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class WithDrawalsActivity extends BaseActivity implements WithdrawalView {
@@ -54,7 +52,7 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-        balance=extras.getString("balance");
+        balance=extras.getString("transfer_amount");
         bank_card=extras.getString("bank_card");
     }
 
@@ -83,9 +81,12 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
                 bankCard.setText(bank_card);
             }
         }
+        if (StringUtils.StringIsEmpty(balance)){
+            transferAmount.setHint("可提现金额 "+0.00+" ￥");
+        }else {
+            transferAmount.setHint("可提现金额 "+balance+" ￥");
+        }
 
-        bankCard.setText(bank_card);
-        transferAmount.setHint("可提现金额 "+balance+" ￥");
         withdrawalPresenter=new WithdrawalPresenterImpl(mContext,this);
     }
 
@@ -126,12 +127,18 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
                 finish();
                 break;
             case R.id.withdrawals:
+
+/*                if (transferAmount.getText().toString()){
+
+                }*/
                 JSONObject jsonObject=new JSONObject();
+
                 try {
                     jsonObject.put("appkey", Constants.ZSBAPPKEY);
                     jsonObject.put("version", Constants.ZSBVERSION);
                     jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    jsonObject.put("category", "余额转出");
                     jsonObject.put("transfer_amount", balance);
                 }catch (JSONException j){
 
@@ -142,7 +149,7 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
                 //给个网页说明
                 Bundle bundle=new Bundle();
                 bundle.putString(BaseWebActivity.BUNDLE_KEY_URL,"http://www.cqdmd.com/");
-                bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE,"关于我们");
+                bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE,"常见问题");
                 readyGo(BaseWebActivity.class,bundle);
                 break;
         }

@@ -25,7 +25,6 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class UserDetailActivity extends BaseActivity implements UserDetailView, View.OnClickListener {

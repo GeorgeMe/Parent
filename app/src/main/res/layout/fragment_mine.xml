@@ -283,7 +283,20 @@
         android:layout_marginTop="10dp"
         android:background="#ffffff"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/mine_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/list_telescopic_more"
+            android:paddingBottom="10dp"
+            android:paddingLeft="55dp"
+            android:paddingRight="22dp"
+            android:paddingTop="10dp"
+            android:text="个人设置" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/app_line_view_bg" />
         <TextView
             android:id="@+id/mine_about_us"
             android:layout_width="match_parent"
@@ -295,37 +308,6 @@
             android:paddingTop="10dp"
             android:text="关于我们" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_line_view_bg" />
-
-        <TextView
-            android:id="@+id/mine_switch_account"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/list_telescopic_more"
-            android:paddingBottom="10dp"
-            android:paddingLeft="55dp"
-            android:paddingRight="22dp"
-            android:paddingTop="10dp"
-            android:text="切换账号" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/app_line_view_bg" />
-
-        <TextView
-            android:id="@+id/mine_setting"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:drawableRight="@drawable/list_telescopic_more"
-            android:paddingBottom="10dp"
-            android:paddingLeft="55dp"
-            android:paddingRight="22dp"
-            android:paddingTop="10dp"
-            android:text="设置" />
     </LinearLayout>
 
 </LinearLayout>

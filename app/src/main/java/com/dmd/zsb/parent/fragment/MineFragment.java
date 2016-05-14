@@ -1,11 +1,13 @@
 package com.dmd.zsb.parent.fragment;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dmd.dialog.MaterialDialog;
+import com.dmd.tutor.base.BaseWebActivity;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.parent.R;
@@ -65,8 +67,6 @@ public class MineFragment extends BaseFragment implements MineView {
     TextView mineVouchers;
     @Bind(R.id.mine_about_us)
     TextView mineAboutUs;
-    @Bind(R.id.mine_switch_account)
-    TextView mineSwitchAccount;
     @Bind(R.id.mine_setting)
     TextView mineSetting;
 
@@ -142,7 +142,7 @@ public class MineFragment extends BaseFragment implements MineView {
 
     }
 
-    @OnClick({R.id.mine_sign_in, R.id.mine_modify_data, R.id.mine_wallet, R.id.mine_order, R.id.mine_evaluation, R.id.mine_demand, R.id.mine_vouchers, R.id.mine_about_us, R.id.mine_switch_account, R.id.mine_setting})
+    @OnClick({R.id.mine_sign_in, R.id.mine_modify_data, R.id.mine_wallet, R.id.mine_order, R.id.mine_evaluation, R.id.mine_demand, R.id.mine_vouchers, R.id.mine_about_us, R.id.mine_setting})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mine_sign_in:
@@ -167,16 +167,19 @@ public class MineFragment extends BaseFragment implements MineView {
                 readyGo(VouchersActivity.class);
                 break;
             case R.id.mine_about_us:
-                readyGo(AboutUsActivity.class);
+                Bundle bundle=new Bundle();
+                bundle.putString(BaseWebActivity.BUNDLE_KEY_URL,"http://www.cqdmd.com/");
+                bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE,"关于我们");
+                readyGo(BaseWebActivity.class,bundle);
                 break;
-            case R.id.mine_switch_account:
+/*            case R.id.mine_switch_account:
                 new MaterialDialog.Builder(getActivity())
                         .title(R.string.title)
                         .content("切换账户")
                         .positiveText(R.string.agree)
                         .negativeText(R.string.disagree)
                         .show();
-                break;
+                break;*/
             case R.id.mine_setting:
                 readyGo(SettingActivity.class);
                 break;

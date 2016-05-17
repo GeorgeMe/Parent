@@ -84,4 +84,9 @@
     <string name="get_verify_code_again">重新获取验证码</string>
     <string name="resend_after">秒后重新发送</string>
 
+
+    <string name="photo_choose">图片选择</string>
+    <string name="camera">相机拍摄</string>
+    <string name="album">本地图片</string>
+    <string name="photo_not_exsit">图片不存在</string>
 </resources>

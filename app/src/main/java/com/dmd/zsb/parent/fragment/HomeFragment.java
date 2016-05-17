@@ -330,8 +330,10 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 
     @Override
     public void onItemClick(View view, int position) {
+
         SubjectsBean entity= subjectList.get(position);
-        BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
+        showToast(entity.sub_name);
+        //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
     }
     //==============================LoadMoreListView.OnLoadMoreListener=============================================
     @Override

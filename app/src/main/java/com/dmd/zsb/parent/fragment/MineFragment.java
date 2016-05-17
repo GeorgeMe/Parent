@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.base.BaseWebActivity;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.utils.XmlDB;
@@ -14,7 +13,6 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.mvp.presenter.impl.MinePresenterImpl;
 import com.dmd.zsb.mvp.view.MineView;
-import com.dmd.zsb.parent.activity.AboutUsActivity;
 import com.dmd.zsb.parent.activity.DemandActivity;
 import com.dmd.zsb.parent.activity.EvaluationActivity;
 import com.dmd.zsb.parent.activity.OrderActivity;
@@ -97,6 +95,22 @@ public class MineFragment extends BaseFragment implements MineView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        topBarBack.setVisibility(View.GONE);
+        topBarTitle.setText("我的");
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)){
+            mineSignOutHeader.setVisibility(View.GONE);
+            mineLogoutHeader.setVisibility(View.VISIBLE);
+            minePresenter=new MinePresenterImpl(mContext,this);
+            minePresenter.onMineInfo();
+        }else {
+            mineSignOutHeader.setVisibility(View.VISIBLE);
+            mineLogoutHeader.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     protected void initViewsAndEvents() {
         topBarBack.setVisibility(View.GONE);
         topBarTitle.setText("我的");
@@ -172,14 +186,6 @@ public class MineFragment extends BaseFragment implements MineView {
                 bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE,"关于我们");
                 readyGo(BaseWebActivity.class,bundle);
                 break;
-/*            case R.id.mine_switch_account:
-                new MaterialDialog.Builder(getActivity())
-                        .title(R.string.title)
-                        .content("切换账户")
-                        .positiveText(R.string.agree)
-                        .negativeText(R.string.disagree)
-                        .show();
-                break;*/
             case R.id.mine_setting:
                 readyGo(SettingActivity.class);
                 break;

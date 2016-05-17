@@ -4,7 +4,7 @@ public class ApiConstants {
 
     public static final class Urls {
 
-        public static final String API_DEVELOPMENT_URLS = "http://192.168.1.105:8080/TutorClient/v1.0/";
+        public static final String API_DEVELOPMENT_URLS = "http://192.168.1.55:8080/TutorClient/v1.0/";
         public static final String API_BASE_URLS = "http://www.cqdmd.com/v1.0/";
         public static final String API_IMG_BASE_URLS = "http://www.cqdmd.com/";
 

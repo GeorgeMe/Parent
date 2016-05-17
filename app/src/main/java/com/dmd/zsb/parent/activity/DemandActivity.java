@@ -22,7 +22,6 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.DemandEntity;
-import com.dmd.zsb.entity.response.DemandResponse;
 import com.dmd.zsb.mvp.presenter.impl.DemandPresenterImpl;
 import com.dmd.zsb.mvp.view.DemandView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
@@ -30,7 +29,6 @@ import com.dmd.zsb.protocol.response.demandResponse;
 import com.dmd.zsb.protocol.table.DemandsBean;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
-import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
@@ -55,8 +53,6 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     RadioButton demandLevyConcentration;
     @Bind(R.id.demand_to_be_completed)
     RadioButton demandToBeCompleted;
-    @Bind(R.id.demand_has_been_completed)
-    RadioButton demandHasBeenCompleted;
     @Bind(R.id.top_bar_title)
     TextView topBarTitle;
     @Bind(R.id.top_bar_back)
@@ -110,9 +106,11 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                                 jsonObject.put("group_menu", "demandLevyConcentration");
                             } else if (demandToBeCompleted.isChecked()) {
                                 jsonObject.put("group_menu", "demandToBeCompleted");
-                            } else if (demandHasBeenCompleted.isChecked()) {
+                            }
+/*                            else if (demandHasBeenCompleted.isChecked()) {
                                 jsonObject.put("group_menu", "demandHasBeenCompleted");
-                            } else {
+                            } */
+                            else {
                                 jsonObject.put("group_menu", "demandLevyConcentration");
                             }
                         }catch (JSONException j){
@@ -139,9 +137,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             jsonObject.put("group_menu", "demandLevyConcentration");
                         } else if (demandToBeCompleted.isChecked()) {
                             jsonObject.put("group_menu", "demandToBeCompleted");
-                        } else if (demandHasBeenCompleted.isChecked()) {
-                            jsonObject.put("group_menu", "demandHasBeenCompleted");
                         }
+/*                        else if (demandHasBeenCompleted.isChecked()) {
+                            jsonObject.put("group_menu", "demandHasBeenCompleted");
+                        }*/
                     }catch (JSONException j){
 
                     }
@@ -220,7 +219,9 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                                 tv_mode.setText("一对多");
                             }
 
-                        } else if (demandHasBeenCompleted.isChecked()) {
+                        }
+
+/*                        else if (demandHasBeenCompleted.isChecked()) {
                             tv_zjz.setVisibility(View.GONE);
                             img_header.setVisibility(View.VISIBLE);
                             l_zjh.setVisibility(View.VISIBLE);
@@ -239,7 +240,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                                 tv_state.setText("已付款");
                             }
 
-                        }
+                        }*/
                         tv_appointed_time.setText(itemData.appointed_time);
                         tv_charging.setText(itemData.charging);
                         tv_curriculum.setText(itemData.curriculum);
@@ -335,9 +336,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 jsonObject.put("group_menu", "demandLevyConcentration");
             } else if (demandToBeCompleted.isChecked()) {
                 jsonObject.put("group_menu", "demandToBeCompleted");
-            } else if (demandHasBeenCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandHasBeenCompleted");
             }
+/*            else if (demandHasBeenCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandHasBeenCompleted");
+            }*/
         }catch (JSONException j){
 
         }
@@ -359,9 +361,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 jsonObject.put("group_menu", "demandLevyConcentration");
             } else if (demandToBeCompleted.isChecked()) {
                 jsonObject.put("group_menu", "demandToBeCompleted");
-            } else if (demandHasBeenCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandHasBeenCompleted");
             }
+/*            else if (demandHasBeenCompleted.isChecked()) {
+                jsonObject.put("group_menu", "demandHasBeenCompleted");
+            }*/
         }catch (JSONException j){
 
         }
@@ -427,7 +430,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
 
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_to_be_completed);
                 break;
-            case R.id.demand_has_been_completed:
+/*            case R.id.demand_has_been_completed:
                 JSONObject demand_has_been_completed=new JSONObject();
                 try {
                     demand_has_been_completed.put("appkey", Constants.ZSBAPPKEY);
@@ -442,7 +445,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 }
 
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_has_been_completed);
-                break;
+                break;*/
         }
     }
 

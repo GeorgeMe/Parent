@@ -50,7 +50,7 @@
             android:background="#aea6a6" />
 
         <RadioButton
-            android:id="@+id/seek_group_menu_audition"
+            android:id="@+id/seek_group_menu_follow"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -60,7 +60,7 @@
             android:drawableBottom="@drawable/radio_button_drawable_bottom"
             android:button="@null"
             android:gravity="center"
-            android:text="试听"
+            android:text="关注"
             android:textSize="14sp" />
     </RadioGroup>
     <View

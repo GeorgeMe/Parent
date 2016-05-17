@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="select_item">#39BCED</color>
 
+    <drawable name="color_b">#f1f1f1</drawable>
+    <drawable name="color_a">#00000000</drawable>
 
     <color name="app_bg">#dfdfdf</color>
     <color name="app_line_view_bg">#b7b7b7</color>

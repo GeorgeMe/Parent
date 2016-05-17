@@ -63,8 +63,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     RadioButton seekGroupMenuCourse;
     @Bind(R.id.seek_group_menu_sort)
     RadioButton seekGroupMenuSort;
-    @Bind(R.id.seek_group_menu_audition)
-    RadioButton seekGroupMenuAudition;
+    @Bind(R.id.seek_group_menu_follow)
+    RadioButton seekGroupMenuFollow;
     @Bind(R.id.fragment_seek_list_list_view)
     LoadMoreListView fragmentSeekListListView;
     @Bind(R.id.fragment_seek_list_swipe_layout)
@@ -222,7 +222,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         seekGroupMenuCourse.setOnClickListener(this);
         seekGroupMenuSort.setOnClickListener(this);
 
-        seekGroupMenuAudition.setOnClickListener(this);
+        seekGroupMenuFollow.setOnClickListener(this);
     }
 
     @Override
@@ -249,15 +249,17 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
             if (seekGroupMenuSort.isChecked()) {
                 onCreateSortPopWindow(seekGroupMenuSort);
             }
-        } else if (v == seekGroupMenuAudition) {
-            JSONObject jsonObject=new JSONObject();
-            try {
-                jsonObject.put("page", page);
-                jsonObject.put("subid", "");//科目id
-            }catch (JSONException j){
+        } else if (v == seekGroupMenuFollow) {
+            if (seekGroupMenuFollow.isChecked()){
+                JSONObject jsonObject=new JSONObject();
+                try {
+                    jsonObject.put("page", page);
+                    jsonObject.put("subid", "");//科目id
+                }catch (JSONException j){
 
+                }
+                mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
             }
-            mSeekPresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
         }
     }
 

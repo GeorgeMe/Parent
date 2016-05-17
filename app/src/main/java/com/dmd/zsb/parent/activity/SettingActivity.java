@@ -1,5 +1,7 @@
 package com.dmd.zsb.parent.activity;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,8 +10,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dmd.dialog.GravityEnum;
@@ -25,6 +30,8 @@ import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.SettingPresenterImpl;
 import com.dmd.zsb.mvp.view.SettingView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.utils.ImageUtil;
+import com.dmd.zsb.widgets.ToastView;
 import com.google.gson.JsonObject;
 
 import org.json.JSONException;
@@ -37,8 +44,15 @@ import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity implements ChangeAvatarView,OnUploadProcessListener{
 
-    private final static int ACTION_PHOTOGRAPH=1;
-    private final static int ACTION_ALBUM=2;
+    private Dialog mDialog;
+    private File mFileDir;
+    private File mFile;
+    private String mFileName = "";
+    private final int REQUEST_CAMERA = 1;
+    private final int REQUEST_PHOTO = 2;
+    private final int REQUEST_PHOTOZOOM = 3;
+    private File mFileZoomDir;
+    private String mImagePath;
 
     @Bind(R.id.top_bar_back)
     TextView topBarBack;
@@ -58,11 +72,10 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
     TextView tvSettingFeedback;
     @Bind(R.id.btn_sign_out)
     Button btnSignOut;
-    private SettingPresenterImpl settingPresenter;
+
+
     private ChangeAvatarPresenterImpl changeAvatarPresenter;
     private MaterialDialog dialog;
-    private File file = null;
-    private String picturePath=null;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -126,50 +139,6 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
         return null;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 101 && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-            cursor.moveToFirst();
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-
-            picturePath = cursor.getString(columnIndex);
-            cursor.close();
-            file = new File(picturePath);
-            if (file != null && file.exists()) {
-
-                JSONObject jsonObject=new JSONObject();
-                JSONObject formFile=new JSONObject();
-                try {
-                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.put("version", Constants.ZSBVERSION);
-                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    jsonObject.put("fileMime", "image/png");
-
-                    formFile.put("fileName",file.getName());
-                    formFile.put("filePath",file.getAbsolutePath());
-                    formFile.put("parameterName","file");
-                    formFile.put("contentType","application/octet-stream");
-
-
-                }catch (JSONException j){
-
-                }
-                changeAvatarPresenter.onChangeAvatar(jsonObject,formFile);
-            } else {
-                Message msg = Message.obtain();
-                msg.what = 3;
-                msg.arg1 = 10;
-                msg.obj = "图片文件未找到";
-                handler.sendMessage(msg);
-            }
-        }
-    }
-
     @OnClick({R.id.top_bar_back, R.id.tv_setting_nickname, R.id.tv_setting_avatar, R.id.tv_setting_signature, R.id.tv_setting_brief, R.id.tv_setting_change_password, R.id.tv_setting_feedback, R.id.btn_sign_out})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -180,8 +149,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
                 readyGo(NickNameActivity.class);
                 break;
             case R.id.tv_setting_avatar:
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(intent, 101);
+                showDialog();
                 break;
             case R.id.tv_setting_signature:
                 readyGo(SignatureActivity.class);
@@ -196,14 +164,14 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
                 readyGo(FeedbackActivity.class);
                 break;
             case R.id.btn_sign_out:
-                JSONObject jsonObject=new JSONObject();
+/*                JSONObject jsonObject=new JSONObject();
                 try {
                     jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
                     jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
                     settingPresenter.onSignOut(1,jsonObject);
                 }catch (JSONException j){
 
-                }
+                }*/
 
                 break;
         }
@@ -293,4 +261,124 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
             }
         }
     };
+
+    private void showDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.photo_dialog, null);
+        mDialog = new Dialog(this, R.style.dialog);
+        mDialog.setContentView(view);
+
+        mDialog.setCanceledOnTouchOutside(true);
+        mDialog.show();
+        LinearLayout requsetCameraLayout = (LinearLayout) view.findViewById(R.id.register_camera);
+        LinearLayout requestPhotoLayout = (LinearLayout) view.findViewById(R.id.register_photo);
+
+        requsetCameraLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mDialog.dismiss();
+                if (mFileDir == null) {
+                    mFileDir = new File(Constants.FILEPATH + "img/");
+                    if (!mFileDir.exists()) {
+                        mFileDir.mkdirs();
+                    }
+                }
+                mFileName = Constants.FILEPATH + "img/" + "temp.jpg";
+                mFile = new File(mFileName);
+                Uri imageuri = Uri.fromFile(mFile);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageuri);
+                intent.putExtra("return-data", false);
+                startActivityForResult(intent, REQUEST_CAMERA);
+            }
+        });
+
+        requestPhotoLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                mDialog.dismiss();
+                Intent picture = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(picture, REQUEST_PHOTO);
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CAMERA) {
+                File files = new File(mFileName);
+                if (files.exists()) {
+                    mImagePath = mFileName;
+                    mImagePath = startPhotoZoom(Uri.fromFile(new File(mImagePath)));
+                }
+            } else if (requestCode == REQUEST_PHOTO) {
+                Uri selectedImage = data.getData();
+                mImagePath = startPhotoZoom(selectedImage);
+            } else if (requestCode == REQUEST_PHOTOZOOM) {
+                File f = new File(mImagePath);
+                if (f.exists()) {
+                    File file = new File(ImageUtil.zoomImage(mImagePath, 350));
+                    JSONObject jsonObject=new JSONObject();
+                    JSONObject formFile=new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+                        jsonObject.put("fileMime", "image/png");
+
+                        formFile.put("fileName",file.getName());
+                        formFile.put("filePath",file.getAbsolutePath());
+                        formFile.put("parameterName","file");
+                        formFile.put("contentType","application/octet-stream");
+
+
+                    }catch (JSONException j){
+
+                    }
+                    changeAvatarPresenter.onChangeAvatar(jsonObject,formFile);
+                } else {
+                    ToastView toast = new ToastView(this, getString(R.string.photo_not_exsit));
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        }
+    }
+
+    private String startPhotoZoom(Uri uri) {
+
+        if (mFileZoomDir == null) {
+            mFileZoomDir = new File(Constants.FILEPATH + "img/");
+            if (!mFileZoomDir.exists()) {
+                mFileZoomDir.mkdirs();
+            }
+        }
+
+        String fileName;
+        fileName = "/temp.jpg";
+
+        String filePath = mFileZoomDir + fileName;
+        File loadingFile = new File(filePath);
+
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(uri, "image/*");
+        intent.putExtra("crop", "true");
+        intent.putExtra("aspectX", 400);
+        intent.putExtra("aspectY", 400);
+        intent.putExtra("output", Uri.fromFile(loadingFile));// 输出到文件
+        intent.putExtra("outputFormat", "PNG");// 返回格式
+        intent.putExtra("noFaceDetection", true); // 去除面部检测
+        intent.putExtra("return-data", false); // 不要通过Intent传递截获的图片
+        startActivityForResult(intent, REQUEST_PHOTOZOOM);
+
+        return filePath;
+
+    }
+
 }

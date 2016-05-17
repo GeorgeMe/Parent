@@ -1,9 +1,16 @@
 package com.dmd.zsb.common;
 
+import android.os.Environment;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  */
 public class Constants {
+
+    public static String FILEPATH = Environment.getExternalStorageDirectory() + "/zsb/p/";
     //择师宝基础常量
     public static final String ZSBAPPKEY = "o6wmjqsrpmqakbqa0jvtxcmuidqidq";
     public static final String ZSBVERSION= "v1.0";
@@ -23,6 +30,23 @@ public class Constants {
 
     public static final int EVENT_RECOMMEND_COURSES_HOME = 100;
     public static final int EVENT_RECOMMEND_COURSES_SEEK = 101;
+
+    public static String imageName() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String time = format.format(date);
+        String imageName = "IMG_" + time + ".jpg";
+        return imageName;
+    }
+
+    public static String videoName() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String time = format.format(date);
+        String imageName = "Video_" + time + ".mp4";
+        return imageName;
+    }
+
 
 
 }

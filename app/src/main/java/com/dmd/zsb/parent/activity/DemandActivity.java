@@ -392,7 +392,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
         return null;
     }
 
-    @OnClick({R.id.top_bar_back ,R.id.demand_levy_concentration, R.id.demand_to_be_completed, R.id.demand_has_been_completed})
+    @OnClick({R.id.top_bar_back ,R.id.demand_levy_concentration, R.id.demand_to_be_completed})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.top_bar_back:

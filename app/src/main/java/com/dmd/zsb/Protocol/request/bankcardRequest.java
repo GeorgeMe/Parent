@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "bankcardRequest")
-public class bankcardRequest extends DataBaseModel{
+public class bankcardRequest extends Model implements Serializable {
+
     @Column(name = "appkey")
     public String   appkey;
 
@@ -30,6 +34,20 @@ public class bankcardRequest extends DataBaseModel{
 
     @Column(name = "bank_card")
     public String   bank_card;
+
+    public bankcardRequest() {
+        super();
+    }
+
+    public bankcardRequest(String appkey, String version, String sid, String uid, String name, String bank_card) {
+        super();
+        this.appkey = appkey;
+        this.version = version;
+        this.sid = sid;
+        this.uid = uid;
+        this.name = name;
+        this.bank_card = bank_card;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

@@ -2,7 +2,6 @@ package com.dmd.zsb.mvp.interactor.impl;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
@@ -16,12 +15,11 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.parent.R;
-import com.dmd.zsb.entity.response.SplashResponse;
 import com.dmd.zsb.mvp.interactor.SplashInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.protocol.response.initdataResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
@@ -30,19 +28,17 @@ import java.util.Calendar;
 
 public class SplashInteractorImpl implements SplashInteractor {
 
-    private BaseSingleLoadedListener<SplashResponse> loadedListener;
+    private BaseSingleLoadedListener<initdataResponse> loadedListener;
 
-    public SplashInteractorImpl(BaseSingleLoadedListener<SplashResponse> loadedListener) {
+    public SplashInteractorImpl(BaseSingleLoadedListener<initdataResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void loadingInitData(JSONObject json) {
-        GsonRequest<SplashResponse> gsonRequest=new GsonRequest<SplashResponse>(UriHelper.getInstance().InitData(json),null,new TypeToken<SplashResponse>(){}.getType(), new Response.Listener<SplashResponse>(){
+        GsonRequest<initdataResponse> gsonRequest=new GsonRequest<initdataResponse>(UriHelper.getInstance().InitData(json),null,new TypeToken<initdataResponse>(){}.getType(), new Response.Listener<initdataResponse>(){
             @Override
-            public void onResponse(SplashResponse response) {
-                Log.e("onResponse",""+response.getGradeList().size());
-                Log.e("onResponse",""+response.getSubjectList().size());
+            public void onResponse(initdataResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){

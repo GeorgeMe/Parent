@@ -1,4 +1,6 @@
-package com.activeandroid.annotation;
+package com.activeandroid.serializer;
+
+import java.io.File;
 
 /*
  * Copyright (C) 2010 Michael Pardo
@@ -16,16 +18,29 @@ package com.activeandroid.annotation;
  * limitations under the License.
  */
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Table {
+public final class FileSerializer extends TypeSerializer {
+	public Class<?> getDeserializedType() {
+		return File.class;
+	}
 
-	public static final String DEFAULT_ID_NAME = "Id";
-	public String name();
-	public String id() default DEFAULT_ID_NAME;
+	public Class<?> getSerializedType() {
+		return String.class;
+	}
+
+	public String serialize(Object data) {
+		if (data == null) {
+			return null;
+		}
+
+		return ((File) data).toString();
+	}
+
+	public File deserialize(Object data) {
+		if (data == null) {
+			return null;
+		}
+
+		return new File((String) data);
+	}
 }

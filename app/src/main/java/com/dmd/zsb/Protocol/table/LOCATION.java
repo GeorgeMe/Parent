@@ -6,11 +6,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.io.Serializable;
+
 @Table(name = "LOCATION")
-public class LOCATION  extends DataBaseModel
+public class LOCATION  extends Model implements Serializable
 {
 
      @Column(name = "lon")
@@ -21,6 +24,17 @@ public class LOCATION  extends DataBaseModel
 
      @Column(name = "lat")
      public double   lat;
+
+     public LOCATION() {
+          super();
+     }
+
+     public LOCATION(double lon, String name, double lat) {
+          super();
+          this.lon = lon;
+          this.name = name;
+          this.lat = lat;
+     }
 
      public void  fromJson(JSONObject jsonObject)  throws JSONException
      {

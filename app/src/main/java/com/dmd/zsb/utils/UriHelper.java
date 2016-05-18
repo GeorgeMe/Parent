@@ -13,7 +13,7 @@ public class UriHelper {
 
     private static volatile UriHelper instance = null;
     //true开发者模式  false 正式环境
-    private static boolean development=false;
+    private static boolean development=true;
     /**
      * 20 datas per page
      */
@@ -67,7 +67,7 @@ public class UriHelper {
 
     //初始化数据
     public String InitData(JSONObject json){
-        return urlToString(false,ApiConstants.Urls.API_USER_INITDATA,json);
+        return urlToString(true,ApiConstants.Urls.API_USER_INITDATA,json);
     }
     //注册
     public String signUp(JSONObject json){

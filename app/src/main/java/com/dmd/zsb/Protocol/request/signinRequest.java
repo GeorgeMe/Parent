@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.LOCATION;
@@ -9,8 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 @Table(name = "signinRequest")
-public class signinRequest extends DataBaseModel
+public class signinRequest extends Model implements Serializable
 {
 
      @Column(name = "appkey")
@@ -39,6 +42,23 @@ public class signinRequest extends DataBaseModel
 
      @Column(name = "password")
      public String   password;
+
+     public signinRequest() {
+          super();
+     }
+
+     public signinRequest(String appkey, String client_type, String mobile, String role, double lat, double lon, String location, String version, String password) {
+          super();
+          this.appkey = appkey;
+          this.client_type = client_type;
+          this.mobile = mobile;
+          this.role = role;
+          this.lat = lat;
+          this.lon = lon;
+          this.location = location;
+          this.version = version;
+          this.password = password;
+     }
 
      public void  fromJson(JSONObject jsonObject)  throws JSONException
      {

@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,8 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 @Table(name = "mineResponse")
-public class mineResponse extends DataBaseModel
+public class mineResponse extends Model implements Serializable
 {
 
      @Column(name = "mineHeaderImg")
@@ -31,6 +34,22 @@ public class mineResponse extends DataBaseModel
 
      @Column(name = "msg")
      public String msg;
+
+     public mineResponse() {
+          super();
+     }
+
+     public mineResponse(String mineHeaderImg, String mineName, String mineAddress, String mineGrade, String mineSubjects, String uid, int succeed, String msg) {
+          super();
+          this.mineHeaderImg = mineHeaderImg;
+          this.mineName = mineName;
+          this.mineAddress = mineAddress;
+          this.mineGrade = mineGrade;
+          this.mineSubjects = mineSubjects;
+          this.uid = uid;
+          this.succeed = succeed;
+          this.msg = msg;
+     }
 
      public void  fromJson(JSONObject jsonObject)  throws JSONException
      {

@@ -4,8 +4,10 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
+import java.io.Serializable;
+
 @Table(name = "SESSION")
-public class SESSION  extends Model
+public class SESSION  extends Model implements Serializable
 {
     @Column(name = "appkey")
     public String   appkey;
@@ -18,8 +20,20 @@ public class SESSION  extends Model
 
      @Column(name = "sid")
      public String sid;
-     
-     public static SESSION instance;
+
+    public SESSION() {
+        super();
+    }
+
+    public SESSION(String appkey, String version, int uid, String sid) {
+        super();
+        this.appkey = appkey;
+        this.version = version;
+        this.uid = uid;
+        this.sid = sid;
+    }
+
+    public static SESSION instance;
      public static SESSION getInstance() {
          if (instance == null) {
              instance = new SESSION();

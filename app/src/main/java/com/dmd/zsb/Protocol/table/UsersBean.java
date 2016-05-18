@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.table;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/9.
  */
 @Table(name = "Users")
-public class UsersBean  extends DataBaseModel {
+public class UsersBean  extends Model implements Serializable {
 
     @Column(name = "curriculum_id")
     public String curriculum_id;
@@ -42,6 +45,28 @@ public class UsersBean  extends DataBaseModel {
     public String grade_name;
     @Column(name = "subject_name")
     public String subject_name;
+
+    public UsersBean() {
+        super();
+    }
+
+    public UsersBean(String curriculum_id, String user_id, String avatar, String gender, int comment_count, int comment_goodrate, String location, String lat, String lon, String mobile, int total_hours, String role, String grade_name, String subject_name) {
+        super();
+        this.curriculum_id = curriculum_id;
+        this.user_id = user_id;
+        this.avatar = avatar;
+        this.gender = gender;
+        this.comment_count = comment_count;
+        this.comment_goodrate = comment_goodrate;
+        this.location = location;
+        this.lat = lat;
+        this.lon = lon;
+        this.mobile = mobile;
+        this.total_hours = total_hours;
+        this.role = role;
+        this.grade_name = grade_name;
+        this.subject_name = subject_name;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException
     {

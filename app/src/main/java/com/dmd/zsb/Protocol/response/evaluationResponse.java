@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.EvaluationsBean;
@@ -9,13 +10,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "evaluationResponse")
-public class evaluationResponse extends DataBaseModel{
+public class evaluationResponse extends Model implements Serializable {
 
     @Column(name = "errno")
     public int errno;
@@ -26,6 +28,18 @@ public class evaluationResponse extends DataBaseModel{
 
     @Column(name = "evaluations")
     public List<EvaluationsBean> evaluations;
+
+    public evaluationResponse() {
+        super();
+    }
+
+    public evaluationResponse(int errno, String msg, int total_count, List<EvaluationsBean> evaluations) {
+        super();
+        this.errno = errno;
+        this.msg = msg;
+        this.total_count = total_count;
+        this.evaluations = evaluations;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

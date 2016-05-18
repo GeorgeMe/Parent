@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "feedbackRequest")
-public class feedbackRequest extends DataBaseModel{
+public class feedbackRequest extends Model implements Serializable {
     @Column(name = "appkey")
     public String   appkey;
 
@@ -27,6 +30,19 @@ public class feedbackRequest extends DataBaseModel{
 
     @Column(name = "feedback")
     public String   feedback;
+
+    public feedbackRequest() {
+        super();
+    }
+
+    public feedbackRequest(String appkey, String version, String sid, String uid, String feedback) {
+        super();
+        this.appkey = appkey;
+        this.version = version;
+        this.sid = sid;
+        this.uid = uid;
+        this.feedback = feedback;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

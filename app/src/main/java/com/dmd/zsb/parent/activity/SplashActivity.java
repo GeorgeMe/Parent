@@ -55,7 +55,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
     protected void initViewsAndEvents() {
         mSplashPresenter = new SplashPresenterImpl(this, this);
         mSplashPresenter.initialized();
-        mSplashPresenter.loadingInitData(null);
     }
 
     @Override

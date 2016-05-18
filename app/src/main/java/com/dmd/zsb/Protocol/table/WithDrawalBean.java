@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.table;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/13.
  */
 @Table(name = "WithDrawal")
-public class WithDrawalBean  extends DataBaseModel {
+public class WithDrawalBean extends Model implements Serializable {
 
     @Column(name = "id")
     public String id;//图片地址
@@ -24,6 +27,19 @@ public class WithDrawalBean  extends DataBaseModel {
     public String category;//有效期
     @Column(name = "user")
     public String user;
+
+    public WithDrawalBean() {
+        super();
+    }
+
+    public WithDrawalBean(String id, String created_at, String amount, String category, String user) {
+        super();
+        this.id = id;
+        this.created_at = created_at;
+        this.amount = amount;
+        this.category = category;
+        this.user = user;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

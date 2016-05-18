@@ -30,31 +30,35 @@ import java.util.List;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.text.TextUtils;
 
+import com.activeandroid.util.IOUtils;
 import com.activeandroid.util.Log;
 import com.activeandroid.util.NaturalOrderComparator;
-import com.activeandroid.util.ReflectionUtils;
 import com.activeandroid.util.SQLiteUtils;
+import com.activeandroid.util.SqlParser;
 
 public final class DatabaseHelper extends SQLiteOpenHelper {
 	//////////////////////////////////////////////////////////////////////////////////////
-	// PRIVATE CONSTANTS
+	// PUBLIC CONSTANTS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	private final static String AA_DB_NAME = "AA_DB_NAME";
-	private final static String AA_DB_VERSION = "AA_DB_VERSION";
+	public final static String MIGRATION_PATH = "migrations";
 
-	private final static String MIGRATION_PATH = "migrations";
+	//////////////////////////////////////////////////////////////////////////////////////
+    // PRIVATE FIELDS
+    //////////////////////////////////////////////////////////////////////////////////////
 
-	private Context mContext;
+    private final String mSqlParser;
+
 	//////////////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTORS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	public DatabaseHelper(Context context) {
-		super(context, getDbName(context), null, getDbVersion(context));
-		this.mContext = context;
-		copyAttachedDatabase(context);
+	public DatabaseHelper(Configuration configuration) {
+		super(configuration.getContext(), configuration.getDatabaseName(), null, configuration.getDatabaseVersion());
+		copyAttachedDatabase(configuration.getContext(), configuration.getDatabaseName());
+		mSqlParser = configuration.getSqlParser();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -63,57 +67,30 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onOpen(SQLiteDatabase db) {
-		if (SQLiteUtils.FOREIGN_KEYS_SUPPORTED) {
-			db.execSQL("PRAGMA foreign_keys=ON;");
-			Log.i("Foreign Keys supported. Enabling foreign key features.");
-		}
+		executePragmas(db);
 	};
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		if (SQLiteUtils.FOREIGN_KEYS_SUPPORTED) {
-			db.execSQL("PRAGMA foreign_keys=ON;");
-			Log.i("Foreign Keys supported. Enabling foreign key features.");
-		}
-
-		db.beginTransaction();
-
-		try {
-			for (TableInfo tableInfo : Cache.getTableInfos()) {
-				db.execSQL(SQLiteUtils.createTableDefinition(tableInfo));
-			}
-
-			db.setTransactionSuccessful();
-		}
-		finally {
-			db.endTransaction();
-		}
-
+		executePragmas(db);
+		executeCreate(db);
 		executeMigrations(db, -1, db.getVersion());
+		executeCreateIndex(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (SQLiteUtils.FOREIGN_KEYS_SUPPORTED) {
-			db.execSQL("PRAGMA foreign_keys=ON;");
-			Log.i("Foreign Keys supported. Enabling foreign key features.");
-		}
-
-		if (!executeMigrations(db, oldVersion, newVersion)) {
-			Log.i("No migrations found. Calling onCreate.");
-			mContext.deleteDatabase(getDbName(mContext));
-            mContext.deleteDatabase("Ban.db");
-			onCreate(db);
-		}
+		executePragmas(db);
+		executeCreate(db);
+		executeMigrations(db, oldVersion, newVersion);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	public void copyAttachedDatabase(Context context) {
-		String dbName = getDbName(context);
-		final File dbPath = context.getDatabasePath(dbName);
+	public void copyAttachedDatabase(Context context, String databaseName) {
+		final File dbPath = context.getDatabasePath(databaseName);
 
 		// If the database already exists, return
 		if (dbPath.exists()) {
@@ -125,13 +102,13 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 
 		// Try to copy database file
 		try {
-			final InputStream inputStream = context.getAssets().open(dbName);
+			final InputStream inputStream = context.getAssets().open(databaseName);
 			final OutputStream output = new FileOutputStream(dbPath);
 
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[8192];
 			int length;
 
-			while ((length = inputStream.read(buffer)) > 0) {
+			while ((length = inputStream.read(buffer, 0, 8192)) > 0) {
 				output.write(buffer, 0, length);
 			}
 
@@ -147,6 +124,43 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	//////////////////////////////////////////////////////////////////////////////////////
 	// PRIVATE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
+
+	private void executePragmas(SQLiteDatabase db) {
+		if (SQLiteUtils.FOREIGN_KEYS_SUPPORTED) {
+			db.execSQL("PRAGMA foreign_keys=ON;");
+			Log.i("Foreign Keys supported. Enabling foreign key features.");
+		}
+	}
+
+	private void executeCreateIndex(SQLiteDatabase db) {
+		db.beginTransaction();
+		try {
+			for (TableInfo tableInfo : Cache.getTableInfos()) {
+				String[] definitions = SQLiteUtils.createIndexDefinition(tableInfo);
+
+				for (String definition : definitions) {
+					db.execSQL(definition);
+				}
+			}
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
+
+	private void executeCreate(SQLiteDatabase db) {
+		db.beginTransaction();
+		try {
+			for (TableInfo tableInfo : Cache.getTableInfos()) {
+				db.execSQL(SQLiteUtils.createTableDefinition(tableInfo));
+			}
+			db.setTransactionSuccessful();
+		}
+		finally {
+			db.endTransaction();
+		}
+	}
 
 	private boolean executeMigrations(SQLiteDatabase db, int oldVersion, int newVersion) {
 		boolean migrationExecuted = false;
@@ -185,54 +199,59 @@ public final class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	private void executeSqlScript(SQLiteDatabase db, String file) {
-		try {
-			final InputStream input = Cache.getContext().getAssets().open(MIGRATION_PATH + "/" + file);
-			final BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-			String line = null;
 
-			while ((line = reader.readLine()) != null) {
-				db.execSQL(line.replace(";", ""));
-			}
-		}
-		catch (IOException e) {
+	    InputStream stream = null;
+
+		try {
+		    stream = Cache.getContext().getAssets().open(MIGRATION_PATH + "/" + file);
+
+		    if (Configuration.SQL_PARSER_DELIMITED.equalsIgnoreCase(mSqlParser)) {
+		        executeDelimitedSqlScript(db, stream);
+
+		    } else {
+		        executeLegacySqlScript(db, stream);
+
+		    }
+
+		} catch (IOException e) {
 			Log.e("Failed to execute " + file, e);
+
+		} finally {
+		    IOUtils.closeQuietly(stream);
+
 		}
 	}
 
-	// Meta-data methods
+	private void executeDelimitedSqlScript(SQLiteDatabase db, InputStream stream) throws IOException {
 
-	private static String getDbName(Context context) {
-		String aaName = ReflectionUtils.getMetaData(context, AA_DB_NAME);
-		//********************
-		//数据库名称设置 根据用户ID去命名
-/*        if (null != SESSION.instance && SESSION.getInstance().uid > 0) {
-            if (null != aaName) {
-                aaName.replace(".db","");
-                aaName += ""+SESSION.getInstance().uid+".db";
-            }
-        } else {
-            int userId = ((O2OMobile) O2OMobile.getInstance()).getCacheUserId();
-            if (userId > 0) {
-                if (null != aaName) {
-                    aaName.replace(".db","");
-                    aaName += ""+userId+".db";
+	    List<String> commands = SqlParser.parse(stream);
+
+	    for(String command : commands) {
+	        db.execSQL(command);
+	    }
+	}
+
+	private void executeLegacySqlScript(SQLiteDatabase db, InputStream stream) throws IOException {
+
+	    InputStreamReader reader = null;
+        BufferedReader buffer = null;
+
+        try {
+            reader = new InputStreamReader(stream);
+            buffer = new BufferedReader(reader);
+            String line = null;
+
+            while ((line = buffer.readLine()) != null) {
+                line = line.replace(";", "").trim();
+                if (!TextUtils.isEmpty(line)) {
+                    db.execSQL(line);
                 }
             }
-        }*/
-        //********************
-		if (aaName == null) {
-			aaName = "Application.db";
-		}
-		return aaName;
-	}
 
-	private static int getDbVersion(Context context) {
-		Integer aaVersion = ReflectionUtils.getMetaData(context, AA_DB_VERSION);
+        } finally {
+            IOUtils.closeQuietly(buffer);
+            IOUtils.closeQuietly(reader);
 
-		if (aaVersion == null || aaVersion == 0) {
-			aaVersion = 1;
-		}
-
-		return aaVersion;
+        }
 	}
 }

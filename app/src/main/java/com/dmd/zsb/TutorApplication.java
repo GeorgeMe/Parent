@@ -11,7 +11,6 @@ import com.alibaba.wxlib.util.SysUtil;
 import com.dmd.tutor.base.BaseAppManager;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.utils.TLog;
-import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.openim.ChattingUICustom;
 import com.dmd.zsb.openim.ConversationListUICustom;
 import com.dmd.zsb.utils.VolleyHelper;

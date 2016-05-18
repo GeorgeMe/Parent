@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.table;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/5.
  */
 @Table(name = "FORMFILE")
-public class FORMFILE  extends DataBaseModel {
+public class FORMFILE  extends Model implements Serializable {
 
     @Column(name = "fileName")
     public String fileName;
@@ -22,6 +25,19 @@ public class FORMFILE  extends DataBaseModel {
     public String parameterName;
     @Column(name = "contentType")
     public String contentType;
+
+    public FORMFILE() {
+        super();
+    }
+
+    public FORMFILE(String fileName, String filePath, String parameterName, String contentType) {
+        super();
+        this.fileName = fileName;
+        this.filePath = filePath;
+        this.parameterName = parameterName;
+        this.contentType = contentType;
+    }
+
     public void  fromJson(JSONObject jsonObject)  throws JSONException{
         if(null == jsonObject){
             return ;

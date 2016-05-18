@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="AA_DB_NAME"
-            android:value="Ban.db"/>
+            android:value="Application.db"/>
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1"/>

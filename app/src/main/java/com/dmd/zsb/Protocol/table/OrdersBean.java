@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.table;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
@@ -8,11 +9,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/9.
  */
 @Table(name = "Orders")
-public class OrdersBean  extends DataBaseModel {
+public class OrdersBean  extends Model implements Serializable {
     @Column(name = "img_header")
     public String img_header;//头像
     @Column(name = "name")
@@ -33,6 +36,24 @@ public class OrdersBean  extends DataBaseModel {
     public String place;//地点
     @Column(name = "state")
     public String state;//状态
+
+    public OrdersBean() {
+        super();
+    }
+
+    public OrdersBean(String img_header, String name, String type, String sex, String appointed_time, String charging, String curriculum, String address, String place, String state) {
+        super();
+        this.img_header = img_header;
+        this.name = name;
+        this.type = type;
+        this.sex = sex;
+        this.appointed_time = appointed_time;
+        this.charging = charging;
+        this.curriculum = curriculum;
+        this.address = address;
+        this.place = place;
+        this.state = state;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.FORMFILE;
@@ -9,11 +10,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "changeavatarRequest")
-public class changeavatarRequest extends DataBaseModel{
+public class changeavatarRequest extends Model implements Serializable {
 
 
     @Column(name = "appkey")
@@ -30,6 +33,19 @@ public class changeavatarRequest extends DataBaseModel{
 
     @Column(name = "fileMime")
     public String   fileMime;
+
+    public changeavatarRequest() {
+        super();
+    }
+
+    public changeavatarRequest(String appkey, String version, String sid, String uid, String fileMime) {
+        super();
+        this.appkey = appkey;
+        this.version = version;
+        this.sid = sid;
+        this.uid = uid;
+        this.fileMime = fileMime;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

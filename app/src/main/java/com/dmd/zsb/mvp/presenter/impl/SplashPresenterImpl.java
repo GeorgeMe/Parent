@@ -1,9 +1,11 @@
 package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.animation.Animation;
 
 import com.dmd.tutor.utils.XmlDB;
+import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.db.ZSBDataBase;
 import com.dmd.zsb.db.dao.GradeDao;
 import com.dmd.zsb.db.dao.SubjectDao;
@@ -14,12 +16,13 @@ import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.Presenter;
 import com.dmd.zsb.mvp.presenter.SplashPresenter;
 import com.dmd.zsb.mvp.view.SplashView;
-import com.google.gson.JsonObject;
+import com.dmd.zsb.protocol.request.initdataRequest;
+import com.dmd.zsb.protocol.response.initdataResponse;
 
-import org.json.JSONObject;
+import org.json.JSONException;
 
 
-public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSingleLoadedListener<SplashResponse> {
+public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSingleLoadedListener<initdataResponse> {
 
     private Context mContext = null;
     private SplashView mSplashView = null;
@@ -51,13 +54,13 @@ public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSing
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-
+                    loadingInitData();
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     //计时 5秒后进入主页
-                    mSplashView.navigateToHomePage();
+                  //  mSplashView.navigateToHomePage();
                 }
 
                 @Override
@@ -71,28 +74,38 @@ public class SplashPresenterImpl implements SplashPresenter, Presenter, BaseSing
     }
 
     @Override
-    public void loadingInitData(JSONObject jsonObject) {
-        mSplashInteractor.loadingInitData(jsonObject);
+    public void loadingInitData() {
+        try{
+            initdataRequest request=new initdataRequest();
+            request.appkey= Constants.ZSBAPPKEY;
+            request.version=Constants.ZSBVERSION;
+            mSplashInteractor.loadingInitData(request.toJson());
+        }catch (JSONException j){
+
+        }
     }
 
     @Override
-    public void onSuccess(SplashResponse data) {
-/*        gradeDao.saveGrade(data.getGradeList());
-        subjectDao.saveSubject(data.getSubjectList());*/
+    public void onSuccess(initdataResponse data) {
 
-        //mSplashView.navigateToHomePage();
+        if (data.errno == 0) {
+            data.save();
+            Log.e("0",data.grades.size()+"  0");
+            Log.e("0",data.subjects.size()+"  1");
+        }
+        mSplashView.navigateToHomePage();
+
     }
 
     @Override
     public void onError(String msg) {
-       // mSplashView.navigateToHomePage();
+      // mSplashView.navigateToHomePage();
+        Log.e("mSplashView",msg);
+        //mSplashView.showError(msg);
     }
 
     @Override
     public void onException(String msg) {
         onError(msg);
     }
-
-
-
 }

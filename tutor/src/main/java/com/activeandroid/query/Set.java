@@ -66,16 +66,19 @@ public final class Set implements Sqlable {
 
 	@Override
 	public String toSql() {
-		String sql = "";
+		StringBuilder sql = new StringBuilder();
+		sql.append(mUpdate.toSql());
+		sql.append("SET ");
+		sql.append(mSet);
+		sql.append(" ");
 
-		sql += mUpdate.toSql();
-		sql += "SET " + mSet + " ";
-		
 		if (mWhere != null) {
-			sql += "WHERE " + mWhere + " ";
+			sql.append("WHERE ");
+			sql.append(mWhere);
+			sql.append(" ");
 		}
 
-		return sql;
+		return sql.toString();
 	}
 
 	public void execute() {
@@ -92,7 +95,7 @@ public final class Set implements Sqlable {
 		}
 
 		for (int i = 0; i < whereSize; i++) {
-			args[i] = mWhereArguments.get(i).toString();
+			args[i + setSize] = mWhereArguments.get(i).toString();
 		}
 
 		return args;

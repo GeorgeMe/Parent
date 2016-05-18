@@ -14,42 +14,23 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "homeRequest")
-public class homeRequest extends Model implements Serializable {
+@Table(name = "bankcardRequest")
+public class initdataRequest extends Model{
+
     @Column(name = "appkey")
     public String   appkey;
 
     @Column(name = "version")
     public String version;
 
-    @Column(name = "sid")
-    public String   sid;
-
-    @Column(name = "uid")
-    public String   uid;
-
-    @Column(name = "page")
-    public String   page;
-
-    @Column(name = "rows")
-    public String   rows;
-
-    @Column(name = "subid")
-    public String   subid;
-
-    public homeRequest() {
+    public initdataRequest() {
         super();
     }
 
-    public homeRequest(String appkey, String version, String sid, String uid, String page, String rows, String subid) {
+    public initdataRequest(String appkey, String version) {
         super();
         this.appkey = appkey;
         this.version = version;
-        this.sid = sid;
-        this.uid = uid;
-        this.page = page;
-        this.rows = rows;
-        this.subid = subid;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -61,11 +42,6 @@ public class homeRequest extends Model implements Serializable {
 
         this.appkey = jsonObject.optString("appkey");
         this.version = jsonObject.optString("version");
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
-        this.page = jsonObject.optString("page");
-        this.rows = jsonObject.optString("rows");
-        this.subid = jsonObject.optString("subid");
 
         return ;
     }
@@ -75,11 +51,7 @@ public class homeRequest extends Model implements Serializable {
 
         localItemObject.put("appkey", appkey);
         localItemObject.put("version", version);
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
-        localItemObject.put("page", page);
-        localItemObject.put("rows", rows);
-        localItemObject.put("subid", subid);
+
         return localItemObject;
     }
 }

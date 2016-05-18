@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.dmd.zsb.utils.UriHelper;
@@ -9,11 +10,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "seekRequest")
-public class seekRequest extends DataBaseModel{
+public class seekRequest extends Model implements Serializable {
     @Column(name = "appkey")
     public String   appkey;
 
@@ -34,6 +37,21 @@ public class seekRequest extends DataBaseModel{
 
     @Column(name = "subid")
     public String  subid;
+
+    public seekRequest() {
+        super();
+    }
+
+    public seekRequest(String appkey, String version, String sid, String uid, int page, int rows, String subid) {
+        super();
+        this.appkey = appkey;
+        this.version = version;
+        this.sid = sid;
+        this.uid = uid;
+        this.page = page;
+        this.rows = rows;
+        this.subid = subid;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

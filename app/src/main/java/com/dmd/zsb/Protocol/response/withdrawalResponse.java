@@ -1,6 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
 import com.activeandroid.DataBaseModel;
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.TransactionsBean;
@@ -10,19 +11,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/4.
  */
 @Table(name = "withdrawalResponse")
-public class withdrawalResponse extends DataBaseModel{
+public class withdrawalResponse extends Model implements Serializable {
     @Column(name = "errno")
     public int errno;
     @Column(name = "msg")
     public String msg;
 
 
+    public withdrawalResponse() {
+        super();
+    }
+
+    public withdrawalResponse(int errno, String msg) {
+        super();
+        this.errno = errno;
+        this.msg = msg;
+    }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
         if (null == jsonObject) {

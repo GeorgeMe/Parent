@@ -16,38 +16,55 @@ package com.activeandroid;
  * limitations under the License.
  */
 
-import android.app.Application;
-import com.activeandroid.serializer.TypeSerializer;
-import com.activeandroid.util.Log;
-import com.activeandroid.util.ReflectionUtils;
-import dalvik.system.DexFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import android.content.Context;
+
+import com.activeandroid.serializer.CalendarSerializer;
+import com.activeandroid.serializer.SqlDateSerializer;
+import com.activeandroid.serializer.TypeSerializer;
+import com.activeandroid.serializer.UtilDateSerializer;
+import com.activeandroid.serializer.FileSerializer;
+import com.activeandroid.util.Log;
+import com.activeandroid.util.ReflectionUtils;
+import dalvik.system.DexFile;
 
 final class ModelInfo {
 	//////////////////////////////////////////////////////////////////////////////////////
 	// PRIVATE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	private Map<Class<? extends Model>, TableInfo> mTableInfos;
-	private Map<Class<?>, TypeSerializer> mTypeSerializers;
+	private Map<Class<? extends Model>, TableInfo> mTableInfos = new HashMap<Class<? extends Model>, TableInfo>();
+	private Map<Class<?>, TypeSerializer> mTypeSerializers = new HashMap<Class<?>, TypeSerializer>() {
+		{
+			put(Calendar.class, new CalendarSerializer());
+			put(java.sql.Date.class, new SqlDateSerializer());
+			put(java.util.Date.class, new UtilDateSerializer());
+			put(File.class, new FileSerializer());
+		}
+	};
 
 	//////////////////////////////////////////////////////////////////////////////////////
 	// CONSTRUCTORS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	public ModelInfo(Application application) {
-		mTableInfos = new HashMap<Class<? extends Model>, TableInfo>();
-		mTypeSerializers = new HashMap<Class<?>, TypeSerializer>();
-
-		try {
-			scanForModel(application);
-		}
-		catch (IOException e) {
-			Log.e("Couln't open source path.", e);
+	public ModelInfo(Configuration configuration) {
+		if (!loadModelFromMetaData(configuration)) {
+			try {
+				scanForModel(configuration.getContext());
+			}
+			catch (IOException e) {
+				Log.e("Couldn't open source path.", e);
+			}
 		}
 
 		Log.i("ModelInfo loaded.");
@@ -65,11 +82,6 @@ final class ModelInfo {
 		return mTableInfos.get(type);
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<Class<? extends Model>> getModelClasses() {
-		return (List<Class<? extends Model>>) mTableInfos.keySet();
-	}
-
 	public TypeSerializer getTypeSerializer(Class<?> type) {
 		return mTypeSerializers.get(type);
 	}
@@ -78,12 +90,43 @@ final class ModelInfo {
 	// PRIVATE METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
 
-	private void scanForModel(Application application) throws IOException {
-		String packageName = application.getPackageName();
-		String sourcePath = application.getApplicationInfo().sourceDir;
+	private boolean loadModelFromMetaData(Configuration configuration) {
+		if (!configuration.isValid()) {
+			return false;
+		}
+
+		final List<Class<? extends Model>> models = configuration.getModelClasses();
+		if (models != null) {
+			for (Class<? extends Model> model : models) {
+				mTableInfos.put(model, new TableInfo(model));
+			}
+		}
+
+		final List<Class<? extends TypeSerializer>> typeSerializers = configuration.getTypeSerializers();
+		if (typeSerializers != null) {
+			for (Class<? extends TypeSerializer> typeSerializer : typeSerializers) {
+				try {
+					TypeSerializer instance = typeSerializer.newInstance();
+					mTypeSerializers.put(instance.getDeserializedType(), instance);
+				}
+				catch (InstantiationException e) {
+					Log.e("Couldn't instantiate TypeSerializer.", e);
+				}
+				catch (IllegalAccessException e) {
+					Log.e("IllegalAccessException", e);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	private void scanForModel(Context context) throws IOException {
+		String packageName = context.getPackageName();
+		String sourcePath = context.getApplicationInfo().sourceDir;
 		List<String> paths = new ArrayList<String>();
 
-		if (sourcePath != null) {
+		if (sourcePath != null && !(new File(sourcePath).isDirectory())) {
 			DexFile dexfile = new DexFile(sourcePath);
 			Enumeration<String> entries = dexfile.entries();
 
@@ -98,7 +141,7 @@ final class ModelInfo {
 
 			while (resources.hasMoreElements()) {
 				String path = resources.nextElement().getFile();
-				if (path.contains("bin")) {
+				if (path.contains("bin") || path.contains("classes")) {
 					paths.add(path);
 				}
 			}
@@ -106,7 +149,7 @@ final class ModelInfo {
 
 		for (String path : paths) {
 			File file = new File(path);
-			scanForModelClasses(file, packageName, application.getClass().getClassLoader());
+			scanForModelClasses(file, packageName, context.getClassLoader());
 		}
 	}
 
@@ -130,7 +173,7 @@ final class ModelInfo {
 					return;
 				}
 
-				className = className.replace("/", ".");
+				className = className.replace(System.getProperty("file.separator"), ".");
 
 				int packageNameIndex = className.lastIndexOf(packageName);
 				if (packageNameIndex < 0) {
@@ -148,8 +191,8 @@ final class ModelInfo {
 					mTableInfos.put(modelClass, new TableInfo(modelClass));
 				}
 				else if (ReflectionUtils.isTypeSerializer(discoveredClass)) {
-					TypeSerializer typeSerializer = (TypeSerializer) discoveredClass.newInstance();
-					mTypeSerializers.put(typeSerializer.getDeserializedType(), typeSerializer);
+					TypeSerializer instance = (TypeSerializer) discoveredClass.newInstance();
+					mTypeSerializers.put(instance.getDeserializedType(), instance);
 				}
 			}
 			catch (ClassNotFoundException e) {

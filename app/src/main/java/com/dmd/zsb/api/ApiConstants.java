@@ -8,7 +8,7 @@ public class ApiConstants {
         public static final String API_BASE_URLS = "http://www.cqdmd.com/v1.0/";
         public static final String API_IMG_BASE_URLS = "http://www.cqdmd.com/";
 
-        public static final String API_USER_INITDATA = "p_user_initdata.action";//初始化
+        public static final String API_USER_INITDATA = "p_user_initdata.action?";//初始化
         public static final String API_USER_SIGNUP = "p_user_signup.action?";//注册
         public static final String API_USER_SIGNIN = "p_user_signin.action?";//登陆
         public static final String API_USER_SIGNOUT = "p_user_signout.action?";//退出

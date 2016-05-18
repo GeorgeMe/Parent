@@ -19,17 +19,24 @@ package com.activeandroid.util;
 import android.database.Cursor;
 import android.os.Build;
 import android.text.TextUtils;
+
 import com.activeandroid.Cache;
 import com.activeandroid.Model;
 import com.activeandroid.TableInfo;
 import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Column.ConflictAction;
 import com.activeandroid.serializer.TypeSerializer;
 
+import java.lang.Long;
+import java.lang.String;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public final class SQLiteUtils {
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -76,6 +83,14 @@ public final class SQLiteUtils {
 	};
 
 	//////////////////////////////////////////////////////////////////////////////////////
+	// PRIVATE MEMBERS
+	//////////////////////////////////////////////////////////////////////////////////////
+
+	private static HashMap<String, List<String>> sIndexGroupMap;
+	private static HashMap<String, List<String>> sUniqueGroupMap;
+	private static HashMap<String, ConflictAction> sOnUniqueConflictsMap;
+
+	//////////////////////////////////////////////////////////////////////////////////////
 	// PUBLIC METHODS
 	//////////////////////////////////////////////////////////////////////////////////////
 
@@ -94,6 +109,14 @@ public final class SQLiteUtils {
 
 		return entities;
 	}
+	  
+	public static int intQuery(final String sql, final String[] selectionArgs) {
+        final Cursor cursor = Cache.openDatabase().rawQuery(sql, selectionArgs);
+        final int number = processIntCursor(cursor);
+        cursor.close();
+
+        return number;
+	}
 
 	public static <T extends Model> T rawQuerySingle(Class<? extends Model> type, String sql, String[] selectionArgs) {
 		List<T> entities = rawQuery(type, sql, selectionArgs);
@@ -107,6 +130,112 @@ public final class SQLiteUtils {
 
 	// Database creation
 
+	public static ArrayList<String> createUniqueDefinition(TableInfo tableInfo) {
+		final ArrayList<String> definitions = new ArrayList<String>();
+		sUniqueGroupMap = new HashMap<String, List<String>>();
+		sOnUniqueConflictsMap = new HashMap<String, ConflictAction>();
+
+		for (Field field : tableInfo.getFields()) {
+			createUniqueColumnDefinition(tableInfo, field);
+		}
+
+		if (sUniqueGroupMap.isEmpty()) {
+			return definitions;
+		}
+
+		Set<String> keySet = sUniqueGroupMap.keySet();
+		for (String key : keySet) {
+			List<String> group = sUniqueGroupMap.get(key);
+			ConflictAction conflictAction = sOnUniqueConflictsMap.get(key);
+
+			definitions.add(String.format("UNIQUE (%s) ON CONFLICT %s",
+					TextUtils.join(", ", group), conflictAction.toString()));
+		}
+
+		return definitions;
+	}
+
+	public static void createUniqueColumnDefinition(TableInfo tableInfo, Field field) {
+		final String name = tableInfo.getColumnName(field);
+		final Column column = field.getAnnotation(Column.class);
+
+        if (field.getName().equals("mId")) {
+            return;
+        }
+
+		String[] groups = column.uniqueGroups();
+		ConflictAction[] conflictActions = column.onUniqueConflicts();
+		if (groups.length != conflictActions.length)
+			return;
+
+		for (int i = 0; i < groups.length; i++) {
+			String group = groups[i];
+			ConflictAction conflictAction = conflictActions[i];
+
+			if (TextUtils.isEmpty(group))
+				continue;
+
+			List<String> list = sUniqueGroupMap.get(group);
+			if (list == null) {
+				list = new ArrayList<String>();
+			}
+			list.add(name);
+
+			sUniqueGroupMap.put(group, list);
+			sOnUniqueConflictsMap.put(group, conflictAction);
+		}
+	}
+
+	public static String[] createIndexDefinition(TableInfo tableInfo) {
+		final ArrayList<String> definitions = new ArrayList<String>();
+		sIndexGroupMap = new HashMap<String, List<String>>();
+
+		for (Field field : tableInfo.getFields()) {
+			createIndexColumnDefinition(tableInfo, field);
+		}
+
+		if (sIndexGroupMap.isEmpty()) {
+			return new String[0];
+		}
+
+		for (Map.Entry<String, List<String>> entry : sIndexGroupMap.entrySet()) {
+			definitions.add(String.format("CREATE INDEX IF NOT EXISTS %s on %s(%s);",
+					"index_" + tableInfo.getTableName() + "_" + entry.getKey(),
+					tableInfo.getTableName(), TextUtils.join(", ", entry.getValue())));
+		}
+
+		return definitions.toArray(new String[definitions.size()]);
+	}
+
+	public static void createIndexColumnDefinition(TableInfo tableInfo, Field field) {
+		final String name = tableInfo.getColumnName(field);
+		final Column column = field.getAnnotation(Column.class);
+
+        if (field.getName().equals("mId")) {
+            return;
+        }
+
+		if (column.index()) {
+			List<String> list = new ArrayList<String>();
+			list.add(name);
+			sIndexGroupMap.put(name, list);
+		}
+
+		String[] groups = column.indexGroups();
+		for (String group : groups) {
+			if (TextUtils.isEmpty(group))
+				continue;
+
+			List<String> list = sIndexGroupMap.get(group);
+			if (list == null) {
+				list = new ArrayList<String>();
+			}
+
+			list.add(name);
+			sIndexGroupMap.put(group, list);
+		}
+	}
+
 	public static String createTableDefinition(TableInfo tableInfo) {
 		final ArrayList<String> definitions = new ArrayList<String>();
 
@@ -117,13 +246,15 @@ public final class SQLiteUtils {
 			}
 		}
 
+		definitions.addAll(createUniqueDefinition(tableInfo));
+
 		return String.format("CREATE TABLE IF NOT EXISTS %s (%s);", tableInfo.getTableName(),
 				TextUtils.join(", ", definitions));
 	}
 
 	@SuppressWarnings("unchecked")
 	public static String createColumnDefinition(TableInfo tableInfo, Field field) {
-		String definition = null;
+		StringBuilder definition = new StringBuilder();
 
 		Class<?> type = field.getType();
 		final String name = tableInfo.getColumnName(field);
@@ -135,67 +266,141 @@ public final class SQLiteUtils {
 		}
 
 		if (TYPE_MAP.containsKey(type)) {
-			definition = name + " " + TYPE_MAP.get(type).toString();
+			definition.append(name);
+			definition.append(" ");
+			definition.append(TYPE_MAP.get(type).toString());
 		}
 		else if (ReflectionUtils.isModel(type)) {
-			definition = name + " " + SQLiteType.INTEGER.toString();
+			definition.append(name);
+			definition.append(" ");
+			definition.append(SQLiteType.INTEGER.toString());
 		}
 		else if (ReflectionUtils.isSubclassOf(type, Enum.class)) {
-			definition = name + " " + SQLiteType.TEXT.toString();
+			definition.append(name);
+			definition.append(" ");
+			definition.append(SQLiteType.TEXT.toString());
 		}
 
-		if (definition != null) {
-			if (column.length() > -1) {
-				definition += "(" + column.length() + ")";
-			}
+		if (!TextUtils.isEmpty(definition)) {
 
-			if (name.equals("Id")) {
-				definition += " PRIMARY KEY AUTOINCREMENT";
-			}
+			if (name.equals(tableInfo.getIdName())) {
+				definition.append(" PRIMARY KEY AUTOINCREMENT");
+			}else if(column!=null){
+				if (column.length() > -1) {
+					definition.append("(");
+					definition.append(column.length());
+					definition.append(")");
+				}
 
-			if (column.notNull()) {
-				definition += " NOT NULL ON CONFLICT " + column.onNullConflict().toString();
-			}
+				if (column.notNull()) {
+					definition.append(" NOT NULL ON CONFLICT ");
+					definition.append(column.onNullConflict().toString());
+				}
 
-			if (column.unique()) {
-				definition += " UNIQUE ON CONFLICT " + column.onUniqueConflict().toString();
+				if (column.unique()) {
+					definition.append(" UNIQUE ON CONFLICT ");
+					definition.append(column.onUniqueConflict().toString());
+				}
 			}
 
 			if (FOREIGN_KEYS_SUPPORTED && ReflectionUtils.isModel(type)) {
-				definition += " REFERENCES " + Cache.getTableInfo((Class<? extends Model>) type).getTableName() + "(Id)";
-				definition += " ON DELETE " + column.onDelete().toString().replace("_", " ");
-				definition += " ON UPDATE " + column.onUpdate().toString().replace("_", " ");
+				definition.append(" REFERENCES ");
+				definition.append(Cache.getTableInfo((Class<? extends Model>) type).getTableName());
+				definition.append("("+tableInfo.getIdName()+")");
+				definition.append(" ON DELETE ");
+				definition.append(column.onDelete().toString().replace("_", " "));
+				definition.append(" ON UPDATE ");
+				definition.append(column.onUpdate().toString().replace("_", " "));
 			}
 		}
 		else {
 			Log.e("No type mapping for: " + type.toString());
 		}
 
-		return definition;
+		return definition.toString();
 	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Model> List<T> processCursor(Class<? extends Model> type, Cursor cursor) {
+		TableInfo tableInfo = Cache.getTableInfo(type);
+		String idName = tableInfo.getIdName();
 		final List<T> entities = new ArrayList<T>();
 
 		try {
 			Constructor<?> entityConstructor = type.getConstructor();
 
 			if (cursor.moveToFirst()) {
+                /**
+                 * Obtain the columns ordered to fix issue #106 (https://github.com/pardom/ActiveAndroid/issues/106)
+                 * when the cursor have multiple columns with same name obtained from join tables.
+                 */
+                List<String> columnsOrdered = new ArrayList<String>(Arrays.asList(cursor.getColumnNames()));
 				do {
-					// TODO: Investigate entity cache leak
-					T entity = (T) entityConstructor.newInstance();
-					((Model) entity).loadFromCursor(type, cursor);
-					entities.add(entity);
+					Model entity = Cache.getEntity(type, cursor.getLong(columnsOrdered.indexOf(idName)));
+					if (entity == null) {
+						entity = (T) entityConstructor.newInstance();
+					}
+
+					entity.loadFromCursor(cursor);
+					entities.add((T) entity);
 				}
 				while (cursor.moveToNext());
 			}
 
+		}
+		catch (NoSuchMethodException e) {
+			throw new RuntimeException(
+                "Your model " + type.getName() + " does not define a default " +
+                "constructor. The default constructor is required for " +
+                "now in ActiveAndroid models, as the process to " +
+                "populate the ORM model is : " +
+                "1. instantiate default model " +
+                "2. populate fields"
+            );
 		}
 		catch (Exception e) {
 			Log.e("Failed to process cursor.", e);
 		}
 
 		return entities;
+	}
+
+	private static int processIntCursor(final Cursor cursor) {
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+	    }
+        return 0;
+    }
+
+	public static List<String> lexSqlScript(String sqlScript) {
+		ArrayList<String> sl = new ArrayList<String>();
+		boolean inString = false, quoteNext = false;
+		StringBuilder b = new StringBuilder(100);
+
+		for (int i = 0; i < sqlScript.length(); i++) {
+			char c = sqlScript.charAt(i);
+
+			if (c == ';' && !inString && !quoteNext) {
+				sl.add(b.toString());
+				b = new StringBuilder(100);
+				inString = false;
+				quoteNext = false;
+				continue;
+			}
+
+			if (c == '\'' && !quoteNext) {
+				inString = !inString;
+			}
+
+			quoteNext = c == '\\' && !quoteNext;
+
+			b.append(c);
+		}
+
+		if (b.length() > 0) {
+			sl.add(b.toString());
+		}
+
+		return sl;
 	}
 }

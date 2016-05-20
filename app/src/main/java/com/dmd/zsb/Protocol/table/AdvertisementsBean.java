@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,15 +11,11 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/9.
  */
-@Table(name = "Advertisements")
-public class AdvertisementsBean extends Model implements Serializable {
-    @Column(name = "img_url")
+public class AdvertisementsBean extends SugarRecord implements Serializable {
+
     public String img_url;
-    @Column(name = "link")
     public String link;
-    @Column(name = "title")
     public String title;
-    @Column(name = "description")
     public String description;
 
     public AdvertisementsBean() {

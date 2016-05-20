@@ -7,11 +7,8 @@ import com.dmd.zsb.mvp.interactor.impl.ChangeAvatarInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.ChangeAvatarPresenter;
 import com.dmd.zsb.mvp.view.ChangeAvatarView;
-import com.dmd.zsb.protocol.request.changeavatarRequest;
 import com.dmd.zsb.protocol.response.changeavatarResponse;
-import com.dmd.zsb.protocol.table.FORMFILE;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**

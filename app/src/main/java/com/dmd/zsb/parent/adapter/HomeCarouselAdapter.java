@@ -11,8 +11,6 @@ import android.widget.ImageView;
 
 import com.dmd.tutor.base.BaseWebActivity;
 import com.dmd.tutor.rollviewpager.adapter.DynamicPagerAdapter;
-import com.dmd.zsb.api.ApiConstants;
-import com.dmd.zsb.entity.AdvertisementEntity;
 import com.dmd.zsb.protocol.table.AdvertisementsBean;
 import com.squareup.picasso.Picasso;
 

@@ -2,6 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SignOutInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignOutPresenter;
@@ -40,7 +41,11 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
 
     @Override
     public void onSuccess(signoutResponse response) {
-
+        if (response.errno==0){
+            XmlDB.getInstance(mContext).saveKey("sid","");
+            XmlDB.getInstance(mContext).saveKey("uid","");
+            signOutView.onSuccess();
+        }
     }
 
     @Override

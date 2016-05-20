@@ -7,12 +7,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.dmd.zsb.api.ApiConstants;
-
 import com.dmd.tutor.ninelayout.NineGridAdapter;
-import com.dmd.zsb.entity.SubjectEntity;
+import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 

@@ -2,14 +2,12 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SignUpInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignUpPresenter;
 import com.dmd.zsb.mvp.view.SignUpView;
 import com.dmd.zsb.protocol.request.signupRequest;
 import com.dmd.zsb.protocol.response.signupResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

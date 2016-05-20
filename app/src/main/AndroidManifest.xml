@@ -15,12 +15,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <meta-data
-            android:name="AA_DB_NAME"
-            android:value="Application.db"/>
-        <meta-data
-            android:name="AA_DB_VERSION"
-            android:value="1"/>
+        <meta-data android:name="DATABASE" android:value="sugar.db" />
+        <meta-data android:name="VERSION" android:value="1" />
+        <meta-data android:name="QUERY_LOG" android:value="true" />
+        <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.dmd.zsb.protocol.table" />
 
         <!-- 引导页 -->
         <activity android:name=".activity.LeadActivity"

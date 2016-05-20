@@ -1,9 +1,9 @@
 package com.dmd.zsb.parent.activity.base;
 
 
+import com.dmd.tutor.base.BaseLazyFragment;
 import com.dmd.zsb.TutorApplication;
 import com.dmd.zsb.mvp.view.BaseView;
-import com.dmd.tutor.base.BaseLazyFragment;
 
 /**
  *

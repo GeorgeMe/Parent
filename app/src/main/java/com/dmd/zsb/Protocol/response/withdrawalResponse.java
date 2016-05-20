@@ -1,27 +1,19 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.dmd.zsb.protocol.table.TransactionsBean;
-import com.dmd.zsb.protocol.table.WithDrawalBean;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "withdrawalResponse")
-public class withdrawalResponse extends Model implements Serializable {
-    @Column(name = "errno")
+public class withdrawalResponse extends SugarRecord implements Serializable {
+
     public int errno;
-    @Column(name = "msg")
     public String msg;
 
 

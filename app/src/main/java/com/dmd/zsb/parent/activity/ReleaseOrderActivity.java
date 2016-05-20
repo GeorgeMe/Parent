@@ -8,11 +8,9 @@ import android.os.Bundle;
 import android.text.Selection;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,20 +19,12 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.dmd.dialog.AlertDialogWrapper;
-import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.timepicker.ScreenInfo;
 import com.dmd.tutor.timepicker.WheelMain;
-import com.dmd.tutor.utils.TLog;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.db.ZSBDataBase;
-import com.dmd.zsb.db.dao.GradeDao;
-import com.dmd.zsb.db.dao.SubjectDao;
-import com.dmd.zsb.entity.GradeEntity;
-import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.mvp.presenter.impl.ReleaseOrderPresenterImpl;
 import com.dmd.zsb.mvp.view.ReleaseOrderView;
 import com.dmd.zsb.parent.R;
@@ -42,8 +32,9 @@ import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.parent.adapter.SeekGradeAdapter;
 import com.dmd.zsb.parent.adapter.SeekSubjectAdapter;
 import com.dmd.zsb.protocol.response.releaseorderResponse;
+import com.dmd.zsb.protocol.table.GradesBean;
+import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.dmd.zsb.widgets.ToastView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,10 +43,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderView {
@@ -116,7 +105,6 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
         Date date = new Date();
         publishOrderTime.setText(mFormat.format(date));
         publishOrderLocation.setText(XmlDB.getInstance(mContext).getKeyString("addr", ""));
-        //publishOrderText.setVisibility(View.GONE);
         //设置光标靠右
         CharSequence charSequencePirce = publishOrderPrice.getText();
         if (charSequencePirce instanceof Spannable) {
@@ -128,10 +116,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
             Spannable spanText = (Spannable) charSequenceLocation;
             Selection.setSelection(spanText, charSequenceLocation.length());
         }
-        //publishOrderText.clearFocus();
-        Log.e(TAG_LOG,publishOrderSubject.requestFocus()+"  publishOrderSubject");
-        Log.e(TAG_LOG,publishOrderText.requestFocus()+"  publishOrderText");
-        //closeKeyBoard();
+
     }
 
     @Override
@@ -171,18 +156,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                 finish();
                 break;
             case R.id.publish_order_subject:
-                new MaterialDialog.Builder(this)
-                        .title("年级")
-                        .items(R.array.socialNetworks)
-                        .itemsCallback(new MaterialDialog.ListCallback() {
-                            @Override
-                            public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                                showToast(which + ": " + text);
-                            }
-                        })
-                        .show();
-
-               // appointmentSubject();
+               appointmentSubject();
                 break;
             case R.id.publish_order_time:
                 appointmentTime();
@@ -263,7 +237,6 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
 
     // 关闭键盘
     public void closeKeyBoard() {
-        //publishOrderPrice.clearFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(publishOrderPrice.getWindowToken(), 0);
     }
@@ -316,7 +289,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
         if (seek_list_view_grade.getVisibility() == View.INVISIBLE) {
             seek_list_view_grade.setVisibility(View.VISIBLE);
         }
-        seekGradeAdapter = new SeekGradeAdapter(getGrades(), mContext);
+        seekGradeAdapter = new SeekGradeAdapter(GradesBean.listAll(GradesBean.class), mContext);
         seek_list_view_grade.setAdapter(seekGradeAdapter);
         seek_list_view_grade.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -330,8 +303,8 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                         seek_list_view_subject.setVisibility(View.VISIBLE);
                     }
 
-                    if (!getSubjects(getGrades().get(position).getGrade_id()).isEmpty()) {
-                        seekSubjectAdapter = new SeekSubjectAdapter(getSubjects(getGrades().get(position).getGrade_id()), mContext);
+                    if (!SubjectsBean.find(SubjectsBean.class,"GRADEID=?", GradesBean.listAll(GradesBean.class).get(position).grade_id).isEmpty()) {
+                        seekSubjectAdapter = new SeekSubjectAdapter(SubjectsBean.find(SubjectsBean.class,"GRADEID=?",GradesBean.listAll(GradesBean.class).get(position).grade_id), mContext);
                         seek_list_view_subject.setAdapter(seekSubjectAdapter);
                         seekSubjectAdapter.notifyDataSetChanged();
                         seek_list_view_subject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -339,8 +312,8 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 //请求数据
-                                publishOrderSubject.setText(((SubjectEntity) parent.getAdapter().getItem(position)).getSub_name());
-                                subid=((SubjectEntity) parent.getAdapter().getItem(position)).getSub_id();
+                                publishOrderSubject.setText(((SubjectsBean) parent.getAdapter().getItem(position)).sub_name);
+                                subid=((SubjectsBean) parent.getAdapter().getItem(position)).sub_id;
                                 popupWindow.dismiss();
                             }
                         });
@@ -362,17 +335,6 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenHeight = dm.heightPixels / 10;
         screenWidth = dm.widthPixels;
-        TLog.v("屏幕宽高", "宽度" + screenWidth + "高度" + screenHeight);
-    }
-
-    private List<GradeEntity> getGrades() {
-        GradeDao gradeDao = new GradeDao(ZSBDataBase.getInstance(mContext));
-        return gradeDao.getGrades();
-    }
-
-    private List<SubjectEntity> getSubjects(String grade_id) {
-        SubjectDao subjectDao = new SubjectDao(ZSBDataBase.getInstance(mContext));
-        return subjectDao.getGrades(grade_id);
     }
 
 }

@@ -6,10 +6,8 @@ import com.dmd.tutor.utils.OnUploadProcessListener;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SettingInteracterImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
-import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SettingPresenter;
 import com.dmd.zsb.mvp.view.SettingView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 

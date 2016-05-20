@@ -1,10 +1,5 @@
 package com.dmd.zsb.openim;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.content.Intent;
 import android.widget.Toast;
 
@@ -17,6 +12,11 @@ import com.alibaba.mobileim.contact.IYWContactService;
 import com.alibaba.mobileim.contact.IYWCrossContactProfileCallback;
 import com.alibaba.mobileim.lib.model.contact.Contact;
 import com.dmd.zsb.TutorApplication;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 用户自定义昵称和头像

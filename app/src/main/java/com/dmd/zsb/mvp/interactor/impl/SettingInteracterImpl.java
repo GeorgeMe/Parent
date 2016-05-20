@@ -1,30 +1,16 @@
 package com.dmd.zsb.mvp.interactor.impl;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.FormFile;
-import com.android.volley.NetworkError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.Response;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
-import com.android.volley.toolbox.PostUploadRequest;
 import com.dmd.tutor.utils.OnUploadProcessListener;
-import com.dmd.tutor.utils.TLog;
-import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
+import com.dmd.zsb.mvp.listeners.CommonListInteractor;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Administrator on 2016/3/25.

@@ -18,7 +18,6 @@ import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.utils.CashierInputFilter;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RechargeActivity extends BaseActivity {

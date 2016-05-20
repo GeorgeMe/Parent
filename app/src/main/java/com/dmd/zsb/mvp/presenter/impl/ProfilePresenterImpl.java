@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.presenter.ProfilePresenter;
 import com.dmd.zsb.mvp.view.ProfileView;
 import com.dmd.zsb.protocol.request.profileRequest;
 import com.dmd.zsb.protocol.response.profileResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

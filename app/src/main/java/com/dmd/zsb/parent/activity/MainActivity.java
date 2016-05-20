@@ -1,20 +1,17 @@
 package com.dmd.zsb.parent.activity;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentTabHost;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
 import com.alibaba.mobileim.YWIMKit;
 import com.alibaba.mobileim.channel.util.YWLog;
 import com.alibaba.mobileim.contact.IYWContact;
@@ -34,24 +31,19 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.mvp.presenter.impl.SplashPresenterImpl;
-import com.dmd.zsb.openim.CustomConversationHelper;
-import com.dmd.zsb.openim.LoginHelper;
-import com.dmd.zsb.openim.Notification;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.mvp.presenter.impl.MainViewImpl;
 import com.dmd.zsb.mvp.view.MainView;
+import com.dmd.zsb.openim.LoginHelper;
+import com.dmd.zsb.openim.Notification;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.parent.fragment.HomeFragment;
 import com.dmd.zsb.parent.fragment.MessageFragment;
 import com.dmd.zsb.parent.fragment.MineFragment;
 import com.dmd.zsb.parent.fragment.SeekFragment;
-import com.dmd.zsb.protocol.table.GradesBean;
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,20 +8,11 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-@Table(name = "signinResponse")
-public class signinResponse extends Model implements Serializable
+public class signinResponse extends SugarRecord implements Serializable
 {
-
-     @Column(name = "sid")
      public String   sid;
-
-     @Column(name = "uid")
      public String   uid;
-
-     @Column(name = "errno")
      public int errno;
-
-     @Column(name = "msg")
      public String msg;
 
      public signinResponse() {

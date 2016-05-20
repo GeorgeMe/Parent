@@ -1,10 +1,6 @@
 package com.dmd.zsb.protocol.request;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-import com.dmd.zsb.protocol.table.LOCATION;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,35 +8,16 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-@Table(name = "signinRequest")
-public class signinRequest extends Model implements Serializable
+public class signinRequest extends SugarRecord implements Serializable
 {
-
-     @Column(name = "appkey")
      public String   appkey;
-
-     @Column(name = "client_type")
      public String   client_type;
-
-     @Column(name = "mobile")
      public String   mobile;
-
-     @Column(name = "role")
      public String   role;
-
-     @Column(name = "lat")
      public double   lat;
-
-     @Column(name = "lon")
      public double   lon;
-
-     @Column(name = "location")
      public String location;
-
-     @Column(name = "version")
      public String version;
-
-     @Column(name = "password")
      public String   password;
 
      public signinRequest() {

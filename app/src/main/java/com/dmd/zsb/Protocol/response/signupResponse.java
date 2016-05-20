@@ -1,10 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.UsersBean;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,21 +12,12 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "signupResponse")
-public class signupResponse extends Model implements Serializable {
-    @Column(name = "sid")
+public class signupResponse extends SugarRecord implements Serializable {
+
     public String   sid;
-
-    @Column(name = "uid")
     public String   uid;
-
-    @Column(name = "succeed")
     public int succeed;
-
-    @Column(name = "msg")
     public String msg;
-
-    @Column(name = "user")
     public UsersBean user;
 
     public signupResponse() {

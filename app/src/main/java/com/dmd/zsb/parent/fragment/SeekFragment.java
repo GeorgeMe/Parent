@@ -24,24 +24,20 @@ import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.TLog;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.db.ZSBDataBase;
-import com.dmd.zsb.db.dao.GradeDao;
-import com.dmd.zsb.db.dao.SubjectDao;
-import com.dmd.zsb.entity.GradeEntity;
-import com.dmd.zsb.entity.SubjectEntity;
-import com.dmd.zsb.entity.UserEntity;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.presenter.impl.SeekPresenterIml;
 import com.dmd.zsb.mvp.view.SeekView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.UserDetailActivity;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
 import com.dmd.zsb.parent.adapter.SeekGradeAdapter;
 import com.dmd.zsb.parent.adapter.SeekSortAdapter;
 import com.dmd.zsb.parent.adapter.SeekSubjectAdapter;
 import com.dmd.zsb.protocol.response.seekResponse;
+import com.dmd.zsb.protocol.table.GradesBean;
+import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.dmd.zsb.protocol.table.UsersBean;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
@@ -50,8 +46,6 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -78,6 +72,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     private ListViewDataAdapter<UsersBean> mListViewAdapter;
     private SeekPresenter mSeekPresenter = null;
     private int page = 1;
+    private String subid="";
     private SeekGradeAdapter seekGradeAdapter;
     private SeekSubjectAdapter seekSubjectAdapter;
     private SeekSortAdapter seekSortAdapter;
@@ -125,7 +120,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                         JSONObject jsonObject=new JSONObject();
                         try {
                             jsonObject.put("page", page);
-                            jsonObject.put("subid", "");//科目id
+                            jsonObject.put("subid", subid);//科目id
                         }catch (JSONException j){
 
                         }
@@ -141,7 +136,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("page", page);
-                        jsonObject.put("subid", "");//科目id
+                        jsonObject.put("subid", subid);//科目id
                     }catch (JSONException j){
 
                     }
@@ -253,8 +248,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
             if (seekGroupMenuFollow.isChecked()){
                 JSONObject jsonObject=new JSONObject();
                 try {
-                    jsonObject.put("page", page);
-                    jsonObject.put("subid", "");//科目id
+                    jsonObject.put("page", 1);
+                    jsonObject.put("subid", subid);//科目id
                 }catch (JSONException j){
 
                 }
@@ -275,7 +270,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         JSONObject jsonObject=new JSONObject();
         try {
             jsonObject.put("page", page);
-            jsonObject.put("subid", "");//科目id
+            jsonObject.put("subid", subid);//科目id
         }catch (JSONException j){
 
         }
@@ -287,8 +282,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     public void onRefresh() {
         JSONObject jsonObject=new JSONObject();
         try {
-            jsonObject.put("page", page);
-            jsonObject.put("subid", "");//科目id
+            jsonObject.put("page", 1);
+            jsonObject.put("subid", subid);//科目id
         }catch (JSONException j){
 
         }
@@ -359,8 +354,10 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 //排序
                 JSONObject jsonObject=new JSONObject();
                 try {
-                    jsonObject.put("page", 0);
-                    jsonObject.put("subid", parent.getAdapter().getItem(position).toString());//科目id
+                    subid=parent.getAdapter().getItem(position).toString();
+                    jsonObject.put("page", 1);
+                    jsonObject.put("subid", subid);//科目id
+
                 }catch (JSONException j){
 
                 }
@@ -389,7 +386,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         if (seek_list_view_grade.getVisibility() == View.INVISIBLE) {
             seek_list_view_grade.setVisibility(View.VISIBLE);
         }
-        seekGradeAdapter = new SeekGradeAdapter(getGrades(), mContext);
+        seekGradeAdapter = new SeekGradeAdapter(GradesBean.listAll(GradesBean.class), mContext);
         seek_list_view_grade.setAdapter(seekGradeAdapter);
         seek_list_view_grade.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -403,8 +400,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                         seek_list_view_subject.setVisibility(View.VISIBLE);
                     }
 
-                    if (!getSubjects(getGrades().get(position).getGrade_id()).isEmpty()) {
-                        seekSubjectAdapter = new SeekSubjectAdapter(getSubjects(getGrades().get(position).getGrade_id()), mContext);
+                    if (!SubjectsBean.find(SubjectsBean.class,"GRADEID=?",GradesBean.listAll(GradesBean.class).get(position).grade_id).isEmpty()) {
+                        seekSubjectAdapter = new SeekSubjectAdapter(SubjectsBean.find(SubjectsBean.class,"GRADEID=?",GradesBean.listAll(GradesBean.class).get(position).grade_id), mContext);
                         seek_list_view_subject.setAdapter(seekSubjectAdapter);
                         seekSubjectAdapter.notifyDataSetChanged();
                         seek_list_view_subject.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -414,8 +411,9 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                                 //请求数据
                                 JSONObject jsonObject=new JSONObject();
                                 try {
-                                    jsonObject.put("page", 0);
-                                    jsonObject.put("subid", ((SubjectEntity) parent.getAdapter().getItem(position)).getSub_id());//科目id
+                                    subid=((SubjectsBean) parent.getAdapter().getItem(position)).sub_id;
+                                    jsonObject.put("page", 1);
+                                    jsonObject.put("subid", subid);//科目id
                                 }catch (JSONException j){
 
                                 }
@@ -445,15 +443,6 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         TLog.v("屏幕宽高", "宽度" + screenWidth + "高度" + screenHeight);
     }
 
-    private List<GradeEntity> getGrades() {
-        GradeDao gradeDao = new GradeDao(ZSBDataBase.getInstance(mContext));
-        return gradeDao.getGrades();
-    }
-
-    private List<SubjectEntity> getSubjects(String grade_id) {
-        SubjectDao subjectDao = new SubjectDao(ZSBDataBase.getInstance(mContext));
-        return subjectDao.getGrades(grade_id);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

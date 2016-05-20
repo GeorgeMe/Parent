@@ -3,14 +3,12 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.response.EvaluationResponse;
 import com.dmd.zsb.mvp.interactor.impl.EvaluationInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.EvaluationPresenter;
 import com.dmd.zsb.mvp.view.EvaluationView;
 import com.dmd.zsb.protocol.request.evaluationRequest;
 import com.dmd.zsb.protocol.response.evaluationResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

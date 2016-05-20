@@ -1,10 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.EvaluationsBean;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,17 +13,11 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "evaluationResponse")
-public class evaluationResponse extends Model implements Serializable {
+public class evaluationResponse extends SugarRecord implements Serializable {
 
-    @Column(name = "errno")
     public int errno;
-    @Column(name = "msg")
     public String msg;
-    @Column(name = "total_count")
     public int total_count;
-
-    @Column(name = "evaluations")
     public List<EvaluationsBean> evaluations;
 
     public evaluationResponse() {

@@ -3,15 +3,12 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.response.VouchersResponse;
 import com.dmd.zsb.mvp.interactor.impl.VouchersInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
-import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.VouchersPresenter;
 import com.dmd.zsb.mvp.view.VouchersView;
 import com.dmd.zsb.protocol.request.vouchersRequest;
 import com.dmd.zsb.protocol.response.vouchersResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

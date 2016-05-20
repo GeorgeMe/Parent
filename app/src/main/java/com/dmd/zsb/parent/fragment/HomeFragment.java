@@ -3,14 +3,12 @@ package com.dmd.zsb.parent.fragment;
 
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.activeandroid.query.Select;
 import com.dmd.tutor.adapter.ListViewDataAdapter;
 import com.dmd.tutor.adapter.ViewHolderBase;
 import com.dmd.tutor.adapter.ViewHolderCreator;
@@ -19,22 +17,19 @@ import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.ninelayout.NineGridlayout;
 import com.dmd.tutor.rollviewpager.RollPagerView;
-import com.dmd.tutor.utils.BusHelper;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.UserEntity;
 import com.dmd.zsb.mvp.presenter.impl.HomePresenterImpl;
 import com.dmd.zsb.mvp.view.HomeView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.ReleaseOrderActivity;
 import com.dmd.zsb.parent.activity.UserDetailActivity;
 import com.dmd.zsb.parent.activity.base.BaseFragment;
 import com.dmd.zsb.parent.adapter.HomeCarouselAdapter;
 import com.dmd.zsb.parent.adapter.HomeCoursesAdapter;
 import com.dmd.zsb.protocol.response.homeResponse;
-import com.dmd.zsb.protocol.table.GradesBean;
 import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.dmd.zsb.protocol.table.UsersBean;
 import com.dmd.zsb.utils.UriHelper;
@@ -329,16 +324,10 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
             }
         }
     }
-    //==============================NineGridlayout.OnItemClickListerner=============================================
-    public static List<GradesBean> getAll() {
-        return new Select()
-                .from(GradesBean.class)
-                .orderBy("grade_id ASC")
-                .execute();
-    }
+
     @Override
     public void onItemClick(View view, int position) {
-        Log.e(TAG_LOG,"   "+getAll().size()+"   Grades");
+
         SubjectsBean entity= subjectList.get(position);
         showToast(entity.sub_name);
         //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));

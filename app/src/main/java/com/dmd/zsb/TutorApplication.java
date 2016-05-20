@@ -1,8 +1,6 @@
 package com.dmd.zsb;
 
-import com.activeandroid.app.Application;
 import android.content.Context;
-import android.os.Environment;
 import android.telephony.TelephonyManager;
 
 import com.alibaba.mobileim.aop.AdviceBinder;
@@ -11,18 +9,18 @@ import com.alibaba.wxlib.util.SysUtil;
 import com.dmd.tutor.base.BaseAppManager;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.utils.TLog;
+import com.dmd.zsb.db.SugarUtil;
 import com.dmd.zsb.openim.ChattingUICustom;
 import com.dmd.zsb.openim.ConversationListUICustom;
 import com.dmd.zsb.utils.VolleyHelper;
+import com.orm.SugarApp;
 import com.umeng.openim.OpenIMAgent;
 
-import java.io.File;
 import java.util.UUID;
-
 /**
  * Created by George on 2015/12/6.
  */
-public class TutorApplication extends Application {
+public class TutorApplication extends SugarApp {
     public static TutorApplication mInstance = null;
     private static Context sContext;
     public static Context getContext(){
@@ -37,10 +35,8 @@ public class TutorApplication extends Application {
         super.onCreate();
         mInstance = this;
         sContext=getApplicationContext();
-        //项目log文件夹
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/000/";
-        File storePath = new File(path);
-        storePath.mkdirs();
+        SugarUtil.getInstance().initDB(sContext);
+
         //定位信息
         LocationManager locationManager = new LocationManager(this);
         locationManager.refreshLocation();
@@ -62,11 +58,17 @@ public class TutorApplication extends Application {
         im.init();
 
     }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
+
     private boolean mustRunFirstInsideApplicationOnCreate() {
         //必须的初始化
         SysUtil.setApplication(this);
 
-        return SysUtil.isTCMSServiceProcess(mInstance.getApplicationContext());
+        return SysUtil.isTCMSServiceProcess(sContext);
     }
     @Override
     public void onLowMemory() {

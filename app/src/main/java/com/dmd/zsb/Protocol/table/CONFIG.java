@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,39 +8,35 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 
-@Table(name = "CONFIG")
-public class CONFIG  extends Model implements Serializable
-{
 
-     @Column(name = "push")
-     public int push;
+public class CONFIG extends SugarRecord implements Serializable {
 
-     public CONFIG() {
-          super();
-     }
+    public int push;
 
-     public CONFIG(int push) {
-          super();
-          this.push = push;
-     }
+    public CONFIG() {
+        super();
+    }
 
-     public void  fromJson(JSONObject jsonObject)  throws JSONException
-     {
-          if(null == jsonObject){
-            return ;
-           }
-          JSONArray subItemArray;
+    public CONFIG(int push) {
+        super();
+        this.push = push;
+    }
 
-          this.push = jsonObject.optInt("push");
-          return ;
-     }
+    public void fromJson(JSONObject jsonObject) throws JSONException {
+        if (null == jsonObject) {
+            return;
+        }
+        JSONArray subItemArray;
 
-     public JSONObject  toJson() throws JSONException 
-     {
-          JSONObject localItemObject = new JSONObject();
-          JSONArray itemJSONArray = new JSONArray();
-          localItemObject.put("push", push);
-          return localItemObject;
-     }
+        this.push = jsonObject.optInt("push");
+        return;
+    }
+
+    public JSONObject toJson() throws JSONException {
+        JSONObject localItemObject = new JSONObject();
+        JSONArray itemJSONArray = new JSONArray();
+        localItemObject.put("push", push);
+        return localItemObject;
+    }
 
 }

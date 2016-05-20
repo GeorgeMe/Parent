@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,12 +11,9 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/9.
  */
-@Table(name = "GradesBean")
-public class GradesBean extends Model implements Serializable {
+public class GradesBean extends SugarRecord implements Serializable {
 
-    @Column(name = "grade_id")
     public String grade_id;
-    @Column(name = "grade_name")
     public String grade_name;
 
     public GradesBean() {

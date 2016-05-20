@@ -1,8 +1,6 @@
 package com.dmd.zsb.mvp.view;
 
 
-import com.dmd.zsb.entity.UserEntity;
-import com.dmd.zsb.entity.response.SeekResponse;
 import com.dmd.zsb.protocol.response.seekResponse;
 import com.dmd.zsb.protocol.table.UsersBean;
 

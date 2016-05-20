@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.interactor.impl.UserDetailInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.UserDetailPresenter;
 import com.dmd.zsb.mvp.view.UserDetailView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

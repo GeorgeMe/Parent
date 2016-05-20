@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,27 +11,14 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "walletResponse")
-public class walletResponse extends Model implements Serializable {
+public class walletResponse extends SugarRecord implements Serializable {
 
-    @Column(name = "errno")
     public int errno;
-    @Column(name = "msg")
     public String msg;
-
-    @Column(name = "balance")
     public String   balance;
-
-    @Column(name = "total_hours")
     public String total_hours;
-
-    @Column(name = "buyer_id")
     public String   buyer_id;
-
-    @Column(name = "total_amount")
     public String   total_amount;
-
-    @Column(name = "bank_card")
     public String   bank_card;
 
     public walletResponse() {

@@ -1,10 +1,7 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.UsersBean;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,15 +13,11 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "seekResponse")
-public class seekResponse extends Model implements Serializable {
-    @Column(name = "errno")
+public class seekResponse extends SugarRecord implements Serializable {
+
     public int errno;
-    @Column(name = "msg")
     public String msg;
-    @Column(name = "total_count")
     public int total_count;
-    @Column(name = "users")
     public List<UsersBean> users;
 
     public seekResponse() {

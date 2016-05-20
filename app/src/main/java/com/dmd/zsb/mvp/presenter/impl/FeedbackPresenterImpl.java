@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.presenter.FeedbackPresenter;
 import com.dmd.zsb.mvp.view.FeedbackView;
 import com.dmd.zsb.protocol.request.feedbackRequest;
 import com.dmd.zsb.protocol.response.feedbackResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

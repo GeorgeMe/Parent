@@ -1,28 +1,18 @@
 
 package com.dmd.zsb.protocol.table;
 
+import com.orm.SugarRecord;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
-
 import java.io.Serializable;
 
-@Table(name = "LOCATION")
-public class LOCATION  extends Model implements Serializable
+public class LOCATION  extends SugarRecord implements Serializable
 {
-
-     @Column(name = "lon")
      public double   lon;
-
-     @Column(name = "name")
      public String   name;
-
-     @Column(name = "lat")
      public double   lat;
 
      public LOCATION() {

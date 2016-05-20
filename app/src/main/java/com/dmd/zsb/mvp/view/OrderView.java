@@ -1,7 +1,6 @@
 package com.dmd.zsb.mvp.view;
 
 import com.dmd.zsb.entity.OrderEntity;
-import com.dmd.zsb.entity.response.OrderResponse;
 import com.dmd.zsb.protocol.response.orderResponse;
 
 /**

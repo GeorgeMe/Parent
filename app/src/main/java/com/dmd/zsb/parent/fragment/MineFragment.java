@@ -9,10 +9,10 @@ import android.widget.TextView;
 import com.dmd.tutor.base.BaseWebActivity;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.mvp.presenter.impl.MinePresenterImpl;
 import com.dmd.zsb.mvp.view.MineView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.DemandActivity;
 import com.dmd.zsb.parent.activity.EvaluationActivity;
 import com.dmd.zsb.parent.activity.OrderActivity;
@@ -162,23 +162,40 @@ public class MineFragment extends BaseFragment implements MineView {
             case R.id.mine_sign_in:
                 readyGo(SignInActivity.class);
                 break;
-            case R.id.mine_modify_data:
-                readyGo(SettingActivity.class);
-                break;
             case R.id.mine_wallet:
-                readyGo(WalletActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(WalletActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.mine_order:
-                readyGo(OrderActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(OrderActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.mine_evaluation:
-                readyGo(EvaluationActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(EvaluationActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.mine_demand:
-                readyGo(DemandActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(DemandActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.mine_vouchers:
-                readyGo(VouchersActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(VouchersActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.mine_about_us:
                 Bundle bundle=new Bundle();

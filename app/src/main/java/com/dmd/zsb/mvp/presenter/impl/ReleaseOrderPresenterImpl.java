@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.presenter.ReleaseOrderPresenter;
 import com.dmd.zsb.mvp.view.ReleaseOrderView;
 import com.dmd.zsb.protocol.request.releaseorderRequest;
 import com.dmd.zsb.protocol.response.releaseorderResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

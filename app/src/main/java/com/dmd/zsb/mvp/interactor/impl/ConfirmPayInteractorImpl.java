@@ -11,7 +11,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
-import com.dmd.zsb.protocol.response.changepasswordResponse;
 import com.dmd.zsb.protocol.response.confirmpayResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;

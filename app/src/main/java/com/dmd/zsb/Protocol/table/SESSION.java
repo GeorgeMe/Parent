@@ -1,24 +1,14 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import java.io.Serializable;
 
-@Table(name = "SESSION")
-public class SESSION  extends Model implements Serializable
+public class SESSION  extends SugarRecord implements Serializable
 {
-    @Column(name = "appkey")
     public String   appkey;
-
-    @Column(name = "version")
     public String version;
-
-     @Column(name = "uid")
      public int uid ;
-
-     @Column(name = "sid")
      public String sid;
 
     public SESSION() {

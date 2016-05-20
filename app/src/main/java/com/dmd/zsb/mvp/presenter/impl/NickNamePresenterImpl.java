@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.presenter.NickNamePresenter;
 import com.dmd.zsb.mvp.view.NickNameView;
 import com.dmd.zsb.protocol.request.nicknameRequest;
 import com.dmd.zsb.protocol.response.nicknameResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

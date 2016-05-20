@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,26 +11,16 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/9.
  */
-@Table(name = "Evaluations")
-public class EvaluationsBean  extends Model implements Serializable {
+public class EvaluationsBean  extends SugarRecord implements Serializable {
 
-    @Column(name = "img_header")
     public String img_header;//头像
-    @Column(name = "name")
     public String name;//姓名
-    @Column(name = "type")
     public String type;//职业类型
-    @Column(name = "sex")
     public String sex;//性别
-    @Column(name = "appointed_time")
     public String appointed_time;//约定时间
-    @Column(name = "charging")
     public String charging;//计费
-    @Column(name = "curriculum")
     public String curriculum;//课程
-    @Column(name = "note")
     public String note;//评论内容
-    @Column(name = "comment_level")
     public String comment_level;//评论等级
 
     public EvaluationsBean() {

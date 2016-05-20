@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.presenter.WalletPresenter;
 import com.dmd.zsb.mvp.view.WalletView;
 import com.dmd.zsb.protocol.request.walletRequest;
 import com.dmd.zsb.protocol.response.walletResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

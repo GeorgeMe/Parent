@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.dmd.dialog.DialogAction;
 import com.dmd.dialog.GravityEnum;
 import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
@@ -25,14 +26,13 @@ import com.dmd.tutor.utils.OnUploadProcessListener;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.presenter.impl.ChangeAvatarPresenterImpl;
+import com.dmd.zsb.mvp.presenter.impl.SignOutPresenterImpl;
 import com.dmd.zsb.mvp.view.ChangeAvatarView;
+import com.dmd.zsb.mvp.view.SignOutView;
 import com.dmd.zsb.parent.R;
-import com.dmd.zsb.mvp.presenter.impl.SettingPresenterImpl;
-import com.dmd.zsb.mvp.view.SettingView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.utils.ImageUtil;
 import com.dmd.zsb.widgets.ToastView;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,7 +42,7 @@ import java.io.File;
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class SettingActivity extends BaseActivity implements ChangeAvatarView,OnUploadProcessListener{
+public class SettingActivity extends BaseActivity implements ChangeAvatarView,SignOutView,OnUploadProcessListener{
 
     private Dialog mDialog;
     private File mFileDir;
@@ -75,6 +75,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
 
 
     private ChangeAvatarPresenterImpl changeAvatarPresenter;
+    private SignOutPresenterImpl signOutPresenter;
     private MaterialDialog dialog;
 
     @Override
@@ -102,6 +103,11 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
         changeAvatarPresenter=new ChangeAvatarPresenterImpl(this,mContext,this);
         ///settingPresenter=new SettingPresenterImpl(SettingActivity.this,this,this);
         topBarTitle.setText(getResources().getText(R.string.setting_title));
+        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+            btnSignOut.setVisibility(View.VISIBLE);
+        }else {
+            btnSignOut.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -146,35 +152,82 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,On
                 finish();
                 break;
             case R.id.tv_setting_nickname:
-                readyGo(NickNameActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(NickNameActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.tv_setting_avatar:
-                showDialog();
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    showDialog();
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.tv_setting_signature:
-                readyGo(SignatureActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(SignatureActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.tv_setting_brief:
-                readyGo(BriefActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(BriefActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.tv_setting_change_password:
-                readyGo(ChangePasswordActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(ChangePasswordActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.tv_setting_feedback:
-                readyGo(FeedbackActivity.class);
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                    readyGo(FeedbackActivity.class);
+                }else {
+                    showToast("请先登录");
+                }
                 break;
             case R.id.btn_sign_out:
-/*                JSONObject jsonObject=new JSONObject();
-                try {
-                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    settingPresenter.onSignOut(1,jsonObject);
-                }catch (JSONException j){
-
-                }*/
-
+                    new MaterialDialog.Builder(mContext).title("提示").content("确认要退出登录？").negativeText("取消").positiveText("确认").onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            onSignOutView();
+                            dialog.dismiss();
+                        }
+                    }).show();
                 break;
         }
+    }
+    @Override
+    public void onSignOutView() {
+        signOutPresenter=new SignOutPresenterImpl(this,mContext);
+        JSONObject jsonObject=new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+            signOutPresenter.onSignOut(jsonObject);
+        }catch (JSONException j){
+
+        }
+
+    }
+
+    @Override
+    public void onSuccess() {
+        finish();
     }
 
     @Override

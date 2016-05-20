@@ -1,8 +1,5 @@
 package com.dmd.zsb.mvp.presenter;
 
-import com.dmd.zsb.entity.UserEntity;
-import com.google.gson.JsonObject;
-
 import org.json.JSONObject;
 
 /**

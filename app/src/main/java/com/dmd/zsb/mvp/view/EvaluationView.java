@@ -1,6 +1,5 @@
 package com.dmd.zsb.mvp.view;
 
-import com.dmd.zsb.entity.response.EvaluationResponse;
 import com.dmd.zsb.entity.EvaluationEntity;
 import com.dmd.zsb.protocol.response.evaluationResponse;
 

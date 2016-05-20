@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
-import com.dmd.zsb.protocol.response.releaseorderResponse;
+import com.dmd.zsb.protocol.response.initdataResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.reflect.TypeToken;
@@ -19,20 +19,21 @@ import com.google.gson.reflect.TypeToken;
 import org.json.JSONObject;
 
 /**
- * Created by Administrator on 2016/3/28.
+ * Created by Administrator on 2016/5/20.
  */
-public class ReleaseOrderInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<releaseorderResponse> loadedListener;
+public class MainViewInteractorImpl implements CommonSingleInteractor {
 
-    public ReleaseOrderInteractorImpl(BaseSingleLoadedListener<releaseorderResponse> loadedListener) {
+    private BaseSingleLoadedListener<initdataResponse> loadedListener;
+
+    public MainViewInteractorImpl(BaseSingleLoadedListener<initdataResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
 
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<releaseorderResponse> gsonRequest=new GsonRequest<releaseorderResponse>(UriHelper.getInstance().saveOrder(json),null,new TypeToken<releaseorderResponse>(){}.getType(), new Response.Listener<releaseorderResponse>(){
+        GsonRequest<initdataResponse> gsonRequest=new GsonRequest<initdataResponse>(UriHelper.getInstance().InitData(json),null,new TypeToken<initdataResponse>(){}.getType(), new Response.Listener<initdataResponse>(){
             @Override
-            public void onResponse(releaseorderResponse response) {
+            public void onResponse(initdataResponse response) {
                 loadedListener.onSuccess(response);
             }
         },new Response.ErrorListener(){
@@ -56,7 +57,7 @@ public class ReleaseOrderInteractorImpl implements CommonSingleInteractor {
             }
         });
         gsonRequest.setShouldCache(true);
-        gsonRequest.setTag("saveOrder");
+        gsonRequest.setTag("InitData");
         VolleyHelper.getInstance().getRequestQueue().add(gsonRequest);
     }
 }

@@ -17,16 +17,15 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
+import com.dmd.zsb.mvp.presenter.impl.SignUpPresenterImpl;
+import com.dmd.zsb.mvp.view.SignUpView;
 import com.dmd.zsb.openim.LoginHelper;
 import com.dmd.zsb.openim.Notification;
 import com.dmd.zsb.openim.NotificationInitHelper;
 import com.dmd.zsb.openim.UserProfileHelper;
 import com.dmd.zsb.parent.R;
-import com.dmd.zsb.mvp.presenter.impl.SignUpPresenterImpl;
-import com.dmd.zsb.mvp.view.SignUpView;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.widgets.ToastView;
-import com.google.gson.JsonObject;
 import com.squareup.otto.Subscribe;
 
 import org.json.JSONException;

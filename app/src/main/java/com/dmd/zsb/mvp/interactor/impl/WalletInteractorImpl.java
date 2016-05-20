@@ -9,12 +9,11 @@ import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
-import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
 import com.dmd.zsb.protocol.response.walletResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;

@@ -1,36 +1,29 @@
 package com.dmd.zsb.protocol.request;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "bankcardRequest")
-public class initdataRequest extends Model{
+public class initdataRequest extends SugarRecord {
 
-    @Column(name = "appkey")
     public String   appkey;
-
-    @Column(name = "version")
     public String version;
+    public int  db_version;
 
     public initdataRequest() {
         super();
     }
 
-    public initdataRequest(String appkey, String version) {
+    public initdataRequest(int db_version,String appkey, String version) {
         super();
         this.appkey = appkey;
         this.version = version;
+        this.db_version = db_version;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -42,6 +35,7 @@ public class initdataRequest extends Model{
 
         this.appkey = jsonObject.optString("appkey");
         this.version = jsonObject.optString("version");
+        this.db_version = jsonObject.optInt("db_version");
 
         return ;
     }
@@ -51,6 +45,7 @@ public class initdataRequest extends Model{
 
         localItemObject.put("appkey", appkey);
         localItemObject.put("version", version);
+        localItemObject.put("db_version", db_version);
 
         return localItemObject;
     }

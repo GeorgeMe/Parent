@@ -2,10 +2,10 @@ package com.dmd.zsb.parent.activity.base;
 
 import android.support.v7.widget.Toolbar;
 
-import com.dmd.zsb.parent.R;
-import com.dmd.zsb.TutorApplication;
 import com.dmd.tutor.base.BaseAppCompatActivity;
+import com.dmd.zsb.TutorApplication;
 import com.dmd.zsb.mvp.view.BaseView;
+import com.dmd.zsb.parent.R;
 
 import butterknife.ButterKnife;
 

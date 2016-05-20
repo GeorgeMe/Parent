@@ -1,10 +1,7 @@
 package com.dmd.zsb.protocol.request;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.dmd.zsb.utils.UriHelper;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,27 +12,14 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "seekRequest")
-public class seekRequest extends Model implements Serializable {
-    @Column(name = "appkey")
+public class seekRequest extends SugarRecord implements Serializable {
+
     public String   appkey;
-
-    @Column(name = "version")
     public String version;
-
-    @Column(name = "sid")
     public String   sid;
-
-    @Column(name = "uid")
     public String   uid;
-
-    @Column(name = "page")
     public int  page;
-
-    @Column(name = "rows")
     public int  rows;
-
-    @Column(name = "subid")
     public String  subid;
 
     public seekRequest() {

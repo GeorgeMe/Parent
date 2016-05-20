@@ -1,9 +1,6 @@
 package com.dmd.zsb.protocol.table;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -14,16 +11,11 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/5.
  */
-@Table(name = "FORMFILE")
-public class FORMFILE  extends Model implements Serializable {
+public class FORMFILE  extends SugarRecord implements Serializable {
 
-    @Column(name = "fileName")
     public String fileName;
-    @Column(name = "filePath")
     public String filePath;
-    @Column(name = "parameterName")
     public String parameterName;
-    @Column(name = "contentType")
     public String contentType;
 
     public FORMFILE() {

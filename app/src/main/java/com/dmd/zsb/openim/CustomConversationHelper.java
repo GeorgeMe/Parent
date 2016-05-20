@@ -1,10 +1,10 @@
 package com.dmd.zsb.openim;
 
-import java.util.Date;
-
 import com.alibaba.mobileim.conversation.IYWConversationService;
 import com.alibaba.mobileim.conversation.YWConversation;
 import com.alibaba.mobileim.conversation.YWCustomConversationUpdateModel;
+
+import java.util.Date;
 
 /**
  * 会话列表增加一个自定义会话

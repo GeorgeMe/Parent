@@ -12,11 +12,10 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.mvp.presenter.impl.ChangePasswordPresenterImpl;
 import com.dmd.zsb.mvp.view.ChangePasswordView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

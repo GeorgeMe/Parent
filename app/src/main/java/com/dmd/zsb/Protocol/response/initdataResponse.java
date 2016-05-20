@@ -1,11 +1,8 @@
 package com.dmd.zsb.protocol.response;
 
-import com.activeandroid.DataBaseModel;
-import com.activeandroid.Model;
-import com.activeandroid.annotation.Column;
-import com.activeandroid.annotation.Table;
 import com.dmd.zsb.protocol.table.GradesBean;
 import com.dmd.zsb.protocol.table.SubjectsBean;
+import com.orm.SugarRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,26 +14,23 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/5/4.
  */
-@Table(name = "bankcardResponse")
-public class initdataResponse extends Model implements Serializable {
-    @Column(name = "errno")
+public class initdataResponse extends SugarRecord implements Serializable {
+
     public int errno;
-    @Column(name = "msg")
+    public int db_version;
     public String msg;
 
-    @Column(name = "grades")
     public List<GradesBean> grades;
-
-    @Column(name = "subjects")
     public List<SubjectsBean> subjects;
 
     public initdataResponse() {
         super();
     }
 
-    public initdataResponse(int errno, String msg, List<GradesBean> grades, List<SubjectsBean> subjects) {
+    public initdataResponse(int db_version,int errno, String msg, List<GradesBean> grades, List<SubjectsBean> subjects) {
         super();
         this.errno = errno;
+        this.db_version = db_version;
         this.msg = msg;
         this.grades = grades;
         this.subjects = subjects;
@@ -51,6 +45,7 @@ public class initdataResponse extends Model implements Serializable {
         JSONArray subItemArray2;
 
         this.errno = jsonObject.optInt("errno");
+        this.db_version = jsonObject.optInt("db_version");
         this.msg = jsonObject.optString("msg");
         subItemArray=jsonObject.optJSONArray("grades");
         subItemArray2=jsonObject.optJSONArray("subjects");
@@ -77,6 +72,7 @@ public class initdataResponse extends Model implements Serializable {
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
         JSONArray itemJSONArray2 = new JSONArray();
+        localItemObject.put("db_version", db_version);
         localItemObject.put("errno", errno);
         localItemObject.put("msg", msg);
 

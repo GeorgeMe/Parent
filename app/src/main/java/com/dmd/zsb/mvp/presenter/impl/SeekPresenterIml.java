@@ -3,18 +3,15 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.parent.R;
-import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.UserEntity;
-import com.dmd.zsb.entity.response.SeekResponse;
 import com.dmd.zsb.mvp.interactor.impl.SeekInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.view.SeekView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.protocol.request.seekRequest;
 import com.dmd.zsb.protocol.response.seekResponse;
-import com.google.gson.JsonObject;
+import com.dmd.zsb.utils.UriHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,9 +40,9 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
             request.version=Constants.ZSBVERSION;
             request.uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
             request.sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
-            request.page=1;
-            request.rows=1;
-            request.subid="";
+            request.page=jsonObject.optInt("page");
+            request.rows= UriHelper.PAGE_LIMIT;
+            request.subid=jsonObject.optString("subid");
             mCommonListInteractor.getCommonListData(event,request.toJson());
         }catch (JSONException j){
 

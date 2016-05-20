@@ -9,7 +9,6 @@ import com.dmd.zsb.mvp.view.ChangePasswordView;
 import com.dmd.zsb.protocol.request.changepasswordRequest;
 import com.dmd.zsb.protocol.response.changepasswordResponse;
 
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

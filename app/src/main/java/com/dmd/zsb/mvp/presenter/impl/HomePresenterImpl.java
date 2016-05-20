@@ -2,19 +2,14 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.parent.R;
-import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.UserEntity;
-import com.dmd.zsb.entity.response.HomeResponse;
 import com.dmd.zsb.mvp.interactor.impl.HomeInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.HomePresenter;
 import com.dmd.zsb.mvp.view.HomeView;
+import com.dmd.zsb.parent.R;
 import com.dmd.zsb.protocol.request.homeRequest;
 import com.dmd.zsb.protocol.response.homeResponse;
-import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;

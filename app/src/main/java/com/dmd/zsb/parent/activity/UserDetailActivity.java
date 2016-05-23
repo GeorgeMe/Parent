@@ -2,80 +2,80 @@ package com.dmd.zsb.parent.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.alibaba.mobileim.YWAPI;
 import com.alibaba.mobileim.YWIMKit;
+import com.dmd.tutor.adapter.ListViewDataAdapter;
+import com.dmd.tutor.adapter.ViewHolderBase;
+import com.dmd.tutor.adapter.ViewHolderCreator;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
+import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.entity.response.UserDetailResponse;
 import com.dmd.zsb.mvp.view.UserDetailView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
-import com.dmd.zsb.protocol.table.UsersBean;
-import com.dmd.zsb.widgets.ToastView;
-import com.squareup.otto.Subscribe;
+import com.dmd.zsb.protocol.response.userdetailsResponse;
+import com.dmd.zsb.protocol.table.MyComments;
+import com.dmd.zsb.protocol.table.MyServices;
+import com.dmd.zsb.utils.UriHelper;
+import com.dmd.zsb.widgets.LoadMoreListView;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UserDetailActivity extends BaseActivity implements UserDetailView, View.OnClickListener {
+public class UserDetailActivity extends BaseActivity implements UserDetailView, LoadMoreListView.OnLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
 
-    @Bind(R.id.user_img_header)
-    ImageView userImgHeader;
-    @Bind(R.id.user_name)
-    TextView userName;
-    @Bind(R.id.user_gender)
-    TextView userGender;
-    @Bind(R.id.user_praise)
-    TextView userPraise;
-    @Bind(R.id.user_audition)
-    TextView userAudition;
-    @Bind(R.id.user_appointment)
-    TextView userAppointment;
-    @Bind(R.id.user_follow)
-    ImageView userFollow;
-    @Bind(R.id.teacher_identity)
-    TextView teacherIdentity;
-    @Bind(R.id.teacher_price)
-    TextView teacherPrice;
-    @Bind(R.id.appointment_time)
-    TextView appointmentTime;
-    @Bind(R.id.good_subjects)
-    TextView goodSubjects;
-    @Bind(R.id.teaching_place)
-    TextView teachingPlace;
-    @Bind(R.id.teaching_methods)
-    TextView teachingMethods;
-    @Bind(R.id.self_evaluation)
-    TextView selfEvaluation;
-    @Bind(R.id.good_subjects2)
-    TextView goodSubjects2;
-    @Bind(R.id.professional_accreditation)
-    TextView professionalAccreditation;
-    @Bind(R.id.send_msg)
-    Button sendMsg;
-    @Bind(R.id.user_loading_view)
-    FrameLayout userLoadingView;
     @Bind(R.id.top_bar_back)
     TextView topBarBack;
     @Bind(R.id.top_bar_title)
     TextView topBarTitle;
 
-    private UsersBean data;
+    RoundedImageView userAvatar;
+    TextView tvName;
+    TextView tvSeniority;
+    TextView appointmentTime;
+    TextView goodSubjects;
+    TextView teachingPlace;
+    TextView teachingMethods;
+    @Bind(R.id.evaluation_list_swipe_layout)
+    XSwipeRefreshLayout evaluationListSwipeLayout;
+
+    private View mHeaderView;
 
 
+    @Bind(R.id.service_list_view)
+    LoadMoreListView serviceListView;
+    @Bind(R.id.evaluation_list_view)
+    LoadMoreListView evaluationListView;
+    @Bind(R.id.btn_follow)
+    Button btnFollow;
+    @Bind(R.id.btn_appointment)
+    Button btnAppointment;
+    @Bind(R.id.btn_call)
+    Button btnCall;
+    @Bind(R.id.btn_msg)
+    Button btnMsg;
+
+    private ListViewDataAdapter<MyServices> servicesListViewDataAdapter;
+    private ListViewDataAdapter<MyComments> commentsListViewDataAdapter;
+
+    private int page=1;
     @Override
     protected void getBundleExtras(Bundle extras) {
-        data = (UsersBean) extras.getSerializable("data");
+
     }
 
     @Override
@@ -83,7 +83,6 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
         return R.layout.activity_user_detail;
     }
 
-    @Subscribe
     @Override
     public void onEventComming(EventCenter eventCenter) {
 
@@ -91,30 +90,156 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
 
     @Override
     protected View getLoadingTargetView() {
-        return userLoadingView;
+        return evaluationListSwipeLayout;
     }
 
     @Override
     protected void initViewsAndEvents() {
-        topBarTitle.setText("用户详情");
-        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + data.avatar).into(userImgHeader);
-        userName.setText(data.mobile);
-        userGender.setText(data.gender);
-        userPraise.setText(data.total_hours + "0");
-        teacherIdentity.setText(data.user_id);
-        teacherPrice.setText(data.role);
-        appointmentTime.setText(data.subject_name);
-        goodSubjects.setText(data.comment_count + "0");
-        teachingPlace.setText(data.comment_goodrate + "0");
-        teachingMethods.setText(data.comment_count + "0");
-        selfEvaluation.setText("" + data.location);
-        goodSubjects2.setText(data.comment_count + "0");
-        professionalAccreditation.setText(data.curriculum_id);
+        topBarTitle.setText("教师详情");
+        mHeaderView = LayoutInflater.from(mContext).inflate(R.layout.user_detail_header, null);
 
-        userAudition.setOnClickListener(this);
-        userAppointment.setOnClickListener(this);
-        userFollow.setOnClickListener(this);
-        sendMsg.setOnClickListener(this);
+        userAvatar = ButterKnife.findById(mHeaderView, R.id.user_avatar);
+        tvName = ButterKnife.findById(mHeaderView, R.id.tv_name);
+        tvSeniority = ButterKnife.findById(mHeaderView, R.id.tv_seniority);
+        appointmentTime = ButterKnife.findById(mHeaderView, R.id.appointment_time);
+        goodSubjects = ButterKnife.findById(mHeaderView, R.id.good_subjects);
+        teachingPlace = ButterKnife.findById(mHeaderView, R.id.teaching_place);
+        teachingMethods = ButterKnife.findById(mHeaderView, R.id.teaching_methods);
+
+
+        servicesListViewDataAdapter = new ListViewDataAdapter<>(new ViewHolderCreator<MyServices>() {
+            @Override
+            public ViewHolderBase<MyServices> createViewHolder(int position) {
+                return new ViewHolderBase<MyServices>() {
+                    ImageView icon;
+                    TextView name, price;
+
+                    @Override
+                    public View createView(LayoutInflater layoutInflater) {
+                        View view = layoutInflater.inflate(R.layout.teacher_sevice_list_item, null);
+                        icon = ButterKnife.findById(view, R.id.icon);
+                        name = ButterKnife.findById(view, R.id.name);
+                        price = ButterKnife.findById(view, R.id.price);
+                        return view;
+                    }
+
+                    @Override
+                    public void showData(int position, MyServices itemData) {
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.service_img).into(icon);
+                        name.setText(itemData.service_name);
+                        price.setText(itemData.service_price);
+                    }
+                };
+            }
+        });
+
+        commentsListViewDataAdapter = new ListViewDataAdapter<>(new ViewHolderCreator<MyComments>() {
+            @Override
+            public ViewHolderBase<MyComments> createViewHolder(int position) {
+                return new ViewHolderBase<MyComments>() {
+                    ImageView user_avatar;
+                    RatingBar ratingBar;
+                    TextView nickname, createtime, comment_content;
+
+                    @Override
+                    public View createView(LayoutInflater layoutInflater) {
+                        View view = layoutInflater.inflate(R.layout.review_cell, null);
+                        user_avatar = ButterKnife.findById(view, R.id.user_avatar);
+                        nickname = ButterKnife.findById(view, R.id.tv_nickname);
+                        ratingBar = ButterKnife.findById(view, R.id.ratingBar);
+                        createtime = ButterKnife.findById(view, R.id.tv_createtime);
+                        comment_content = ButterKnife.findById(view, R.id.tv_comment_content);
+                        return view;
+                    }
+
+                    @Override
+                    public void showData(int position, MyComments itemData) {
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.user_avatar).into(user_avatar);
+                        nickname.setText(itemData.user_nickname);
+                        createtime.setText(itemData.createtime);
+                        comment_content.setText(itemData.comment_content);
+                        ratingBar.setRating(Float.parseFloat(itemData.rank));
+                    }
+                };
+            }
+        });
+
+        serviceListView.setAdapter(servicesListViewDataAdapter);
+        if (evaluationListView.getHeaderViewsCount()==0)
+            evaluationListView.addHeaderView(mHeaderView);
+        evaluationListView.setAdapter(commentsListViewDataAdapter);
+        evaluationListView.setOnLoadMoreListener(this);
+        evaluationListSwipeLayout.setColorSchemeColors(
+                getResources().getColor(R.color.gplus_color_1),
+                getResources().getColor(R.color.gplus_color_2),
+                getResources().getColor(R.color.gplus_color_3),
+                getResources().getColor(R.color.gplus_color_4));
+        evaluationListSwipeLayout.setOnRefreshListener(this);
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
+
+    @Override
+    public void onRefresh() {
+
+    }
+
+    @Override
+    public void refreshListData(userdetailsResponse response) {
+        if (evaluationListSwipeLayout!=null){
+            evaluationListSwipeLayout.setRefreshing(false);
+        }
+        if (response!=null){
+            if (response.comments.size()>0){
+                if (commentsListViewDataAdapter!=null){
+                    commentsListViewDataAdapter.getDataList().clear();
+                    commentsListViewDataAdapter.getDataList().addAll(response.comments);
+                    commentsListViewDataAdapter.notifyDataSetChanged();
+                }
+            }
+            if (response.services.size()>0){
+                if (servicesListViewDataAdapter!=null){
+                    servicesListViewDataAdapter.getDataList().clear();
+                    servicesListViewDataAdapter.getDataList().addAll(response.services);
+                    servicesListViewDataAdapter.notifyDataSetChanged();
+                }
+            }
+
+            if (evaluationListView!=null){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page) {
+                    evaluationListView.setCanLoadMore(true);
+                }else {
+                    evaluationListView.setCanLoadMore(false);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    public void addMoreListData(userdetailsResponse response) {
+        if (evaluationListView!=null){
+            evaluationListView.onLoadMoreComplete();
+        }
+        if (response!=null) {
+            if (response.comments.size() > 0) {
+                if (commentsListViewDataAdapter != null) {
+                    commentsListViewDataAdapter.getDataList().clear();
+                    commentsListViewDataAdapter.getDataList().addAll(response.comments);
+                    commentsListViewDataAdapter.notifyDataSetChanged();
+                }
+            }
+            if (evaluationListView!=null){
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page) {
+                    evaluationListView.setCanLoadMore(true);
+                }else {
+                    evaluationListView.setCanLoadMore(false);
+                }
+            }
+        }
     }
 
     @Override
@@ -154,50 +279,49 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
 
     @Override
     public void userAppointment() {
-        if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)) {
-            Bundle bundle = new Bundle();
-            bundle.putString("default_receiver_id", data.mobile);
-            readyGo(ReleaseOrderActivity.class, bundle);
-        } else {
-            ToastView toast=new ToastView(mContext,"请登录后进行约课");
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
+
     }
 
     @Override
     public void userFollow() {
-        ToastView toast=new ToastView(mContext,"关注");
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+
     }
 
     @Override
     public void sendMsg() {
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)) {
-            YWIMKit mIMKit = YWAPI.getIMKitInstance(data.mobile, "23346330");
-            Intent intent = mIMKit.getChattingActivityIntent(data.mobile, "23346330");
+            YWIMKit mIMKit = YWAPI.getIMKitInstance("mobile", "23346330");
+            Intent intent = mIMKit.getChattingActivityIntent("mobile", "23346330");
             startActivity(intent);
-        }else {
-            ToastView toast=new ToastView(mContext,"请先登录");
+        } else {
+            showToast("请先登录");
+/*            ToastView toast=new ToastView(mContext,"请先登录");
             toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+            toast.show();*/
+        }
+    }
+
+    @OnClick({R.id.top_bar_back, R.id.btn_follow, R.id.btn_appointment, R.id.btn_call, R.id.btn_msg})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.top_bar_back:
+                break;
+            case R.id.btn_follow:
+                break;
+            case R.id.btn_appointment:
+                break;
+            case R.id.btn_call:
+                break;
+            case R.id.btn_msg:
+                sendMsg();
+                break;
         }
     }
 
     @Override
-    public void onClick(View v) {
-        if (v == userAppointment) {
-            userAppointment();
-        } else if (v == sendMsg) {
-            sendMsg();
-        } else if (v == userFollow) {
-            userFollow();
-        }
-    }
-
-    @OnClick(R.id.top_bar_back)
-    public void onClick() {
-        finish();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

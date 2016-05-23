@@ -33,6 +33,7 @@ public class SplashPresenterImpl implements Presenter{
                 mSplashInteractor.getCopyright(mContext),
                 mSplashInteractor.getBackgroundImageResID());
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isFirstRunLead", true)) {
+            XmlDB.getInstance(mContext).saveKey("isFirstRunLead", false);
             mSplashView.navigateToLead();
         } else {
             Animation animation = mSplashInteractor.getBackgroundImageAnimation(mContext);

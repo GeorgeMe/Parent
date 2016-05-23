@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
-import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.presenter.impl.SplashPresenterImpl;
 import com.dmd.zsb.mvp.view.SplashView;
@@ -115,7 +114,6 @@ public class SplashActivity extends BaseActivity implements SplashView {
 
     @Override
     public void navigateToHomePage() {
-        XmlDB.getInstance(mContext).saveKey("isFirstRunLead", false);
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
         readyGoThenKill(MainActivity.class);
     }

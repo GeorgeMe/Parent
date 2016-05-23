@@ -13,41 +13,30 @@ import java.io.Serializable;
  */
 public class UsersBean  extends SugarRecord implements Serializable {
 
-    public String curriculum_id;
     public String user_id;
     public String avatar;
+    public String username;
     public String gender;
-    public int comment_count;
-    public int comment_goodrate;
-    public String location;
+    public String signature;
+    public double goodrate;
     public String lat;
     public String lon;
-    public String mobile;
-    public int total_hours;
-    public String role;
-    public String grade_name;
-    public String subject_name;
+    public double total_hours;
 
     public UsersBean() {
         super();
     }
 
-    public UsersBean(String curriculum_id, String user_id, String avatar, String gender, int comment_count, int comment_goodrate, String location, String lat, String lon, String mobile, int total_hours, String role, String grade_name, String subject_name) {
-        super();
-        this.curriculum_id = curriculum_id;
+    public UsersBean(String user_id, String avatar,String username,String gender, String signature, double goodrate, String lat, String lon, double total_hours) {
         this.user_id = user_id;
         this.avatar = avatar;
+        this.username = username;
         this.gender = gender;
-        this.comment_count = comment_count;
-        this.comment_goodrate = comment_goodrate;
-        this.location = location;
+        this.signature = signature;
+        this.goodrate = goodrate;
         this.lat = lat;
         this.lon = lon;
-        this.mobile = mobile;
         this.total_hours = total_hours;
-        this.role = role;
-        this.grade_name = grade_name;
-        this.subject_name = subject_name;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException
@@ -58,44 +47,33 @@ public class UsersBean  extends SugarRecord implements Serializable {
 
         JSONArray subItemArray;
 
-        this.comment_count = jsonObject.optInt("comment_count");
-        this.comment_goodrate = jsonObject.optInt("comment_goodrate");
-        this.total_hours = jsonObject.optInt("total_hours");
-
-        this.curriculum_id = jsonObject.optString("curriculum_id");
         this.user_id = jsonObject.optString("user_id");
         this.avatar = jsonObject.optString("avatar");
+        this.username = jsonObject.optString("username");
         this.gender = jsonObject.optString("gender");
-        this.location = jsonObject.optString("location");
+        this.signature = jsonObject.optString("signature");
+        this.goodrate = jsonObject.optInt("goodrate");
         this.lat = jsonObject.optString("lon");
         this.lat = jsonObject.optString("lat");
-        this.mobile = jsonObject.optString("mobile");
-        this.role = jsonObject.optString("role");
-        this.grade_name = jsonObject.optString("grade_name");
-        this.subject_name = jsonObject.optString("subject_name");
+        this.total_hours = jsonObject.optInt("total_hours");
 
         return ;
     }
     public JSONObject toJson() throws JSONException
     {
         JSONObject localItemObject = new JSONObject();
+
         JSONArray itemJSONArray = new JSONArray();
 
-        localItemObject.put("comment_count", comment_count);
-        localItemObject.put("comment_goodrate", comment_goodrate);
-        localItemObject.put("total_hours", total_hours);
-
-        localItemObject.put("curriculum_id", curriculum_id);
         localItemObject.put("user_id", user_id);
         localItemObject.put("avatar", avatar);
+        localItemObject.put("username", username);
         localItemObject.put("gender", gender);
-        localItemObject.put("location", location);
+        localItemObject.put("signature", signature);
+        localItemObject.put("goodrate", goodrate);
         localItemObject.put("lon", lon);
         localItemObject.put("lat", lat);
-        localItemObject.put("mobile", mobile);
-        localItemObject.put("role", role);
-        localItemObject.put("grade_name", grade_name);
-        localItemObject.put("subject_name", subject_name);
+        localItemObject.put("total_hours", total_hours);
 
         return localItemObject;
     }

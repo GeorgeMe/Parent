@@ -127,10 +127,6 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
                 finish();
                 break;
             case R.id.withdrawals:
-
-/*                if (transferAmount.getText().toString()){
-
-                }*/
                 JSONObject jsonObject=new JSONObject();
 
                 try {

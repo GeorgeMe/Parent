@@ -46,7 +46,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HomeFragment extends BaseFragment implements HomeView, LoadMoreListView.OnLoadMoreListener, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener,NineGridlayout.OnItemClickListerner {
+public class HomeFragment extends BaseFragment implements HomeView, LoadMoreListView.OnLoadMoreListener, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener, NineGridlayout.OnItemClickListerner {
 
     @Bind(R.id.bar_home_address)
     TextView barHomeAddress;
@@ -62,8 +62,9 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     private NineGridlayout mNineGridlayout;
     private ListViewDataAdapter<UsersBean> mListViewAdapter;
     private List<SubjectsBean> subjectList;
-    private int page=1;
-    private HomePresenterImpl mHomePresenter=null;
+    private int page = 1;
+    private HomePresenterImpl mHomePresenter = null;
+
     /**
      *
      */
@@ -117,20 +118,20 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                     @Override
                     public void run() {
                         //提交的参数封装
-                        JSONObject jsonObject=new JSONObject();
+                        JSONObject jsonObject = new JSONObject();
                         try {
                             jsonObject.put("appkey", Constants.ZSBAPPKEY);
                             jsonObject.put("version", Constants.ZSBVERSION);
-                            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-                            jsonObject.put("page",1);//页码
-                            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
-                        }catch (JSONException j){
+                            jsonObject.put("page", 1);//页码
+                            jsonObject.put("subid", "402881e953795aab0153795bffa90005");//科目id
+                        } catch (JSONException j) {
 
                         }
 
-                        mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
+                        mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA, jsonObject);
                     }
                 }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
             }
@@ -139,31 +140,31 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 @Override
                 public void onClick(View v) {
                     //提交的参数封装
-                    JSONObject jsonObject=new JSONObject();
+                    JSONObject jsonObject = new JSONObject();
                     try {
                         jsonObject.put("appkey", Constants.ZSBAPPKEY);
                         jsonObject.put("version", Constants.ZSBVERSION);
-                        jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                        jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-                        jsonObject.put("page",1);//页码
-                        jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
-                    }catch (JSONException j){
+                        jsonObject.put("page", 1);//页码
+                        jsonObject.put("subid", "402881e953795aab0153795bffa90005");//科目id
+                    } catch (JSONException j) {
 
                     }
 
-                    mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
+                    mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA, jsonObject);
                 }
             });
         }
 
-        barHomeAddress.setText(XmlDB.getInstance(mContext).getKeyString("BDLocation","定位"));
+        barHomeAddress.setText(XmlDB.getInstance(mContext).getKeyString("BDLocation", "定位"));
         barHomeDemand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
+                if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)) {
                     readyGo(ReleaseOrderActivity.class);
-                }else {
+                } else {
                     showToast("请登录后发布需求");
                 }
             }
@@ -176,46 +177,36 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
             @Override
             public ViewHolderBase<UsersBean> createViewHolder(int position) {
                 return new ViewHolderBase<UsersBean>() {
-                    ImageView tutor_list_teacher_header_img;
-                    TextView tutor_list_teacher_name,
-                            tutor_list_teacher_type,
-                            tutor_list_teacher_sex,
-                            tutor_list_teacher_time,
-                            tutor_list_teacher_Level,
-                            tutor_list_teacher_content,
-                            tutor_list_teacher_one2one,
-                            tutor_list_teacher_one2more,
-                            tutor_list_teacher_distance;
+                    ImageView teacher_avatar;
+                    TextView teacher_name,
+                            teacher_gender,
+                            teacher_signature,
+                            teacher_total_hours,
+                            teacher_goodrate,
+                            teacher_distance;
 
                     @Override
                     public View createView(LayoutInflater layoutInflater) {
                         View view = layoutInflater.inflate(R.layout.tutor_teacher_list_item, null);
-                        tutor_list_teacher_header_img = ButterKnife.findById(view, R.id.tutor_list_teacher_header_img);
-                        tutor_list_teacher_name = ButterKnife.findById(view, R.id.tutor_list_teacher_name);
-                        tutor_list_teacher_type = ButterKnife.findById(view, R.id.tutor_list_teacher_type);
-                        tutor_list_teacher_sex = ButterKnife.findById(view, R.id.tutor_list_teacher_sex);
-                        tutor_list_teacher_time = ButterKnife.findById(view, R.id.tutor_list_teacher_time);
-                        tutor_list_teacher_Level = ButterKnife.findById(view, R.id.tutor_list_teacher_Level);
-                        tutor_list_teacher_content = ButterKnife.findById(view, R.id.tutor_list_teacher_content);
-                        tutor_list_teacher_one2one = ButterKnife.findById(view, R.id.tutor_list_teacher_one2one);
-                        tutor_list_teacher_one2more = ButterKnife.findById(view, R.id.tutor_list_teacher_one2more);
-                        tutor_list_teacher_distance = ButterKnife.findById(view, R.id.tutor_list_teacher_distance);
+                        teacher_avatar = ButterKnife.findById(view, R.id.teacher_avatar);
+                        teacher_name = ButterKnife.findById(view, R.id.teacher_name);
+                        teacher_gender = ButterKnife.findById(view, R.id.teacher_gender);
+                        teacher_signature = ButterKnife.findById(view, R.id.teacher_signature);
+                        teacher_total_hours = ButterKnife.findById(view, R.id.teacher_total_hours);
+                        teacher_goodrate = ButterKnife.findById(view, R.id.teacher_goodrate);
+                        teacher_distance = ButterKnife.findById(view, R.id.teacher_distance);
                         return view;
                     }
 
                     @Override
                     public void showData(int position, UsersBean itemData) {
-
-                                Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.avatar).into(tutor_list_teacher_header_img);
-                                tutor_list_teacher_name.setText(itemData.user_id);
-                                tutor_list_teacher_type.setText("("+itemData.role+")");
-                                tutor_list_teacher_sex.setText(itemData.gender);
-                                tutor_list_teacher_time.setText(itemData.curriculum_id+"");
-                                tutor_list_teacher_Level.setText("未认证");
-                                tutor_list_teacher_content.setText(itemData.subject_name);
-                                tutor_list_teacher_one2one.setText("");
-                                tutor_list_teacher_one2more.setText("");
-                                tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat),Double.parseDouble(itemData.lon)));
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(teacher_avatar);
+                        teacher_name.setText(itemData.username);
+                        teacher_gender.setText(itemData.gender);
+                        teacher_signature.setText(itemData.signature);
+                        teacher_total_hours.setText(itemData.total_hours + "");
+                        teacher_goodrate.setText(itemData.goodrate + "");
+                        teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
                     }
                 };
             }
@@ -259,9 +250,9 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 
     @Override
     public void navigateToUserDetail(UsersBean data) {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("data",data);
-        readyGo(UserDetailActivity.class,bundle);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("data", data);
+        readyGo(UserDetailActivity.class, bundle);
     }
 
     @Override
@@ -280,14 +271,14 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 mRollPagerView.setAdapter(new HomeCarouselAdapter(mContext, response.advertisements));
             }
             if (response.subjects.size() >= 0) {//科目
-                subjectList=new ArrayList<SubjectsBean>();
+                subjectList = new ArrayList<SubjectsBean>();
                 subjectList.addAll(response.subjects);
                 mNineGridlayout.setAdapter(new HomeCoursesAdapter(mContext, response.subjects, 5));
             }
-            if (fragmentHomeListView!=null){
-                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
+            if (fragmentHomeListView != null) {
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page) {
                     fragmentHomeListView.setCanLoadMore(true);
-                }else {
+                } else {
                     fragmentHomeListView.setCanLoadMore(false);
                 }
             }
@@ -303,10 +294,10 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
                 mListViewAdapter.getDataList().addAll(response.users);
                 mListViewAdapter.notifyDataSetChanged();
             }
-            if (fragmentHomeListView!=null){
-                if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){
+            if (fragmentHomeListView != null) {
+                if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page) {
                     fragmentHomeListView.setCanLoadMore(true);
-                }else {
+                } else {
                     fragmentHomeListView.setCanLoadMore(false);
                 }
             }
@@ -318,8 +309,8 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (mListViewAdapter != null) {
             int j = position + -1;
-            if (j >= 0 && j < mListViewAdapter.getDataList().size()){
-                UsersBean data=(UsersBean)parent.getItemAtPosition(position);
+            if (j >= 0 && j < mListViewAdapter.getDataList().size()) {
+                UsersBean data = (UsersBean) parent.getItemAtPosition(position);
                 navigateToUserDetail(data);
             }
         }
@@ -328,29 +319,30 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     @Override
     public void onItemClick(View view, int position) {
 
-        SubjectsBean entity= subjectList.get(position);
+        SubjectsBean entity = subjectList.get(position);
         showToast(entity.sub_name);
         //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
     }
+
     //==============================LoadMoreListView.OnLoadMoreListener=============================================
     @Override
     public void onLoadMore() {
         page = 1 + page;
         //提交的参数封装
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("appkey", Constants.ZSBAPPKEY);
             jsonObject.put("version", Constants.ZSBVERSION);
-            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-            jsonObject.put("page",page);//页码
-            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
-        }catch (JSONException j){
+            jsonObject.put("page", page);//页码
+            jsonObject.put("subid", "402881e953795aab0153795bffa90005");//科目id
+        } catch (JSONException j) {
 
         }
 
-        mHomePresenter.loadListData(Constants.EVENT_LOAD_MORE_DATA,jsonObject);
+        mHomePresenter.loadListData(Constants.EVENT_LOAD_MORE_DATA, jsonObject);
     }
     //==============================SwipeRefreshLayout.OnRefreshListener=============================================
 
@@ -359,19 +351,19 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     public void onRefresh() {
 
         //提交的参数封装
-        JSONObject jsonObject=new JSONObject();
+        JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("appkey", Constants.ZSBAPPKEY);
             jsonObject.put("version", Constants.ZSBVERSION);
-            jsonObject.put("uid",XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-            jsonObject.put("sid",XmlDB.getInstance(mContext).getKeyString("sid","sid"));
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-            jsonObject.put("page",1);//页码
-            jsonObject.put("subid","402881e953795aab0153795bffa90005");//科目id
-        }catch (JSONException j){
+            jsonObject.put("page", 1);//页码
+            jsonObject.put("subid", "402881e953795aab0153795bffa90005");//科目id
+        } catch (JSONException j) {
 
         }
 
-        mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA,jsonObject);
+        mHomePresenter.loadListData(Constants.EVENT_REFRESH_DATA, jsonObject);
     }
 }

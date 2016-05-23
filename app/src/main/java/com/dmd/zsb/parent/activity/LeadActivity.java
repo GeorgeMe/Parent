@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 
-import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.viewpagerindicator.CirclePageIndicator;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.adapter.LeadAdapter;
@@ -23,7 +22,6 @@ public class LeadActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lead);
-        XmlDB.getInstance(this).saveKey("isFirstRunLead", false);
         leadViewPager = (ViewPager) findViewById(R.id.lead_viewPager);
         indicator = (CirclePageIndicator)findViewById(R.id.indicator);
 

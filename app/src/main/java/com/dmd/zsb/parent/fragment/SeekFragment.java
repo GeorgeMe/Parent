@@ -154,45 +154,36 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
             @Override
             public ViewHolderBase<UsersBean> createViewHolder(int position) {
                 return new ViewHolderBase<UsersBean>() {
-                    ImageView tutor_list_teacher_header_img;
-                    TextView tutor_list_teacher_name,
-                            tutor_list_teacher_type,
-                            tutor_list_teacher_sex,
-                            tutor_list_teacher_time,
-                            tutor_list_teacher_Level,
-                            tutor_list_teacher_content,
-                            tutor_list_teacher_one2one,
-                            tutor_list_teacher_one2more,
-                            tutor_list_teacher_distance;
+                    ImageView teacher_avatar;
+                    TextView teacher_name,
+                            teacher_gender,
+                            teacher_signature,
+                            teacher_total_hours,
+                            teacher_goodrate,
+                            teacher_distance;
 
                     @Override
                     public View createView(LayoutInflater layoutInflater) {
                         View view = layoutInflater.inflate(R.layout.tutor_teacher_list_item, null);
-                        tutor_list_teacher_header_img = ButterKnife.findById(view, R.id.tutor_list_teacher_header_img);
-                        tutor_list_teacher_name = ButterKnife.findById(view, R.id.tutor_list_teacher_name);
-                        tutor_list_teacher_type = ButterKnife.findById(view, R.id.tutor_list_teacher_type);
-                        tutor_list_teacher_sex = ButterKnife.findById(view, R.id.tutor_list_teacher_sex);
-                        tutor_list_teacher_time = ButterKnife.findById(view, R.id.tutor_list_teacher_time);
-                        tutor_list_teacher_Level = ButterKnife.findById(view, R.id.tutor_list_teacher_Level);
-                        tutor_list_teacher_content = ButterKnife.findById(view, R.id.tutor_list_teacher_content);
-                        tutor_list_teacher_one2one = ButterKnife.findById(view, R.id.tutor_list_teacher_one2one);
-                        tutor_list_teacher_one2more = ButterKnife.findById(view, R.id.tutor_list_teacher_one2more);
-                        tutor_list_teacher_distance = ButterKnife.findById(view, R.id.tutor_list_teacher_distance);
+                        teacher_avatar = ButterKnife.findById(view, R.id.teacher_avatar);
+                        teacher_name = ButterKnife.findById(view, R.id.teacher_name);
+                        teacher_gender = ButterKnife.findById(view, R.id.teacher_gender);
+                        teacher_signature = ButterKnife.findById(view, R.id.teacher_signature);
+                        teacher_total_hours = ButterKnife.findById(view, R.id.teacher_total_hours);
+                        teacher_goodrate = ButterKnife.findById(view, R.id.teacher_goodrate);
+                        teacher_distance = ButterKnife.findById(view, R.id.teacher_distance);
                         return view;
                     }
 
                     @Override
                     public void showData(int position, UsersBean itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(tutor_list_teacher_header_img);
-                        tutor_list_teacher_name.setText(itemData.user_id);
-                        tutor_list_teacher_type.setText("(" + itemData.role + ")");
-                        tutor_list_teacher_sex.setText(itemData.gender);
-                        tutor_list_teacher_time.setText(itemData.total_hours + "");
-                        tutor_list_teacher_Level.setText("未认证");
-                        tutor_list_teacher_content.setText(itemData.mobile);
-                        tutor_list_teacher_one2one.setText("");
-                        tutor_list_teacher_one2more.setText("");
-                        tutor_list_teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(teacher_avatar);
+                        teacher_name.setText(itemData.username);
+                        teacher_gender.setText(itemData.gender);
+                        teacher_signature.setText(itemData.signature);
+                        teacher_total_hours.setText(itemData.total_hours + "");
+                        teacher_goodrate.setText(itemData.goodrate + "");
+                        teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
                     }
                 };
             }

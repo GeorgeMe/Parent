@@ -19,5 +19,7 @@
 
     <color name="setting_grey_bg_nor">#F0F0F0</color>
 
+    <drawable name="img_selected">#44aaaaaa</drawable>
+    <drawable name="img_defaul">#00000000</drawable>
 
 </resources>

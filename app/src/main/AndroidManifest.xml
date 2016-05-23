@@ -81,9 +81,6 @@
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"/>
         <!-- 测试 -->
-        <activity android:name=".activity.TestActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"/>
 
         <!-- 父母 -->
         <!-- 设置 -->

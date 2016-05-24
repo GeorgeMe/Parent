@@ -41,6 +41,7 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
             request.uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
             request.sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
             request.page=jsonObject.optInt("page");
+            request.sort=jsonObject.optInt("sort");
             request.rows= UriHelper.PAGE_LIMIT;
             request.subid=jsonObject.optString("subid");
             mCommonListInteractor.getCommonListData(event,request.toJson());
@@ -53,21 +54,6 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
         }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
             mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
         }
-/*        //提交的参数封装
-        JSONObject jsonObject=new JSONObject();
-        String uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
-        String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
-        try {
-            jsonObject.put("appkey", Constants.ZSBAPPKEY);
-            jsonObject.put("version", Constants.ZSBVERSION);
-            jsonObject.put("uid",uid);
-            jsonObject.put("sid",sid);
-            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
-            jsonObject.put("page",data.optString("page"));//页码
-            jsonObject.put("subid",data.optString("subid"));//科目id
-        }catch (JSONException j){
-
-        }*/
     }
 
 

@@ -1,10 +1,14 @@
 package com.dmd.zsb.parent.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -12,25 +16,34 @@ import android.widget.TextView;
 
 import com.alibaba.mobileim.YWAPI;
 import com.alibaba.mobileim.YWIMKit;
+import com.dmd.dialog.DialogAction;
+import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.adapter.ListViewDataAdapter;
 import com.dmd.tutor.adapter.ViewHolderBase;
 import com.dmd.tutor.adapter.ViewHolderCreator;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.StringUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
+import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.entity.response.UserDetailResponse;
+import com.dmd.zsb.mvp.presenter.impl.UserDetailPresenterImpl;
 import com.dmd.zsb.mvp.view.UserDetailView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.protocol.response.userdetailsResponse;
 import com.dmd.zsb.protocol.table.MyComments;
 import com.dmd.zsb.protocol.table.MyServices;
+import com.dmd.zsb.protocol.table.UserDetails;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,11 +66,14 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
     @Bind(R.id.evaluation_list_swipe_layout)
     XSwipeRefreshLayout evaluationListSwipeLayout;
 
+
+    //XSwipeRefreshLayout service_list_swipe_layout;
+
     private View mHeaderView;
 
-
-    @Bind(R.id.service_list_view)
     LoadMoreListView serviceListView;
+    private UserDetails details;
+
     @Bind(R.id.evaluation_list_view)
     LoadMoreListView evaluationListView;
     @Bind(R.id.btn_follow)
@@ -73,9 +89,11 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
     private ListViewDataAdapter<MyComments> commentsListViewDataAdapter;
 
     private int page=1;
+    private String user="";
+    private UserDetailPresenterImpl userDetailPresenter;
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        user=extras.getString("user");
     }
 
     @Override
@@ -107,17 +125,68 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
         teachingMethods = ButterKnife.findById(mHeaderView, R.id.teaching_methods);
 
 
+        serviceListView= ButterKnife.findById(mHeaderView, R.id.service_list_view);
+       // service_list_swipe_layout= ButterKnife.findById(mHeaderView, R.id.service_list_swipe_layout);
+
+
+        userDetailPresenter = new UserDetailPresenterImpl(mContext, this);
+        if (NetUtils.isNetworkConnected(mContext)) {
+            if (null != evaluationListSwipeLayout) {
+                evaluationListSwipeLayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //提交的参数封装
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                            jsonObject.put("version", Constants.ZSBVERSION);
+                            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+                            jsonObject.put("page", 1);//页码
+                            jsonObject.put("user_id", user);//页码
+                        } catch (JSONException j) {
+
+                        }
+
+                        userDetailPresenter.onUserDetail(Constants.EVENT_REFRESH_DATA, jsonObject);
+                    }
+                }, ApiConstants.Integers.PAGE_LAZY_LOAD_DELAY_TIME_MS);
+            }
+        } else {
+            toggleNetworkError(true, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //提交的参数封装
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                        jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+                        jsonObject.put("page", 1);//页码
+                        jsonObject.put("user_id", user);//页码
+                    } catch (JSONException j) {
+
+                    }
+
+                    userDetailPresenter.onUserDetail(Constants.EVENT_REFRESH_DATA, jsonObject);
+                }
+            });
+        }
+
         servicesListViewDataAdapter = new ListViewDataAdapter<>(new ViewHolderCreator<MyServices>() {
             @Override
             public ViewHolderBase<MyServices> createViewHolder(int position) {
                 return new ViewHolderBase<MyServices>() {
-                    ImageView icon;
+                    ImageView service_img;
                     TextView name, price;
 
                     @Override
                     public View createView(LayoutInflater layoutInflater) {
                         View view = layoutInflater.inflate(R.layout.teacher_sevice_list_item, null);
-                        icon = ButterKnife.findById(view, R.id.icon);
+                        service_img = ButterKnife.findById(view, R.id.service_img);
                         name = ButterKnife.findById(view, R.id.name);
                         price = ButterKnife.findById(view, R.id.price);
                         return view;
@@ -125,7 +194,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
 
                     @Override
                     public void showData(int position, MyServices itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.service_img).into(icon);
+                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.service_img).into(service_img);
                         name.setText(itemData.service_name);
                         price.setText(itemData.service_price);
                     }
@@ -176,15 +245,60 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                 getResources().getColor(R.color.gplus_color_4));
         evaluationListSwipeLayout.setOnRefreshListener(this);
     }
+    private void hight(){
 
+        if (servicesListViewDataAdapter == null) {
+            return;
+        }
+
+        int totalHeight = 0;
+        for (int i = 0; i < servicesListViewDataAdapter.getCount(); i++) {
+            View listItem = servicesListViewDataAdapter.getView(i, null, serviceListView);
+            listItem.measure(0, 0);
+            totalHeight += listItem.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = serviceListView.getLayoutParams();
+        params.height = totalHeight + (serviceListView.getDividerHeight() * (servicesListViewDataAdapter.getCount()-1));
+        ((ViewGroup.MarginLayoutParams)params).setMargins(10, 10, 10, 10);
+        serviceListView.setLayoutParams(params);
+    }
     @Override
     public void onLoadMore() {
+        page = 1 + page;
+        //提交的参数封装
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+            jsonObject.put("page", page);//页码
+            jsonObject.put("user_id", user);//页码
+        } catch (JSONException j) {
 
+        }
+
+        userDetailPresenter.onUserDetail(Constants.EVENT_LOAD_MORE_DATA, jsonObject);
     }
 
     @Override
     public void onRefresh() {
+        //提交的参数封装
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("appkey", Constants.ZSBAPPKEY);
+            jsonObject.put("version", Constants.ZSBVERSION);
+            jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+            jsonObject.put("page", 1);//页码
+            jsonObject.put("user_id", user);//页码
+        } catch (JSONException j) {
 
+        }
+        userDetailPresenter.onUserDetail(Constants.EVENT_REFRESH_DATA, jsonObject);
     }
 
     @Override
@@ -204,10 +318,21 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                 if (servicesListViewDataAdapter!=null){
                     servicesListViewDataAdapter.getDataList().clear();
                     servicesListViewDataAdapter.getDataList().addAll(response.services);
+                    hight();
                     servicesListViewDataAdapter.notifyDataSetChanged();
                 }
             }
+            if (response.details!=null){
+                details=response.details;
+                Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + details.user_avatar).into(userAvatar);
 
+                tvName.setText(details.user_name);
+                tvSeniority.setText(details.user_seniority);
+                appointmentTime.setText(details.appointment_time);
+                goodSubjects.setText(details.good_subjects);
+                teachingPlace.setText(details.teaching_place);
+                teachingMethods.setText(details.teaching_methods);
+            }
             if (evaluationListView!=null){
                 if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page) {
                     evaluationListView.setCanLoadMore(true);
@@ -290,9 +415,13 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
     @Override
     public void sendMsg() {
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)) {
-            YWIMKit mIMKit = YWAPI.getIMKitInstance("mobile", "23346330");
-            Intent intent = mIMKit.getChattingActivityIntent("mobile", "23346330");
-            startActivity(intent);
+            if (details!=null){
+                YWIMKit mIMKit = YWAPI.getIMKitInstance(details.mobile, "23346330");
+                Intent intent = mIMKit.getChattingActivityIntent(details.mobile, "23346330");
+                startActivity(intent);
+            }else {
+                showToast("未获取到教师信息");
+            }
         } else {
             showToast("请先登录");
 /*            ToastView toast=new ToastView(mContext,"请先登录");
@@ -305,23 +434,52 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.top_bar_back:
+                finish();
                 break;
             case R.id.btn_follow:
                 break;
             case R.id.btn_appointment:
+                if (!StringUtils.StringIsEmpty(user)){
+                    Bundle bundle=new Bundle();
+                    bundle.putString("default_receiver_id",user);
+                    readyGo(ReleaseOrderActivity.class,bundle);
+                }else {
+                    showToast("发生错误，请重试");
+                }
                 break;
             case R.id.btn_call:
+                if (details!=null){
+                    new MaterialDialog.Builder(mContext).title("拨打电话").content("确定拨打"+details.mobile+"吗？").positiveText("确定").negativeText("取消").onNegative(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            dialog.dismiss();
+                        }
+                    }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            call();
+                            dialog.dismiss();
+                        }
+                    }).show();
+                }else {
+                    showToast("未获取到教师信息");
+                }
+
                 break;
             case R.id.btn_msg:
                 sendMsg();
                 break;
         }
+
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    private void  call(){
+        try {
+            Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:"+details.mobile));
+            startActivity(intent);
+        }catch (SecurityException s){
+            Log.e("msg",s.getMessage());
+        }
+
     }
 }

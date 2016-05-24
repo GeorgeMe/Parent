@@ -15,19 +15,30 @@ public class signupRequest extends SugarRecord implements Serializable {
 
     public String   appkey;
     public String version;
-    public String   sid;
-    public String   uid;
+    public String   client_type;
+    public String   location;
+    public String   lat;
+    public String   lon;
+    public String   role;
+    public String   nickname;
+    public String   mobile;
+    public String   password;
 
     public signupRequest() {
         super();
     }
 
-    public signupRequest(String appkey, String version, String sid, String uid) {
-        super();
+    public signupRequest(String appkey, String version, String client_type, String location, String lat, String lon, String role, String nickname, String mobile, String password) {
         this.appkey = appkey;
         this.version = version;
-        this.sid = sid;
-        this.uid = uid;
+        this.client_type = client_type;
+        this.location = location;
+        this.lat = lat;
+        this.lon = lon;
+        this.role = role;
+        this.nickname = nickname;
+        this.mobile = mobile;
+        this.password = password;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -39,8 +50,14 @@ public class signupRequest extends SugarRecord implements Serializable {
 
         this.appkey = jsonObject.optString("appkey");
         this.version = jsonObject.optString("version");
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
+        this.client_type = jsonObject.optString("client_type");
+        this.location = jsonObject.optString("location");
+        this.lat = jsonObject.optString("lat");
+        this.lon = jsonObject.optString("lon");
+        this.role = jsonObject.optString("role");
+        this.nickname = jsonObject.optString("nickname");
+        this.mobile = jsonObject.optString("mobile");
+        this.password = jsonObject.optString("password");
 
 
         return ;
@@ -51,8 +68,14 @@ public class signupRequest extends SugarRecord implements Serializable {
 
         localItemObject.put("appkey", appkey);
         localItemObject.put("version", version);
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
+        localItemObject.put("client_type", client_type);
+        localItemObject.put("location", location);
+        localItemObject.put("lat", lat);
+        localItemObject.put("lon", lon);
+        localItemObject.put("role", role);
+        localItemObject.put("nickname", nickname);
+        localItemObject.put("mobile", mobile);
+        localItemObject.put("password", password);
 
         return localItemObject;
     }

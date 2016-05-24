@@ -7,7 +7,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,7 +21,7 @@ import com.dmd.tutor.adapter.ViewHolderCreator;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
-import com.dmd.tutor.utils.TLog;
+import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
@@ -72,6 +71,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     private ListViewDataAdapter<UsersBean> mListViewAdapter;
     private SeekPresenter mSeekPresenter = null;
     private int page = 1;
+    private int sort=0;
     private String subid="";
     private SeekGradeAdapter seekGradeAdapter;
     private SeekSubjectAdapter seekSubjectAdapter;
@@ -107,8 +107,8 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
     @Override
     protected void initViewsAndEvents() {
-
-
+        subid= XmlDB.getInstance(mContext).getKeyString("subid","");
+        XmlDB.getInstance(mContext).saveKey("subid","");
         if (mSeekPresenter==null){
             mSeekPresenter = new SeekPresenterIml(mContext, this);
         }
@@ -220,9 +220,22 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     public void onEventComming(EventCenter eventCenter) {
         if (eventCenter.getEventCode() == Constants.EVENT_RECOMMEND_COURSES_SEEK) {
-
+            //subid=eventCenter.getData().toString();
+            // showToast("000");
         }
     }
+
+/*
+    @Subscribe
+    @Override
+    public void onEventMainThread(EventCenter eventCenter){
+        super.onEventMainThread(eventCenter);
+        if (eventCenter.getEventCode() == Constants.EVENT_RECOMMEND_COURSES_SEEK) {
+            subid=eventCenter.getData().toString();
+           // showToast("000");
+        }
+    }
+*/
 
     @Override
     public void onClick(View v) {
@@ -241,6 +254,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 try {
                     jsonObject.put("page", 1);
                     jsonObject.put("subid", subid);//科目id
+                    jsonObject.put("sort", 100);//科目id
                 }catch (JSONException j){
 
                 }
@@ -262,6 +276,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         try {
             jsonObject.put("page", page);
             jsonObject.put("subid", subid);//科目id
+            jsonObject.put("sort", sort);//科目id
         }catch (JSONException j){
 
         }
@@ -275,6 +290,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         try {
             jsonObject.put("page", 1);
             jsonObject.put("subid", subid);//科目id
+            jsonObject.put("sort", sort);//科目id
         }catch (JSONException j){
 
         }
@@ -345,10 +361,22 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                 //排序
                 JSONObject jsonObject=new JSONObject();
                 try {
-                    subid=parent.getAdapter().getItem(position).toString();
                     jsonObject.put("page", 1);
                     jsonObject.put("subid", subid);//科目id
 
+                    //jsonObject.put("","");
+                    if (parent.getAdapter().getItem(position).toString().equals("综合排序")){
+                        sort=0;
+                    }else if (parent.getAdapter().getItem(position).toString().equals("价钱 低--高")){
+                        sort=1;
+                    }else if (parent.getAdapter().getItem(position).toString().equals("价钱 高--低")){
+                        sort=2;
+                    }else if (parent.getAdapter().getItem(position).toString().equals("人气 高--低")){
+                        sort=3;
+                    }else if (parent.getAdapter().getItem(position).toString().equals("距离 近--远")){
+                        sort=4;
+                    }
+                    jsonObject.put("sort", sort);//科目id
                 }catch (JSONException j){
 
                 }
@@ -402,9 +430,11 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                                 //请求数据
                                 JSONObject jsonObject=new JSONObject();
                                 try {
+                                    sort=0;
                                     subid=((SubjectsBean) parent.getAdapter().getItem(position)).sub_id;
                                     jsonObject.put("page", 1);
                                     jsonObject.put("subid", subid);//科目id
+                                    jsonObject.put("sort", sort);//科目id
                                 }catch (JSONException j){
 
                                 }
@@ -431,21 +461,5 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
         DisplayMetrics dm = getResources().getDisplayMetrics();
         screenHeight = dm.heightPixels / 10;
         screenWidth = dm.widthPixels;
-        TLog.v("屏幕宽高", "宽度" + screenWidth + "高度" + screenHeight);
-    }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        ButterKnife.bind(this, rootView);
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 }

@@ -17,6 +17,7 @@ import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.ninelayout.NineGridlayout;
 import com.dmd.tutor.rollviewpager.RollPagerView;
+import com.dmd.tutor.utils.BusHelper;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
@@ -251,7 +252,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     @Override
     public void navigateToUserDetail(UsersBean data) {
         Bundle bundle = new Bundle();
-        bundle.putSerializable("data", data);
+        bundle.putString("user", data.user_id);
         readyGo(UserDetailActivity.class, bundle);
     }
 
@@ -318,10 +319,8 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 
     @Override
     public void onItemClick(View view, int position) {
-
         SubjectsBean entity = subjectList.get(position);
-        showToast(entity.sub_name);
-        //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
+        BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_HOME,entity));
     }
 
     //==============================LoadMoreListView.OnLoadMoreListener=============================================

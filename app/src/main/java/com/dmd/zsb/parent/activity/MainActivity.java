@@ -32,7 +32,6 @@ import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.SubjectEntity;
 import com.dmd.zsb.mvp.presenter.impl.MainViewImpl;
 import com.dmd.zsb.mvp.view.MainView;
 import com.dmd.zsb.openim.LoginHelper;
@@ -43,6 +42,7 @@ import com.dmd.zsb.parent.fragment.HomeFragment;
 import com.dmd.zsb.parent.fragment.MessageFragment;
 import com.dmd.zsb.parent.fragment.MineFragment;
 import com.dmd.zsb.parent.fragment.SeekFragment;
+import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.squareup.otto.Subscribe;
 
 import butterknife.Bind;
@@ -108,11 +108,11 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
     @Override
     public void onEventComming(EventCenter eventCenter) {
         if (eventCenter.getEventCode()== Constants.EVENT_RECOMMEND_COURSES_HOME){
-            SubjectEntity entity=(SubjectEntity) eventCenter.getData();
-            XmlDB.getInstance(mContext).saveKey("subid",entity.getSub_id());
-
             tabhost.onTabChanged(TAB_SEEK);
             tabhost.setCurrentTabByTag(TAB_SEEK);
+            SubjectsBean entity=(SubjectsBean) eventCenter.getData();
+            //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_SEEK,entity.sub_id));
+            XmlDB.getInstance(mContext).saveKey("subid",entity.sub_id);
         }
     }
 

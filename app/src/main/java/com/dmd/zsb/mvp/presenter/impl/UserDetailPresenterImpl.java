@@ -2,12 +2,13 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.entity.response.UserDetailResponse;
-import com.dmd.zsb.mvp.interactor.impl.UserDetailInteractorImpl;
-import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
+import com.dmd.zsb.common.Constants;
+import com.dmd.zsb.mvp.interactor.impl.UserDetailInteractoterImpl;
+import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.UserDetailPresenter;
 import com.dmd.zsb.mvp.view.UserDetailView;
+import com.dmd.zsb.protocol.request.userdetailsRequest;
+import com.dmd.zsb.protocol.response.userdetailsResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,42 +16,44 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/3/18.
  */
-public class UserDetailPresenterImpl implements UserDetailPresenter,BaseSingleLoadedListener<UserDetailResponse> {
+public class UserDetailPresenterImpl implements UserDetailPresenter,BaseMultiLoadedListener<userdetailsResponse> {
     private Context mContext=null;
     private UserDetailView userDetailView;
-    private UserDetailInteractorImpl userDetailInteractor;
+    private UserDetailInteractoterImpl userDetailInteractor;
 
     public UserDetailPresenterImpl(Context mContext, UserDetailView userDetailView) {
         this.mContext = mContext;
         this.userDetailView = userDetailView;
-        userDetailInteractor=new UserDetailInteractorImpl(this);
+        userDetailInteractor=new UserDetailInteractoterImpl(this);
     }
 
     @Override
-    public void getUserDetail(JSONObject jsonObject) {
-        String uid= XmlDB.getInstance(mContext).getKeyString("uid","uid");
-        String sid=XmlDB.getInstance(mContext).getKeyString("sid","sid");
+    public void onUserDetail(int event_tag,JSONObject jsonObject) {
+        userdetailsRequest request=new userdetailsRequest();
         try{
-            jsonObject.put("uid",uid);
-            jsonObject.put("sid",sid);
+            request.fromJson(jsonObject);
+            userDetailInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
-
         }
-        userDetailInteractor.getCommonSingleData(jsonObject);
+
     }
 
     @Override
-    public void onSuccess(UserDetailResponse data) {
-        userDetailView.setUserInfo(data);
+    public void onSuccess(int event_tag, userdetailsResponse response) {
+        if (event_tag == Constants.EVENT_REFRESH_DATA) {
+            userDetailView.refreshListData(response);
+        } else if (event_tag == Constants.EVENT_LOAD_MORE_DATA) {
+            userDetailView.addMoreListData(response);
+        }
     }
 
     @Override
     public void onError(String msg) {
-        userDetailView.showError(msg);
+
     }
 
     @Override
     public void onException(String msg) {
-        onError(msg);
+
     }
 }

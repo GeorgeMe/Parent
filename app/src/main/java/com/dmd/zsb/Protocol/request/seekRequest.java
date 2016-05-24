@@ -21,12 +21,12 @@ public class seekRequest extends SugarRecord implements Serializable {
     public int  page;
     public int  rows;
     public String  subid;
-
+    public int  sort;
     public seekRequest() {
         super();
     }
 
-    public seekRequest(String appkey, String version, String sid, String uid, int page, int rows, String subid) {
+    public seekRequest(String appkey, String version, String sid, String uid, int page, int rows, String subid,int  sort) {
         super();
         this.appkey = appkey;
         this.version = version;
@@ -34,6 +34,7 @@ public class seekRequest extends SugarRecord implements Serializable {
         this.uid = uid;
         this.page = page;
         this.rows = rows;
+        this.sort = sort;
         this.subid = subid;
     }
 
@@ -50,6 +51,7 @@ public class seekRequest extends SugarRecord implements Serializable {
         this.uid = jsonObject.optString("uid");
         this.page = jsonObject.optInt("page");
         this.rows = jsonObject.optInt("rows");
+        this.sort = jsonObject.optInt("sort");
         this.subid = jsonObject.optString("subid");
 
 
@@ -64,6 +66,7 @@ public class seekRequest extends SugarRecord implements Serializable {
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
         localItemObject.put("page", page);
+        localItemObject.put("sort", sort);
         localItemObject.put("rows", UriHelper.getInstance().PAGE_LIMIT);
         localItemObject.put("subid", subid);
 

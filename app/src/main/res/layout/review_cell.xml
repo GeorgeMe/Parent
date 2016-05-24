@@ -57,7 +57,7 @@
                         style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.7"
+                        android:layout_weight="0.5"
                         android:numStars="5"
                         android:rating="3.5" />
 
@@ -65,7 +65,7 @@
                         android:id="@+id/tv_createtime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="0.3"
+                        android:layout_weight="0.5"
                         android:gravity="right"
                         android:text="1小时前"
                         android:textColor="#666666"

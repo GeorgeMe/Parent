@@ -13,10 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:id="@+id/input_recharge"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:layout_marginTop="15dp"
             android:background="@drawable/feed_item_bg"
             android:gravity="center_vertical"
@@ -65,12 +67,12 @@
         </LinearLayout>
 
         <Button
+            android:layout_below="@+id/input_recharge"
             android:id="@+id/btn_recharge"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
             android:layout_margin="20dp"
             android:background="@drawable/c1_apply_btn_select"
-            android:layout_alignParentBottom="true"
             android:text="充值"
             android:textColor="#ffffff"
             android:textSize="20dp"/>

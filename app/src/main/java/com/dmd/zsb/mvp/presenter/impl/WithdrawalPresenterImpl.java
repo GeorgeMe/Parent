@@ -27,11 +27,13 @@ public class WithdrawalPresenterImpl implements WithdrawalPresenter,BaseSingleLo
 
     @Override
     public void onSuccess(withdrawalResponse data) {
+        withdrawalView.hideLoading();
         withdrawalView.onWithdrawal(data);
     }
 
     @Override
     public void onError(String msg) {
+        withdrawalView.hideLoading();
         withdrawalView.showError(msg);
     }
 
@@ -42,6 +44,7 @@ public class WithdrawalPresenterImpl implements WithdrawalPresenter,BaseSingleLo
 
     @Override
     public void onWithdrawal(JSONObject jsonObject) {
+        withdrawalView.showLoading(null);
         withdrawalInterActor.getCommonSingleData(jsonObject);
     }
 }

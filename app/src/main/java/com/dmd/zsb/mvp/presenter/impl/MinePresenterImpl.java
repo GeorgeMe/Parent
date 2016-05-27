@@ -30,13 +30,15 @@ public class MinePresenterImpl implements MinePresenter,BaseSingleLoadedListener
 
     @Override
     public void onSuccess(mineResponse response) {
-        if (response.succeed==0){
+        mineView.hideLoading();
+        if (response.errno==0){
             mineView.setView(response);
         }
     }
 
     @Override
     public void onError(String msg) {
+        mineView.hideLoading();
         mineView.showTip(msg);
     }
 
@@ -47,6 +49,7 @@ public class MinePresenterImpl implements MinePresenter,BaseSingleLoadedListener
 
     @Override
     public void onMineInfo() {
+        mineView.showLoading(null);
         mineRequest request=new mineRequest();
         request.appkey = Constants.ZSBAPPKEY;
         request.version = Constants.ZSBVERSION;

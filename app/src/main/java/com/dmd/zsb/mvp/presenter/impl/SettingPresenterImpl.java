@@ -3,7 +3,6 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.tutor.utils.OnUploadProcessListener;
-import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SettingInteracterImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SettingPresenter;
@@ -28,14 +27,14 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
 
     @Override
     public void uploadAvatar(int event,JSONObject jsonObject) {
-
+        settingView.showLoading(null);
         settingInteracter.getCommonListData(event,jsonObject);
     }
 
     @Override
     public void onSuccess(int event,JSONObject data) {
+        settingView.hideLoading();
         if (event==1){
-            XmlDB.getInstance(mContext).saveKey("isLogin",false);
             settingView.showTip(data.optString("msg"));
         }else {
 
@@ -45,6 +44,7 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
 
     @Override
     public void onError(String msg) {
+        settingView.hideLoading();
         settingView.showError(msg);
     }
 
@@ -55,6 +55,7 @@ public class SettingPresenterImpl implements SettingPresenter,BaseMultiLoadedLis
 
     @Override
     public void onSignOut(int event,JSONObject jsonObject) {
+        settingView.showLoading(null);
         settingInteracter.onSignOut(event,jsonObject);
     }
 }

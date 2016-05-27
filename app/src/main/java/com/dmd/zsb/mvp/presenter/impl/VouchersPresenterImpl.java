@@ -29,6 +29,7 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
 
     @Override
     public void onVouchers(int event_tag,JSONObject jsonObject) {
+        vouchersView.showLoading(null);
         vouchersRequest request=new vouchersRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,6 +42,7 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
 
     @Override
     public void onSuccess(int event_tag,vouchersResponse response) {
+        vouchersView.hideLoading();
         if (event_tag== Constants.EVENT_REFRESH_DATA){
             vouchersView.refreshListData(response);
         }else if (event_tag==Constants.EVENT_LOAD_MORE_DATA){
@@ -50,6 +52,7 @@ public class VouchersPresenterImpl implements VouchersPresenter,BaseMultiLoadedL
 
     @Override
     public void onError(String msg) {
+        vouchersView.hideLoading();
         vouchersView.showError(msg);
     }
 

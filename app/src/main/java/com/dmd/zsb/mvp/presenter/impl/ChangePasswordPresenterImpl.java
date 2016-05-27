@@ -28,9 +28,8 @@ public class ChangePasswordPresenterImpl implements ChangePasswordPresenter,Base
 
     @Override
     public void onChangePassword(JSONObject jsonObject) {
+        changePasswordView.showLoading(null);
         changepasswordRequest request=new changepasswordRequest();
-
-
         try {
             request.fromJson(jsonObject);
             changePasswordInteractor.getCommonSingleData(request.toJson());
@@ -42,11 +41,13 @@ public class ChangePasswordPresenterImpl implements ChangePasswordPresenter,Base
 
     @Override
     public void onSuccess(changepasswordResponse data) {
+        changePasswordView.hideLoading();
         changePasswordView.toSettingView();
     }
 
     @Override
     public void onError(String msg) {
+        changePasswordView.hideLoading();
         changePasswordView.showTip(msg);
     }
 

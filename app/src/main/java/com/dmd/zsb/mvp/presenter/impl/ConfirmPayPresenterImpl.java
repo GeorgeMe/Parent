@@ -26,16 +26,19 @@ public class ConfirmPayPresenterImpl implements ConfirmPayPresenter,BaseSingleLo
 
     @Override
     public void onConfirmPay(JSONObject jsonObject) {
+        payView.showLoading(null);
         confirmPayInteractor.getCommonSingleData(jsonObject);
     }
 
     @Override
     public void onSuccess(confirmpayResponse data) {
+        payView.hideLoading();
         payView.setConfirmPayView(data);
     }
 
     @Override
     public void onError(String msg) {
+        payView.hideLoading();
         payView.showTip(msg);
     }
 

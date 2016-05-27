@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.StringUtils;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.utils.CheckBankCard;
@@ -43,9 +44,10 @@ public class BankCardActivity extends BaseActivity {
     @Bind(R.id.rl_change_card)
     RelativeLayout rlChangeCard;
 
+    private String bankCard="";
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        bankCard=extras.getString("bank_card");
     }
 
     @Override
@@ -66,9 +68,17 @@ public class BankCardActivity extends BaseActivity {
     @Override
     protected void initViewsAndEvents() {
         topBarTitle.setText("银行卡详情");
-        rlNoneCard.setVisibility(View.VISIBLE);
-        rlAddCard.setVisibility(View.GONE);
-        rlChangeCard.setVisibility(View.GONE);
+
+        if (StringUtils.StringIsEmpty(bankCard)){
+            rlNoneCard.setVisibility(View.VISIBLE);
+            rlAddCard.setVisibility(View.GONE);
+            rlChangeCard.setVisibility(View.GONE);
+        }else {
+            rlNoneCard.setVisibility(View.GONE);
+            rlAddCard.setVisibility(View.GONE);
+            rlChangeCard.setVisibility(View.VISIBLE);
+        }
+
         inputBankCard.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_VARIATION_NORMAL);
         //校验银行卡号码
         if (CheckBankCard.checkBankCard("622848")) {
@@ -116,16 +126,19 @@ public class BankCardActivity extends BaseActivity {
                 rlNoneCard.setVisibility(View.GONE);
                 rlAddCard.setVisibility(View.VISIBLE);
                 rlChangeCard.setVisibility(View.GONE);
+
                 break;
             case R.id.save_bank_card:
                 rlNoneCard.setVisibility(View.GONE);
                 rlAddCard.setVisibility(View.GONE);
                 rlChangeCard.setVisibility(View.VISIBLE);
+
                 break;
             case R.id.change_bank_card:
                 rlNoneCard.setVisibility(View.GONE);
                 rlAddCard.setVisibility(View.VISIBLE);
                 rlChangeCard.setVisibility(View.GONE);
+
                 break;
         }
     }

@@ -6,7 +6,6 @@ public class ApiConstants {
 
         public static final String API_DEVELOPMENT_URLS = "http://192.168.1.55:8080/TutorClient/v1.0/";
         public static final String API_BASE_URLS = "http://www.cqdmd.com/v1.0/";
-        public static final String API_IMG_BASE_URLS = "http://www.cqdmd.com/";
 
         public static final String API_USER_INITDATA = "p_user_initdata.action?";//初始化
         public static final String API_USER_SIGNUP = "p_user_signup.action?";//注册
@@ -37,7 +36,7 @@ public class ApiConstants {
         public static final String API_USER_VOUCHERS = "p_user_vouchers.action?";//代金券
 
         public static final String API_USER_CHANGEAVATAR = "p_user_changeavatar.action?";//修改头像
-        public static final String API_USER_CHANGEPROFILE = "p_user_changeprofile.action?";//修改信息简介
+        public static final String API_USER_CHANGEBRIEF = "p_user_changebrief.action?";//修改信息简介
         public static final String API_USER_CHANGEPASSWORD = "p_user_changepassword.action?";//修改密码
         public static final String API_USER_CHANGESIGNATURE= "p_user_changesignature.action?";//修改签名
         public static final String API_USER_CHANGENICKNAME = "p_user_changenickname.action?";//修改昵称
@@ -50,7 +49,6 @@ public class ApiConstants {
         public static final String API_ORDER_CANCEL = "p_order_cancel.action?";//取消订单
         public static final String API_ORDER_PAY = "p_order_pay.action?";//支付订单
         public static final String API_ORDER_CONFIRMPAY = "p_order_confirmpay.action?";//确认支付
-        public static final String API_ORDER_UPDATEORDERSTATUS = "p_order_updateOrderStatus.action?";//修改订单状态
 
     }
 

@@ -40,8 +40,6 @@ public class WalletActivity extends BaseActivity implements WalletView{
     TextView walletWithdrawals;
     @Bind(R.id.wallet_bank_card)
     TextView walletBankCard;
-    @Bind(R.id.wallet_vouchers)
-    TextView walletVouchers;
 
     private WalletPresenterImpl walletPresenter;
 
@@ -132,7 +130,7 @@ public class WalletActivity extends BaseActivity implements WalletView{
         return null;
     }
 
-    @OnClick({R.id.top_bar_back, R.id.wallet_transaction_detail, R.id.wallet_cumulative_class, R.id.wallet_earn_money, R.id.wallet_recharge, R.id.wallet_withdrawals, R.id.wallet_bank_card, R.id.wallet_vouchers})
+    @OnClick({R.id.top_bar_back, R.id.wallet_transaction_detail, R.id.wallet_cumulative_class, R.id.wallet_earn_money, R.id.wallet_recharge, R.id.wallet_withdrawals, R.id.wallet_bank_card})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.top_bar_back:
@@ -153,10 +151,9 @@ public class WalletActivity extends BaseActivity implements WalletView{
                 readyGo(WithDrawalsActivity.class,withdrawals);
                 break;
             case R.id.wallet_bank_card:
-                readyGo(BankCardActivity.class);
-                break;
-            case R.id.wallet_vouchers:
-                readyGo(VouchersActivity.class);
+                Bundle bankCard=new Bundle();
+                bankCard.putString("bank_card",bank_card);
+                readyGo(BankCardActivity.class,bankCard);
                 break;
         }
     }

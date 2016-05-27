@@ -11,16 +11,16 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-public class profileResponse extends SugarRecord implements Serializable {
+public class briefResponse extends SugarRecord implements Serializable {
 
     public int errno;
     public String msg;
 
-    public profileResponse() {
+    public briefResponse() {
         super();
     }
 
-    public profileResponse(int errno, String msg) {
+    public briefResponse(int errno, String msg) {
         super();
         this.errno = errno;
         this.msg = msg;

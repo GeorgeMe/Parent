@@ -8,7 +8,6 @@ import com.dmd.zsb.mvp.interactor.impl.SeekInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.view.SeekView;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.protocol.request.seekRequest;
 import com.dmd.zsb.protocol.response.seekResponse;
 import com.dmd.zsb.utils.UriHelper;
@@ -33,6 +32,7 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
 
     @Override
     public void loadListData(int event,JSONObject jsonObject) {
+        mSeekView.showLoading(null);
         seekRequest request=new seekRequest();
         try {
             //request.fromJson(jsonObject);
@@ -47,12 +47,6 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
             mCommonListInteractor.getCommonListData(event,request.toJson());
         }catch (JSONException j){
 
-        }
-        mSeekView.hideLoading();
-        if (event==Constants.EVENT_REFRESH_DATA) {
-            mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
-        }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
-            mSeekView.showLoading(mContext.getString(R.string.common_loading_message));
         }
     }
 
@@ -75,7 +69,6 @@ public class SeekPresenterIml implements SeekPresenter,BaseMultiLoadedListener<s
 
     @Override
     public void onException(String msg) {
-        mSeekView.hideLoading();
-        mSeekView.showException(msg);
+        onError(msg);
     }
 }

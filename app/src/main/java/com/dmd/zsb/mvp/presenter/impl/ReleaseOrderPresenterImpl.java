@@ -29,6 +29,7 @@ public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSin
 
     @Override
     public void onReleaseOrder(JSONObject jsonObject) {
+        releaseOrderView.showLoading(null);
         releaseorderRequest request=new releaseorderRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,11 +42,13 @@ public class ReleaseOrderPresenterImpl implements ReleaseOrderPresenter ,BaseSin
 
     @Override
     public void onSuccess(releaseorderResponse response) {
+        releaseOrderView.hideLoading();
         releaseOrderView.showSuccessView(response);
     }
 
     @Override
     public void onError(String msg) {
+        releaseOrderView.hideLoading();
         releaseOrderView.showTip(msg);
     }
 

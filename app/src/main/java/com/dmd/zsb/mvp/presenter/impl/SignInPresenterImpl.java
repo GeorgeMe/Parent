@@ -30,6 +30,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
 
     @Override
     public void onSuccess(signinResponse response) {
+        signInView.hideLoading();
         if (response.errno==0){
             XmlDB.getInstance(mContext).saveKey("uid",response.uid);
             XmlDB.getInstance(mContext).saveKey("sid",response.sid);
@@ -41,6 +42,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
 
     @Override
     public void onError(String msg) {
+        signInView.hideLoading();
         XmlDB.getInstance(mContext).saveKey("isLogin", false);
         signInView.showTip(msg);
     }
@@ -52,7 +54,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
 
     @Override
     public void signIn(String mobile, String password) {
-
+        signInView.showLoading(null);
         signinRequest request = new signinRequest();
         request.appkey =Constants.ZSBAPPKEY;
         request.mobile =mobile;

@@ -29,6 +29,7 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
 
     @Override
     public void onDemand(int event_tag, JSONObject jsonObject) {
+        demandView.showLoading(null);
         demandRequest request=new demandRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,6 +42,7 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
 
     @Override
     public void onSuccess(int event_tag, demandResponse response) {
+        demandView.hideLoading();
         if (event_tag== Constants.EVENT_REFRESH_DATA){
             demandView.refreshListData(response);
         }else if (event_tag==Constants.EVENT_LOAD_MORE_DATA){
@@ -51,6 +53,7 @@ public class DemandPresenterImpl implements DemandPresenter,BaseMultiLoadedListe
 
     @Override
     public void onError(String msg) {
+        demandView.hideLoading();
         demandView.showError(msg);
     }
 

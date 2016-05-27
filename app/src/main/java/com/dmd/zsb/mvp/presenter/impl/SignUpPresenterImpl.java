@@ -28,6 +28,7 @@ public class SignUpPresenterImpl implements SignUpPresenter,BaseSingleLoadedList
 
     @Override
     public void signUp(JSONObject jsonObject) {
+        signUpView.showLoading(null);
         signupRequest request=new signupRequest();
         try {
             request.fromJson(jsonObject);
@@ -40,7 +41,7 @@ public class SignUpPresenterImpl implements SignUpPresenter,BaseSingleLoadedList
 
     @Override
     public void onSuccess(signupResponse response) {
-
+        signUpView.hideLoading();
 /*        if (data.optString("msg").equals("fail")){
             onError("登录失败");
         }else {
@@ -53,6 +54,7 @@ public class SignUpPresenterImpl implements SignUpPresenter,BaseSingleLoadedList
 
     @Override
     public void onError(String msg) {
+        signUpView.hideLoading();
         signUpView.showTip(msg);
     }
 

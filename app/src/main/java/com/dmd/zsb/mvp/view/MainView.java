@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.view;
 
 import android.view.View;
 
-public interface MainView {
+public interface MainView  extends BaseView{
 
     void initTabView();
 

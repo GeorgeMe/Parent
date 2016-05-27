@@ -20,6 +20,7 @@ public class userdetailsResponse extends SugarRecord implements Serializable {
     public int errno;
     public String msg;
     public int total_count;
+    public boolean follow;
 
     public UserDetails details;
     public List<MyComments> comments;
@@ -29,10 +30,11 @@ public class userdetailsResponse extends SugarRecord implements Serializable {
         super();
     }
 
-    public userdetailsResponse(int errno, String msg, int total_count, List<MyComments> comments, List<MyServices> services) {
+    public userdetailsResponse(int errno, String msg, int total_count,boolean follow, List<MyComments> comments, List<MyServices> services) {
         this.errno = errno;
         this.msg = msg;
         this.total_count = total_count;
+        this.follow = follow;
         this.comments = comments;
         this.services = services;
     }
@@ -48,6 +50,7 @@ public class userdetailsResponse extends SugarRecord implements Serializable {
         this.errno = jsonObject.optInt("errno");
         this.total_count = jsonObject.optInt("total_count");
         this.msg = jsonObject.optString("msg");
+        this.follow = jsonObject.optBoolean("follow");
         UserDetails details=new UserDetails();
         details.fromJson(jsonObject.optJSONObject("details"));
         this.details =details;
@@ -81,6 +84,7 @@ public class userdetailsResponse extends SugarRecord implements Serializable {
         localItemObject.put("errno", errno);
         localItemObject.put("total_count", total_count);
         localItemObject.put("msg", msg);
+        localItemObject.put("follow", follow);
         if (details!=null){
             localItemObject.put("details",details.toJson());
         }

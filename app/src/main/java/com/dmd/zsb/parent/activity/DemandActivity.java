@@ -20,7 +20,6 @@ import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.DemandEntity;
 import com.dmd.zsb.mvp.presenter.impl.DemandPresenterImpl;
 import com.dmd.zsb.mvp.view.DemandView;
 import com.dmd.zsb.parent.R;
@@ -103,15 +102,9 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             jsonObject.put("page", page);
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                             if (demandLevyConcentration.isChecked()) {
-                                jsonObject.put("group_menu", "demandLevyConcentration");
+                                jsonObject.put("order_status", 0);
                             } else if (demandToBeCompleted.isChecked()) {
-                                jsonObject.put("group_menu", "demandToBeCompleted");
-                            }
-/*                            else if (demandHasBeenCompleted.isChecked()) {
-                                jsonObject.put("group_menu", "demandHasBeenCompleted");
-                            } */
-                            else {
-                                jsonObject.put("group_menu", "demandLevyConcentration");
+                                jsonObject.put("order_status", 1);
                             }
                         }catch (JSONException j){
 
@@ -134,13 +127,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                         jsonObject.put("page", page);
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                         if (demandLevyConcentration.isChecked()) {
-                            jsonObject.put("group_menu", "demandLevyConcentration");
+                            jsonObject.put("order_status", 0);
                         } else if (demandToBeCompleted.isChecked()) {
-                            jsonObject.put("group_menu", "demandToBeCompleted");
+                            jsonObject.put("order_status", 1);
                         }
-/*                        else if (demandHasBeenCompleted.isChecked()) {
-                            jsonObject.put("group_menu", "demandHasBeenCompleted");
-                        }*/
                     }catch (JSONException j){
 
                     }
@@ -209,7 +199,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             l_zjh_m.setVisibility(View.VISIBLE);
                             l_zjh_s.setVisibility(View.GONE);
 
-                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                            Picasso.with(mContext).load(itemData.img_header).into(img_header);
                             tv_type2.setText(itemData.type);
                             tv_sex2.setText(itemData.sex);
                             tv_name.setText(itemData.name);
@@ -221,26 +211,6 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
 
                         }
 
-/*                        else if (demandHasBeenCompleted.isChecked()) {
-                            tv_zjz.setVisibility(View.GONE);
-                            img_header.setVisibility(View.VISIBLE);
-                            l_zjh.setVisibility(View.VISIBLE);
-                            l_zjz.setVisibility(View.GONE);
-                            l_zjz_p.setVisibility(View.GONE);
-                            l_zjh_m.setVisibility(View.GONE);
-                            l_zjh_s.setVisibility(View.VISIBLE);
-
-                            Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
-                            tv_type2.setText(itemData.type);
-                            tv_sex2.setText(itemData.sex);
-                            tv_name.setText(itemData.name);
-                            if (itemData.state.equals("2")) {
-                                tv_state.setText("已完成");
-                            } else if (itemData.state.equals("3")) {
-                                tv_state.setText("已付款");
-                            }
-
-                        }*/
                         tv_appointed_time.setText(itemData.appointed_time);
                         tv_charging.setText(itemData.charging);
                         tv_curriculum.setText(itemData.curriculum);
@@ -276,8 +246,15 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     }
 
     @Override
-    public void navigateToDemandDetail(int position, DemandEntity itemData) {
-        showToast("我们");
+    public void navigateToDemandDetail(int position, DemandsBean itemData) {
+        if (itemData!=null)
+        showToast("我们"+itemData.appointed_time);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        DemandsBean demandsBean = (DemandsBean) parent.getAdapter().getItem(position);
+        navigateToDemandDetail(position, demandsBean);
     }
 
     @Override
@@ -285,12 +262,15 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
         if (fragmentDemandListSwipeLayout != null)
             fragmentDemandListSwipeLayout.setRefreshing(false);
         if (response != null) {
-            if (response.demands.size() >= 2) {
+            if (response.demands.size() >= 1) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
                     mListViewAdapter.getDataList().addAll(response.demands);
                     mListViewAdapter.notifyDataSetChanged();
                 }
+            }else {
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
             }
             if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentDemandListView.setCanLoadMore(true);
@@ -316,12 +296,6 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DemandEntity demandEntity = (DemandEntity) parent.getItemAtPosition(position);
-        navigateToDemandDetail(position, demandEntity);
-    }
-
-    @Override
     public void onLoadMore() {
         page = page + 1;
         JSONObject jsonObject=new JSONObject();
@@ -333,13 +307,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             jsonObject.put("page", page);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (demandLevyConcentration.isChecked()) {
-                jsonObject.put("group_menu", "demandLevyConcentration");
+                jsonObject.put("order_status", 0);
             } else if (demandToBeCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandToBeCompleted");
+                jsonObject.put("order_status", 1);
             }
-/*            else if (demandHasBeenCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandHasBeenCompleted");
-            }*/
         }catch (JSONException j){
 
         }
@@ -358,13 +329,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             jsonObject.put("page", 1);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (demandLevyConcentration.isChecked()) {
-                jsonObject.put("group_menu", "demandLevyConcentration");
+                jsonObject.put("order_status", 0);
             } else if (demandToBeCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandToBeCompleted");
+                jsonObject.put("order_status", 1);
             }
-/*            else if (demandHasBeenCompleted.isChecked()) {
-                jsonObject.put("group_menu", "demandHasBeenCompleted");
-            }*/
         }catch (JSONException j){
 
         }
@@ -399,6 +367,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 finish();
                 break;
             case R.id.demand_levy_concentration:
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject demand_levy_concentration=new JSONObject();
                 try {
                     demand_levy_concentration.put("appkey", Constants.ZSBAPPKEY);
@@ -407,7 +377,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                     demand_levy_concentration.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     demand_levy_concentration.put("page", 1);
                     demand_levy_concentration.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    demand_levy_concentration.put("group_menu", "demandLevyConcentration");
+                    demand_levy_concentration.put("order_status", 0);
                 }catch (JSONException j){
 
                 }
@@ -415,6 +385,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_levy_concentration);
                 break;
             case R.id.demand_to_be_completed:
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject demand_to_be_completed=new JSONObject();
                 try {
                     demand_to_be_completed.put("appkey", Constants.ZSBAPPKEY);
@@ -423,29 +395,13 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                     demand_to_be_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     demand_to_be_completed.put("page", 1);
                     demand_to_be_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    demand_to_be_completed.put("group_menu", "demandToBeCompleted");
+                    demand_to_be_completed.put("order_status", 1);
                 }catch (JSONException j){
 
                 }
 
                 demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_to_be_completed);
                 break;
-/*            case R.id.demand_has_been_completed:
-                JSONObject demand_has_been_completed=new JSONObject();
-                try {
-                    demand_has_been_completed.put("appkey", Constants.ZSBAPPKEY);
-                    demand_has_been_completed.put("version", Constants.ZSBVERSION);
-                    demand_has_been_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    demand_has_been_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    demand_has_been_completed.put("page", 1);
-                    demand_has_been_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    demand_has_been_completed.put("group_menu", "demandHasBeenCompleted");
-                }catch (JSONException j){
-
-                }
-
-                demandPresenter.onDemand(Constants.EVENT_REFRESH_DATA, demand_has_been_completed);
-                break;*/
         }
     }
 

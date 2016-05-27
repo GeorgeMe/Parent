@@ -19,7 +19,6 @@ import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.EvaluationEntity;
 import com.dmd.zsb.mvp.presenter.impl.EvaluationPresenterImpl;
 import com.dmd.zsb.mvp.view.EvaluationView;
 import com.dmd.zsb.parent.R;
@@ -96,11 +95,9 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                             jsonObject.put("page", page);
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                             if (evaluationGroupMenuIncomplete.isChecked()) {
-                                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                                jsonObject.put("flag", 5);
                             } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
-                            } else {
-                                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                                jsonObject.put("flag", 6);
                             }
                         }catch (JSONException j){
 
@@ -123,11 +120,9 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                         jsonObject.put("page", page);
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                         if (evaluationGroupMenuIncomplete.isChecked()) {
-                            jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                            jsonObject.put("flag", 5);
                         } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                            jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
-                        } else {
-                            jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                            jsonObject.put("flag", 6);
                         }
                     }catch (JSONException j){
 
@@ -146,7 +141,7 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
 
                 return new ViewHolderBase<EvaluationsBean>() {
                     ImageView img_header;
-                    TextView tv_name, tv_type, tv_sex, tv_appointed_time, tv_charging, tv_curriculum, tv_note, tv_comment_level;
+                    TextView tv_name, tv_type, tv_sex, tv_appointed_time, tv_charging, tv_curriculum, tv_note;
 
                     //定义UI控件
                     @Override
@@ -161,7 +156,6 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                         tv_charging = ButterKnife.findById(view, R.id.tv_charging);
                         tv_curriculum = ButterKnife.findById(view, R.id.tv_curriculum);
                         tv_note = ButterKnife.findById(view, R.id.tv_note);
-                        tv_comment_level = ButterKnife.findById(view, R.id.tv_comment_level);
                         return view;
                     }
 
@@ -170,13 +164,11 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                         //数据展示set
                         if (evaluationGroupMenuIncomplete.isChecked()) {
                             tv_note.setVisibility(View.GONE);
-                            tv_comment_level.setText("评论");
                         } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
                             tv_note.setVisibility(View.VISIBLE);
                             tv_note.setText(itemData.note);
-                            tv_comment_level.setText(itemData.comment_level);
                         }
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
+                        Picasso.with(mContext).load(itemData.img_header).into(img_header);
                         tv_name.setText(itemData.name);
                         tv_type.setText(itemData.type);
                         tv_sex.setText(itemData.sex);
@@ -233,9 +225,15 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
 
 
     @Override
-    public void navigateToEvaluationDetail(EvaluationEntity data) {
-        //readyGo();
-        showToast("评论");
+    public void navigateToEvaluationDetail(EvaluationsBean itemData) {
+        if (itemData!=null)
+        showToast("评论"+itemData.appointed_time);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        EvaluationsBean evaluationsBean = (EvaluationsBean) parent.getAdapter().getItem(position);
+        navigateToEvaluationDetail(evaluationsBean);
     }
 
     @Override
@@ -249,11 +247,9 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
             jsonObject.put("page", page);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (evaluationGroupMenuIncomplete.isChecked()) {
-                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                jsonObject.put("flag", 5);
             } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
-            } else {
-                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                jsonObject.put("flag", 6);
             }
         }catch (JSONException j){
 
@@ -273,11 +269,9 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
             jsonObject.put("page", page);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (evaluationGroupMenuIncomplete.isChecked()) {
-                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                jsonObject.put("flag", 5);
             } else if (evaluationGroupMenuRecentCompleted.isChecked()) {
-                jsonObject.put("group_menu", "evaluationGroupMenuRecentCompleted");
-            } else {
-                jsonObject.put("group_menu", "evaluationGroupMenuIncomplete");
+                jsonObject.put("flag", 6);
             }
         }catch (JSONException j){
 
@@ -286,22 +280,19 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        EvaluationEntity evaluationEntity = (EvaluationEntity) parent.getItemAtPosition(position);
-        navigateToEvaluationDetail(evaluationEntity);
-    }
-
-    @Override
     public void refreshListData(evaluationResponse response) {
         if (fragmentEvaluationListSwipeLayout != null)
             fragmentEvaluationListSwipeLayout.setRefreshing(false);
         if (response != null) {
-            if (response.evaluations.size() >= 2) {
+            if (response.evaluations.size() >= 1) {
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
                     mListViewAdapter.getDataList().addAll(response.evaluations);
                     mListViewAdapter.notifyDataSetChanged();
                 }
+            }else {
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
             }
             if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
                 fragmentEvaluationListListView.setCanLoadMore(true);
@@ -334,6 +325,8 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                 finish();
                 break;
             case R.id.evaluation_group_menu_incomplete:
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject evaluation_group_menu_incomplete=new JSONObject();
                 try {
                     evaluation_group_menu_incomplete.put("appkey", Constants.ZSBAPPKEY);
@@ -342,7 +335,7 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                     evaluation_group_menu_incomplete.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     evaluation_group_menu_incomplete.put("page", 1);
                     evaluation_group_menu_incomplete.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    evaluation_group_menu_incomplete.put("group_menu", "evaluationGroupMenuIncomplete");
+                    evaluation_group_menu_incomplete.put("flag", 5);
                 }catch (JSONException j){
 
                 }
@@ -350,6 +343,9 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                 evaluationPresenter.onEvaluation(Constants.EVENT_REFRESH_DATA, evaluation_group_menu_incomplete);
                 break;
             case R.id.evaluation_group_menu_recent_completed:
+
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject evaluation_group_menu_recent_completed=new JSONObject();
                 try {
                     evaluation_group_menu_recent_completed.put("appkey", Constants.ZSBAPPKEY);
@@ -358,7 +354,7 @@ public class EvaluationActivity extends BaseActivity implements EvaluationView, 
                     evaluation_group_menu_recent_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     evaluation_group_menu_recent_completed.put("page", 1);
                     evaluation_group_menu_recent_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    evaluation_group_menu_recent_completed.put("group_menu", "evaluationGroupMenuRecentCompleted");
+                    evaluation_group_menu_recent_completed.put("flag", 6);
                 }catch (JSONException j){
 
                 }

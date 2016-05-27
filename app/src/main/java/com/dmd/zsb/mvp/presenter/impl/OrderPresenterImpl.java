@@ -29,6 +29,7 @@ public class OrderPresenterImpl implements OrderPresenter ,BaseMultiLoadedListen
 
     @Override
     public void onOrder(int event_tag, JSONObject jsonObject) {
+        orderView.showLoading(null);
         orderRequest request=new orderRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,6 +42,7 @@ public class OrderPresenterImpl implements OrderPresenter ,BaseMultiLoadedListen
 
     @Override
     public void onSuccess(int event_tag, orderResponse data) {
+        orderView.hideLoading();
         if (event_tag== Constants.EVENT_LOAD_MORE_DATA){
             orderView.addMoreListData(data);
         }else if (event_tag==Constants.EVENT_REFRESH_DATA){
@@ -50,6 +52,7 @@ public class OrderPresenterImpl implements OrderPresenter ,BaseMultiLoadedListen
 
     @Override
     public void onError(String msg) {
+        orderView.hideLoading();
         orderView.showError(msg);
     }
 

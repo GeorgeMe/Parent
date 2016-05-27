@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.GsonRequest;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.listeners.CommonSingleInteractor;
-import com.dmd.zsb.protocol.response.profileResponse;
+import com.dmd.zsb.protocol.response.briefResponse;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.utils.VolleyHelper;
 import com.google.gson.reflect.TypeToken;
@@ -21,18 +21,18 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/3/28.
  */
-public class ProfileInteractorImpl implements CommonSingleInteractor {
-    private BaseSingleLoadedListener<profileResponse> loadedListener;
+public class BriefInteractorImpl implements CommonSingleInteractor {
+    private BaseSingleLoadedListener<briefResponse> loadedListener;
 
-    public ProfileInteractorImpl(BaseSingleLoadedListener<profileResponse> loadedListener) {
+    public BriefInteractorImpl(BaseSingleLoadedListener<briefResponse> loadedListener) {
         this.loadedListener = loadedListener;
     }
     @Override
     public void getCommonSingleData(JSONObject json) {
-        GsonRequest<profileResponse> gsonRequest = new GsonRequest<profileResponse>(UriHelper.getInstance().changeprofile(json), null, new TypeToken<profileResponse>() {
-        }.getType(), new Response.Listener<profileResponse>() {
+        GsonRequest<briefResponse> gsonRequest = new GsonRequest<briefResponse>(UriHelper.getInstance().changeBrief(json), null, new TypeToken<briefResponse>() {
+        }.getType(), new Response.Listener<briefResponse>() {
             @Override
-            public void onResponse(profileResponse response) {
+            public void onResponse(briefResponse response) {
                 loadedListener.onSuccess(response);
             }
         }, new Response.ErrorListener() {
@@ -56,7 +56,7 @@ public class ProfileInteractorImpl implements CommonSingleInteractor {
             }
         });
         gsonRequest.setShouldCache(true);
-        gsonRequest.setTag("changeprofile");
+        gsonRequest.setTag("changeBrief");
         VolleyHelper.getInstance().getRequestQueue().add(gsonRequest);
     }
 }

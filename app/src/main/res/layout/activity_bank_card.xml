@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:gravity="center_horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,12 +38,13 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_add_card"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone">
+        android:layout_height="fill_parent">
 
         <LinearLayout
+            android:id="@+id/ll_002"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -138,27 +139,28 @@
             </LinearLayout>
 
         </LinearLayout>
-
         <Button
+            android:layout_below="@+id/ll_002"
             android:id="@+id/save_bank_card"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
-            android:layout_alignParentBottom="true"
             android:layout_margin="20dp"
             android:background="@drawable/c1_apply_btn_select"
             android:text="@string/save"
             android:textColor="#ffffff"
             android:textSize="20dp" />
+
     </RelativeLayout>
 
     <RelativeLayout
+        android:visibility="gone"
         android:id="@+id/rl_change_card"
         android:layout_margin="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/ll_001"
             android:background="@drawable/feed_item_bg"
-            android:layout_margin="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -174,12 +176,12 @@
                 android:text="622844824568721"/>
         </LinearLayout>
         <Button
+            android:layout_below="@+id/ll_001"
             android:id="@+id/change_bank_card"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
-            android:layout_alignParentBottom="true"
+            android:layout_marginTop="30dp"
             android:layout_centerHorizontal="true"
-            android:layout_margin="20dp"
             android:background="@drawable/c1_apply_btn_select"
             android:text="修改银行卡"
             android:textColor="#ffffff"

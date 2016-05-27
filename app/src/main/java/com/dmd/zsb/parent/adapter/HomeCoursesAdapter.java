@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.dmd.tutor.ninelayout.NineGridAdapter;
-import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.protocol.table.SubjectsBean;
 import com.squareup.picasso.Picasso;
 
@@ -58,7 +57,7 @@ public class HomeCoursesAdapter extends NineGridAdapter {
             iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
             iv.setBackgroundColor(context.getResources().getColor((android.R.color.transparent)));
             String url = getUrl(i);
-            Picasso.with(context).load(ApiConstants.Urls.API_IMG_BASE_URLS+url).placeholder(new ColorDrawable(Color.parseColor("#f5f5f5"))).into(iv);
+            Picasso.with(context).load(url).placeholder(new ColorDrawable(Color.parseColor("#f5f5f5"))).into(iv);
             if (!TextUtils.isEmpty(url)) {
                 iv.setTag(url);
             }

@@ -28,6 +28,7 @@ public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoaded
 
     @Override
     public void seedFeedback(JSONObject jsonObject) {
+        feedbackView.showLoading(null);
         feedbackRequest request=new feedbackRequest();
         try {
             request.fromJson(jsonObject);
@@ -40,11 +41,13 @@ public class FeedbackPresenterImpl implements FeedbackPresenter,BaseSingleLoaded
 
     @Override
     public void onSuccess(feedbackResponse data) {
-        feedbackView.navigateToHome();
+        feedbackView.hideLoading();
+        feedbackView.navigateToSetting(data);
     }
 
     @Override
     public void onError(String msg) {
+        feedbackView.hideLoading();
         feedbackView.showTip(msg);
     }
 

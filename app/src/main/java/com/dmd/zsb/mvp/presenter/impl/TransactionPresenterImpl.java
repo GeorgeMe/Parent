@@ -30,6 +30,7 @@ public class TransactionPresenterImpl implements TransactionPresenter,BaseMultiL
 
     @Override
     public void onTransaction(int event_tag, JSONObject jsonObject) {
+        transactionView.showLoading(null);
         transactionsRequest request=new transactionsRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,6 +42,7 @@ public class TransactionPresenterImpl implements TransactionPresenter,BaseMultiL
 
     @Override
     public void onSuccess(int event_tag, transactionsResponse data) {
+        transactionView.hideLoading();
         if (event_tag== Constants.EVENT_LOAD_MORE_DATA){
             transactionView.addMoreListData(data);
         }else if (event_tag==Constants.EVENT_REFRESH_DATA){
@@ -50,12 +52,13 @@ public class TransactionPresenterImpl implements TransactionPresenter,BaseMultiL
 
     @Override
     public void onError(String msg) {
+        transactionView.hideLoading();
         transactionView.showError(msg);
     }
 
     @Override
     public void onException(String msg) {
-
+        transactionView.hideLoading();
         transactionView.showError(msg);
     }
 }

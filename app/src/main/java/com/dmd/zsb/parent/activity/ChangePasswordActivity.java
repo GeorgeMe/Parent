@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.dmd.dialog.AlertDialogWrapper;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.StringUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.presenter.impl.ChangePasswordPresenterImpl;
@@ -101,9 +102,9 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
                 finish();
                 break;
             case R.id.save:
-                if (newPassword.getText().toString()!=""){
-                    showToast("密码不能为空");
-                }else if (newPassword.getText().toString()!=""){
+                if (StringUtils.StringIsEmpty(nowPassword.getText().toString())){
+                    showToast("请输入原密码");
+                }else if (StringUtils.StringIsEmpty(newPassword.getText().toString())){
                     showToast("密码不能为空");
                 }else if (reNewPassword.getText().toString().length()<6){
                     showToast("密码不能少于6位");
@@ -116,6 +117,8 @@ public class ChangePasswordActivity extends BaseActivity implements ChangePasswo
                         jsonObject.put("version", Constants.ZSBVERSION);
                         jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
                         jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
+
+                        jsonObject.put("nowPassword",nowPassword.getText().toString());
                         jsonObject.put("newPassword",newPassword.getText().toString());
                     }catch (JSONException j){
 

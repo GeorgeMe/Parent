@@ -177,7 +177,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
                     @Override
                     public void showData(int position, UsersBean itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(teacher_avatar);
+                        Picasso.with(mContext).load(itemData.avatar).into(teacher_avatar);
                         teacher_name.setText(itemData.username);
                         teacher_gender.setText(itemData.gender);
                         teacher_signature.setText(itemData.signature);
@@ -265,7 +265,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        UsersBean data=(UsersBean)parent.getItemAtPosition(position);
+        UsersBean data=(UsersBean)parent.getAdapter().getItem(position);
         navigateToUserDetail(data);
     }
 
@@ -300,9 +300,11 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
 
     @Override
     public void navigateToUserDetail(UsersBean itemData) {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("data",itemData);
-        readyGo(UserDetailActivity.class,bundle);
+        if (itemData!=null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("data", itemData);
+            readyGo(UserDetailActivity.class, bundle);
+        }
     }
 
     @Override
@@ -316,6 +318,9 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
                     mListViewAdapter.getDataList().addAll(response.users);
                     mListViewAdapter.notifyDataSetChanged();
                 }
+            }else {
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
             }
             if (fragmentSeekListListView!=null){
                 if (UriHelper.getInstance().calculateTotalPages(response.total_count)> page){

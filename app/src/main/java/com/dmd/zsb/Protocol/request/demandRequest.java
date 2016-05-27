@@ -19,20 +19,20 @@ public class demandRequest extends SugarRecord implements Serializable {
     public String   uid;
     public String   page;
     public String   rows;
-    public String   group_menu;
+    public int   order_status;
 
     public demandRequest() {
         super();
     }
 
-    public demandRequest(String appkey, String version, String sid, String uid, String page, String rows, String group_menu) {
+    public demandRequest(String appkey, String version, String sid, String uid, String page, String rows, int   order_status) {
         this.appkey = appkey;
         this.version = version;
         this.sid = sid;
         this.uid = uid;
         this.page = page;
         this.rows = rows;
-        this.group_menu = group_menu;
+        this.order_status = order_status;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -48,7 +48,7 @@ public class demandRequest extends SugarRecord implements Serializable {
         this.uid = jsonObject.optString("uid");
         this.page = jsonObject.optString("page");
         this.rows = jsonObject.optString("rows");
-        this.group_menu = jsonObject.optString("group_menu");
+        this.order_status = jsonObject.optInt("order_status");
 
 
         return ;
@@ -63,7 +63,7 @@ public class demandRequest extends SugarRecord implements Serializable {
         localItemObject.put("uid", uid);
         localItemObject.put("page", page);
         localItemObject.put("rows", rows);
-        localItemObject.put("group_menu", group_menu);
+        localItemObject.put("order_status", order_status);
 
         return localItemObject;
     }

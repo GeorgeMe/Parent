@@ -5,6 +5,6 @@ import org.json.JSONObject;
 /**
  * Created by Administrator on 2016/3/28.
  */
-public interface ProfilePresenter {
-    void onChangeProfile(JSONObject jsonObject);
+public interface BriefPresenter {
+    void onChangeBrief(JSONObject jsonObject);
 }

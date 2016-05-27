@@ -30,6 +30,7 @@ public class EvaluationPresenterImpl implements EvaluationPresenter,BaseMultiLoa
 
     @Override
     public void onEvaluation(int event_tag,JSONObject jsonObject) {
+        evaluationView.showLoading(null);
         evaluationRequest request=new evaluationRequest();
         try {
             request.fromJson(jsonObject);
@@ -42,6 +43,7 @@ public class EvaluationPresenterImpl implements EvaluationPresenter,BaseMultiLoa
 
     @Override
     public void onSuccess(int event_tag, evaluationResponse response) {
+        evaluationView.hideLoading();
         if (event_tag== Constants.EVENT_LOAD_MORE_DATA){
             evaluationView.addMoreListData(response);
         }else if (event_tag==Constants.EVENT_REFRESH_DATA){
@@ -51,6 +53,7 @@ public class EvaluationPresenterImpl implements EvaluationPresenter,BaseMultiLoa
 
     @Override
     public void onError(String msg) {
+        evaluationView.hideLoading();
         evaluationView.showError(msg);
     }
 

@@ -5,7 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -14,12 +13,12 @@ import com.dmd.tutor.adapter.ListViewDataAdapter;
 import com.dmd.tutor.adapter.ViewHolderBase;
 import com.dmd.tutor.adapter.ViewHolderCreator;
 import com.dmd.tutor.eventbus.EventCenter;
+import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.OrderEntity;
 import com.dmd.zsb.mvp.presenter.impl.OrderPresenterImpl;
 import com.dmd.zsb.mvp.view.OrderView;
 import com.dmd.zsb.parent.R;
@@ -28,7 +27,6 @@ import com.dmd.zsb.protocol.response.orderResponse;
 import com.dmd.zsb.protocol.table.OrdersBean;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -97,11 +95,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                             jsonObject.put("page", page);
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                             if (myOrderGroupMenuIncomplete.isChecked()) {
-                                jsonObject.put("order_status", 1);
-                            } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
                                 jsonObject.put("order_status", 2);
-                            } else {
-                                jsonObject.put("order_status", 1);
+                            } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
+                                jsonObject.put("order_status", 3);
                             }
                         }catch (JSONException j){
 
@@ -124,11 +120,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                         jsonObject.put("page", page);
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                         if (myOrderGroupMenuIncomplete.isChecked()) {
-                            jsonObject.put("order_status", 1);
-                        } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
                             jsonObject.put("order_status", 2);
-                        } else {
-                            jsonObject.put("order_status", 1);
+                        } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
+                            jsonObject.put("order_status", 3);
                         }
                     }catch (JSONException j){
 
@@ -142,42 +136,39 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
             @Override
             public ViewHolderBase<OrdersBean> createViewHolder(int position) {
                 return new ViewHolderBase<OrdersBean>() {
-                    ImageView img_header;
-                    TextView tv_name, tv_type, tv_sex, tv_appointed_time, tv_charging, tv_curriculum, tv_address, tv_place, tv_state;
-
+                    TextView tv_oid, tv_created_at, tv_appointment_time, tv_subject, tv_text, tv_receiver_id, tv_distance, tv_location,tv_order_status,tv_offer_price;
                     @Override
                     public View createView(LayoutInflater layoutInflater) {
                         View view = layoutInflater.inflate(R.layout.order_list_item, null);
-                        img_header = ButterKnife.findById(view, R.id.img_header);
-                        tv_name = ButterKnife.findById(view, R.id.tv_name);
-                        tv_type = ButterKnife.findById(view, R.id.tv_type);
-                        tv_sex = ButterKnife.findById(view, R.id.tv_sex);
-                        tv_appointed_time = ButterKnife.findById(view, R.id.tv_appointed_time);
-                        tv_charging = ButterKnife.findById(view, R.id.tv_charging);
-                        tv_curriculum = ButterKnife.findById(view, R.id.tv_curriculum);
-                        tv_address = ButterKnife.findById(view, R.id.tv_address);
-                        tv_place = ButterKnife.findById(view, R.id.tv_place);
-                        tv_state = ButterKnife.findById(view, R.id.tv_state);
+                        tv_oid = ButterKnife.findById(view, R.id.tv_oid);
+                        tv_created_at = ButterKnife.findById(view, R.id.tv_created_at);
+                        tv_appointment_time = ButterKnife.findById(view, R.id.tv_appointment_time);
+                        tv_subject = ButterKnife.findById(view, R.id.tv_subject);
+                        tv_text = ButterKnife.findById(view, R.id.tv_text);
+                        tv_receiver_id = ButterKnife.findById(view, R.id.tv_receiver_id);
+                        tv_distance = ButterKnife.findById(view, R.id.tv_distance);
+                        tv_location = ButterKnife.findById(view, R.id.tv_location);
+                        tv_offer_price = ButterKnife.findById(view, R.id.tv_offer_price);
+                        tv_order_status = ButterKnife.findById(view, R.id.tv_order_status);
                         return view;
                     }
 
                     @Override
                     public void showData(int position, OrdersBean itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.img_header).into(img_header);
-                        tv_name.setText(itemData.name);
-                        tv_type.setText(itemData.type);
-                        tv_sex.setText(itemData.sex);
-                        tv_appointed_time.setText(itemData.appointed_time);
-                        tv_charging.setText(itemData.charging);
-                        tv_curriculum.setText(itemData.curriculum);
-                        tv_address.setText(itemData.address);
-                        tv_place.setText(itemData.state);
-                        if (itemData.state.equals("1")) {
-                            tv_state.setText("未付款");
-                        } else if (itemData.state.equals("2")) {
-                            tv_state.setText("已付款");
+                        tv_oid.setText(itemData.oid);
+                        tv_created_at.setText(itemData.created_at);
+                        tv_appointment_time.setText(itemData.appointment_time);
+                        tv_subject.setText(itemData.subject);
+                        tv_text.setText(itemData.text);
+                        tv_receiver_id.setText(itemData.receiver_id);
+                        tv_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
+                        tv_location.setText(itemData.location);
+                        tv_offer_price.setText(itemData.offer_price);
+                        if (itemData.order_status==2) {
+                            tv_order_status.setText("未付款");
+                        } else if (itemData.order_status==3) {
+                            tv_order_status.setText("已付款");
                         }
-
                     }
                 };
             }
@@ -227,10 +218,17 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     }
 
     @Override
-    public void navigateToOrderDetail(OrderEntity data) {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("data",data);
-        readyGo(OrderDetailActivity.class,bundle);
+    public void navigateToOrderDetail(OrdersBean itemData) {
+        if (itemData!=null){
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("data",itemData);
+            readyGo(OrderDetailActivity.class,bundle);
+        }
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        OrdersBean ordersBean = (OrdersBean) parent.getAdapter().getItem(position);
+        navigateToOrderDetail(ordersBean);
     }
 
     @Override
@@ -244,6 +242,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                     mListViewAdapter.getDataList().addAll(response.orders);
                     mListViewAdapter.notifyDataSetChanged();
                 }
+            }else {
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
             }
             if (fragmentMyOrderListListView!=null){
                 if (UriHelper.getInstance().calculateTotalPages(response.total_count) > page)
@@ -251,6 +252,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 else
                     fragmentMyOrderListListView.setCanLoadMore(false);
             }
+        }else {
+            mListViewAdapter.getDataList().clear();
+            mListViewAdapter.notifyDataSetChanged();
         }
     }
 
@@ -272,11 +276,6 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
         }
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        OrderEntity orderEntity = (OrderEntity) parent.getItemAtPosition(position);
-        navigateToOrderDetail(orderEntity);
-    }
 
     @Override
     public void onLoadMore() {
@@ -290,11 +289,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
             jsonObject.put("page", page);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (myOrderGroupMenuIncomplete.isChecked()) {
-                jsonObject.put("order_status", 1);
-            } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
                 jsonObject.put("order_status", 2);
-            } else {
-                jsonObject.put("order_status", 1);
+            } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
+                jsonObject.put("order_status", 3);
             }
         }catch (JSONException j){
 
@@ -314,11 +311,9 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
             jsonObject.put("page", 1);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
             if (myOrderGroupMenuIncomplete.isChecked()) {
-                jsonObject.put("order_status", 1);
+                jsonObject.put("order_status", 2);
             } else if (myOrderGroupMenuRecentCompleted.isChecked()) {
-                jsonObject.put("order_status",2);
-            } else {
-                jsonObject.put("order_status", 1);
+                jsonObject.put("order_status",3);
             }
         }catch (JSONException j){
 
@@ -334,13 +329,15 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 finish();
                 break;
             case R.id.my_order_group_menu_incomplete:
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject incomplete=new JSONObject();
                 try {
                     incomplete.put("appkey", Constants.ZSBAPPKEY);
                     incomplete.put("version", Constants.ZSBVERSION);
                     incomplete.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     incomplete.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    incomplete.put("order_status", 1);
+                    incomplete.put("order_status", 2);
                     incomplete.put("page", 1);
                     incomplete.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                 }catch (JSONException j){
@@ -349,19 +346,20 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 orderPresenter.onOrder(Constants.EVENT_REFRESH_DATA, incomplete);
                 break;
             case R.id.my_order_group_menu_recent_completed:
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
                 JSONObject recent_completed=new JSONObject();
                 try {
                     recent_completed.put("appkey", Constants.ZSBAPPKEY);
                     recent_completed.put("version", Constants.ZSBVERSION);
                     recent_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     recent_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    recent_completed.put("order_status", 2);
+                    recent_completed.put("order_status", 3);
                     recent_completed.put("page", 1);
                     recent_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
                 }catch (JSONException j){
 
                 }
-
                 orderPresenter.onOrder(Constants.EVENT_REFRESH_DATA, recent_completed);
                 break;
         }

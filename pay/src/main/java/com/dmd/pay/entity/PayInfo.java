@@ -11,6 +11,7 @@ public class PayInfo implements Serializable {
     private String desc;//详细描述
     private Double price;//价格
     private Double rate;//折扣
+    private String order_sn;
 
     public String getName() {
         return name;
@@ -42,5 +43,13 @@ public class PayInfo implements Serializable {
 
     public void setRate(Double rate) {
         this.rate = rate;
+    }
+
+    public String getOrder_sn() {
+        return order_sn;
+    }
+
+    public void setOrder_sn(String order_sn) {
+        this.order_sn = order_sn;
     }
 }

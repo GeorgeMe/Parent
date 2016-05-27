@@ -7,7 +7,6 @@ import com.dmd.zsb.mvp.interactor.impl.HomeInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.HomePresenter;
 import com.dmd.zsb.mvp.view.HomeView;
-import com.dmd.zsb.parent.R;
 import com.dmd.zsb.protocol.request.homeRequest;
 import com.dmd.zsb.protocol.response.homeResponse;
 
@@ -31,6 +30,7 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
     }
     @Override
     public void loadListData(int event,JSONObject jsonObject) {
+        mHomeView.showLoading(null);
         homeRequest request=new homeRequest();
         try {
             request.fromJson(jsonObject);
@@ -38,13 +38,6 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
         }catch (JSONException j){
 
         }
-        mHomeView.hideLoading();
-        if (event==Constants.EVENT_REFRESH_DATA) {
-            mHomeView.showLoading(mContext.getString(R.string.common_loading_message));
-        }else if (event==Constants.EVENT_LOAD_MORE_DATA) {
-            mHomeView.showLoading(mContext.getString(R.string.common_loading_message));
-        }
-
     }
     @Override
     public void onSuccess(int event_tag, homeResponse response) {
@@ -64,8 +57,7 @@ public class HomePresenterImpl implements HomePresenter,BaseMultiLoadedListener<
 
     @Override
     public void onException(String msg) {
-        mHomeView.hideLoading();
-        mHomeView.showError(msg);
+       onError(msg);
     }
 
 }

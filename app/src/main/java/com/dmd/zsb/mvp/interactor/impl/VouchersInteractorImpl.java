@@ -30,7 +30,7 @@ public class VouchersInteractorImpl implements CommonListInteractor {
 
     @Override
     public void getCommonListData(final int event,JSONObject json) {
-        GsonRequest<vouchersResponse> gsonRequest = new GsonRequest<vouchersResponse>(UriHelper.getInstance().vouchers(json), null, new TypeToken<vouchersResponse>() {
+        GsonRequest<vouchersResponse> gsonRequest = new GsonRequest<vouchersResponse>(UriHelper.getInstance().myvouchers(json), null, new TypeToken<vouchersResponse>() {
         }.getType(), new Response.Listener<vouchersResponse>() {
             @Override
             public void onResponse(vouchersResponse response) {
@@ -57,7 +57,7 @@ public class VouchersInteractorImpl implements CommonListInteractor {
             }
         });
         gsonRequest.setShouldCache(true);
-        gsonRequest.setTag("vouchers");
+        gsonRequest.setTag("myvouchers");
         VolleyHelper.getInstance().getRequestQueue().add(gsonRequest);
     }
 }

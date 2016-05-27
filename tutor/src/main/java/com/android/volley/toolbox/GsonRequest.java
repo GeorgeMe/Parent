@@ -75,9 +75,12 @@ public class GsonRequest<T> extends Request<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
+
+
             String jsonString = new String(response.data,HttpHeaderParser.parseCharset(response.headers));
             VolleyLog.d(TAG, "response ---> " + jsonString);
             return Response.success((T) mGson.fromJson(jsonString, mType), HttpHeaderParser.parseCacheHeaders(response));
+
         } catch (UnsupportedEncodingException e) {
             return Response.error(new VolleyError(e));
         }

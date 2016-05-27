@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.alibaba.mobileim.channel.event.IWxCallback;
 import com.alibaba.mobileim.channel.util.YWLog;
 import com.alibaba.mobileim.login.YWLoginCode;
-import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
@@ -51,8 +50,6 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
     private SignUpPresenterImpl signUpPresenter;
     private String mobile;
-    private MaterialDialog progressDialog=null;
-
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -187,13 +184,6 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
                     }
 
                     signUpPresenter.signUp(jsonObject);
-                    if (progressDialog==null) {
-                        progressDialog=new MaterialDialog.Builder(this)
-                                .title(R.string.progress_dialog)
-                                .content(R.string.please_wait)
-                                .progress(true, 0)
-                                .show();
-                    }
                 }
                 break;
         }
@@ -205,13 +195,9 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
             @Override
             public void onSuccess(Object... arg0) {
+                hideLoading();
                 saveIdPasswordToLocal(mobile, etPassword.getText().toString());
-
                 btnSignupComplete.setClickable(true);
-                if (progressDialog!=null){
-                    progressDialog.dismiss();
-                    progressDialog=null;
-                }
                 Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
                 YWLog.i(TAG_LOG, "login success!");
                 XmlDB.getInstance(mContext).saveKey("isLogin", true);
@@ -229,10 +215,7 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
             @Override
             public void onError(int errorCode, String errorMessage) {
-                if (progressDialog!=null){
-                    progressDialog.dismiss();
-                    progressDialog=null;
-                }
+                hideLoading();
                 if (errorCode == YWLoginCode.LOGON_FAIL_INVALIDUSER) { //若用户不存在，则提示使用游客方式登陆
                     showTip(errorMessage);
                 } else {
@@ -247,11 +230,8 @@ public class SignUpActivity extends BaseActivity implements SignUpView, View.OnC
 
     @Override
     public void showTip(String msg) {
+        hideLoading();
         btnSignupComplete.setClickable(true);
-        if (progressDialog!=null){
-            progressDialog.dismiss();
-            progressDialog=null;
-        }
         ToastView toast = new ToastView(mContext, msg);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();

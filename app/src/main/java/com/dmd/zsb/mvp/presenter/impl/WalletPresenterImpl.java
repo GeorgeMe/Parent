@@ -28,6 +28,7 @@ public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedList
 
     @Override
     public void onWalletInfo(JSONObject jsonObject) {
+        walletView.showLoading(null);
         walletRequest request=new walletRequest();
         try {
             request.fromJson(jsonObject);
@@ -40,11 +41,13 @@ public class WalletPresenterImpl implements WalletPresenter,BaseSingleLoadedList
 
     @Override
     public void onSuccess(walletResponse response) {
+        walletView.hideLoading();
         walletView.setView(response);
     }
 
     @Override
     public void onError(String msg) {
+        walletView.hideLoading();
         walletView.showTip(msg);
     }
 

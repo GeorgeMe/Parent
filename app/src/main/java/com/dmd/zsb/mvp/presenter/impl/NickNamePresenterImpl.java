@@ -28,6 +28,7 @@ public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoaded
 
     @Override
     public void updateNickName(JSONObject jsonObject) {
+        nickNameView.showLoading(null);
         nicknameRequest request=new nicknameRequest();
         try {
             request.fromJson(jsonObject);
@@ -39,11 +40,13 @@ public class NickNamePresenterImpl implements NickNamePresenter,BaseSingleLoaded
 
     @Override
     public void onSuccess(nicknameResponse response) {
+        nickNameView.hideLoading();
         nickNameView.toSettingView();
     }
 
     @Override
     public void onError(String msg) {
+        nickNameView.hideLoading();
         nickNameView.showTip(msg);
     }
 

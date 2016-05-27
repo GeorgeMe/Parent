@@ -13,33 +13,36 @@ import java.io.Serializable;
  */
 public class OrdersBean  extends SugarRecord implements Serializable {
 
-    public String img_header;//头像
-    public String name;//姓名
-    public String type;//职业类型
-    public String sex;//性别
-    public String appointed_time;//约定时间
-    public String charging;//计费
-    public String curriculum;//课程
-    public String address;//地址
-    public String place;//地点
-    public String state;//状态
+    public String oid;
+    public String order_sn;
+    public String offer_price;
+    public String appointment_time;
+    public int order_status;
+    public String location;
+    public String created_at;
+    public String lon;
+    public String lat;
+    public String text;
+    public String subject;
+    public String receiver_id;
 
     public OrdersBean() {
         super();
     }
 
-    public OrdersBean(String img_header, String name, String type, String sex, String appointed_time, String charging, String curriculum, String address, String place, String state) {
-        super();
-        this.img_header = img_header;
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
-        this.appointed_time = appointed_time;
-        this.charging = charging;
-        this.curriculum = curriculum;
-        this.address = address;
-        this.place = place;
-        this.state = state;
+    public OrdersBean(String oid, String order_sn, String offer_price, String appointment_time, int order_status, String location, String created_at, String lon, String lat, String text,String subject,String receiver_id) {
+        this.oid = oid;
+        this.order_sn = order_sn;
+        this.offer_price = offer_price;
+        this.appointment_time = appointment_time;
+        this.order_status = order_status;
+        this.location = location;
+        this.created_at = created_at;
+        this.lon = lon;
+        this.lat = lat;
+        this.text = text;
+        this.subject = subject;
+        this.receiver_id = receiver_id;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -49,16 +52,18 @@ public class OrdersBean  extends SugarRecord implements Serializable {
 
         JSONArray subItemArray;
 
-        this.img_header = jsonObject.optString("img_header");
-        this.name = jsonObject.optString("name");
-        this.type = jsonObject.optString("type");
-        this.sex = jsonObject.optString("sex");
-        this.appointed_time = jsonObject.optString("appointed_time");
-        this.charging = jsonObject.optString("charging");
-        this.curriculum = jsonObject.optString("curriculum");
-        this.address = jsonObject.optString("address");
-        this.place = jsonObject.optString("place");
-        this.state = jsonObject.optString("state");
+        this.oid = jsonObject.optString("oid");
+        this.order_sn = jsonObject.optString("order_sn");
+        this.offer_price = jsonObject.optString("offer_price");
+        this.appointment_time = jsonObject.optString("appointment_time");
+        this.order_status = jsonObject.optInt("order_status");
+        this.location = jsonObject.optString("location");
+        this.created_at = jsonObject.optString("created_at");
+        this.lon = jsonObject.optString("lon");
+        this.lat = jsonObject.optString("lat");
+        this.text = jsonObject.optString("text");
+        this.subject = jsonObject.optString("subject");
+        this.receiver_id = jsonObject.optString("receiver_id");
 
 
         return ;
@@ -67,16 +72,18 @@ public class OrdersBean  extends SugarRecord implements Serializable {
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
 
-        localItemObject.put("img_header", img_header);
-        localItemObject.put("name", name);
-        localItemObject.put("type", type);
-        localItemObject.put("sex", sex);
-        localItemObject.put("appointed_time", appointed_time);
-        localItemObject.put("charging", charging);
-        localItemObject.put("curriculum", curriculum);
-        localItemObject.put("address", address);
-        localItemObject.put("place", place);
-        localItemObject.put("state", state);
+        localItemObject.put("oid", oid);
+        localItemObject.put("order_sn", order_sn);
+        localItemObject.put("offer_price", offer_price);
+        localItemObject.put("appointment_time", appointment_time);
+        localItemObject.put("order_status", order_status);
+        localItemObject.put("location", location);
+        localItemObject.put("created_at", created_at);
+        localItemObject.put("lon", lon);
+        localItemObject.put("lat", lat);
+        localItemObject.put("text", text);
+        localItemObject.put("subject", subject);
+        localItemObject.put("receiver_id", receiver_id);
 
         return localItemObject;
     }

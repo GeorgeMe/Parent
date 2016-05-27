@@ -143,19 +143,5 @@
             android:paddingTop="10dp"
             android:drawableRight="@drawable/list_telescopic_more"
             android:text="我的银行卡" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#b7b7b7"/>
-        <TextView
-            android:id="@+id/wallet_vouchers"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="50dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp"
-            android:drawableRight="@drawable/list_telescopic_more"
-            android:text="代金券" />
     </LinearLayout>
 </LinearLayout>

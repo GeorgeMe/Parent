@@ -11,23 +11,25 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-public class profileRequest extends SugarRecord implements Serializable {
+public class briefRequest extends SugarRecord implements Serializable {
 
     public String   appkey;
     public String version;
     public String   sid;
     public String   uid;
+    public String   brief;
 
-    public profileRequest() {
+    public briefRequest() {
         super();
     }
 
-    public profileRequest(String appkey, String version, String sid, String uid) {
+    public briefRequest(String appkey, String version, String sid, String uid,String   brief) {
         super();
         this.appkey = appkey;
         this.version = version;
         this.sid = sid;
         this.uid = uid;
+        this.brief = brief;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -41,6 +43,7 @@ public class profileRequest extends SugarRecord implements Serializable {
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
+        this.brief = jsonObject.optString("brief");
 
 
         return ;
@@ -53,6 +56,7 @@ public class profileRequest extends SugarRecord implements Serializable {
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
+        localItemObject.put("brief", brief);
 
         return localItemObject;
     }

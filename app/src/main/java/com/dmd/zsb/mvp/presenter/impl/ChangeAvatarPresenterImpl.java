@@ -28,16 +28,19 @@ public class ChangeAvatarPresenterImpl implements ChangeAvatarPresenter,BaseSing
 
     @Override
     public void onChangeAvatar(JSONObject jsonObject,JSONObject file) {
+        changeAvatarView.showLoading(null);
         changeAvatarInteractor.getCommonSingleData(jsonObject,file);
     }
 
     @Override
     public void onSuccess(changeavatarResponse response) {
+        changeAvatarView.hideLoading();
         onError(response.msg);
     }
 
     @Override
     public void onError(String msg) {
+        changeAvatarView.hideLoading();
         changeAvatarView.showTip(msg);
     }
 

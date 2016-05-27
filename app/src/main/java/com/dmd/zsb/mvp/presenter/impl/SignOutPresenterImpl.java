@@ -29,6 +29,7 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
 
     @Override
     public void onSignOut(JSONObject jsonObject) {
+        signOutView.showLoading(null);
         signoutRequest request=new signoutRequest();
         try {
             request.fromJson(jsonObject);
@@ -41,6 +42,7 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
 
     @Override
     public void onSuccess(signoutResponse response) {
+        signOutView.hideLoading();
         if (response.errno==0){
             XmlDB.getInstance(mContext).saveKey("sid","");
             XmlDB.getInstance(mContext).saveKey("uid","");
@@ -50,11 +52,11 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
 
     @Override
     public void onError(String msg) {
-
+        signOutView.hideLoading();
     }
 
     @Override
     public void onException(String msg) {
-
+        onError(msg);
     }
 }

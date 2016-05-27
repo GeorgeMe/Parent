@@ -1,11 +1,13 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.dmd.dialog.AlertDialogWrapper;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
@@ -14,6 +16,7 @@ import com.dmd.zsb.mvp.presenter.impl.FeedbackPresenterImpl;
 import com.dmd.zsb.mvp.view.FeedbackView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.feedbackResponse;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -89,9 +92,21 @@ public class FeedbackActivity extends BaseActivity implements FeedbackView {
     }
 
     @Override
-    public void navigateToHome() {
-        showToast("已收到反馈，谢谢");
-        readyGoThenKill(MainActivity.class);
+    public void navigateToSetting(feedbackResponse data) {
+        if (data.errno==0){
+            new AlertDialogWrapper.Builder(this)
+                    .setTitle(R.string.title)
+                    .setMessage(data.msg)
+                    .setNegativeButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).show();
+        }else {
+            showToast(data.msg);
+        }
     }
 
     @Override

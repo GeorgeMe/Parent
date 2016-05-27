@@ -28,7 +28,6 @@ import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.response.UserDetailResponse;
 import com.dmd.zsb.mvp.presenter.impl.UserDetailPresenterImpl;
 import com.dmd.zsb.mvp.view.UserDetailView;
 import com.dmd.zsb.parent.R;
@@ -145,6 +144,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
                             jsonObject.put("page", 1);//页码
                             jsonObject.put("user_id", user);//页码
+                            jsonObject.put("flag", "detail");//页码
                         } catch (JSONException j) {
 
                         }
@@ -167,6 +167,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
                         jsonObject.put("page", 1);//页码
                         jsonObject.put("user_id", user);//页码
+                        jsonObject.put("flag", "detail");//页码
                     } catch (JSONException j) {
 
                     }
@@ -194,7 +195,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
 
                     @Override
                     public void showData(int position, MyServices itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.service_img).into(service_img);
+                        Picasso.with(mContext).load(itemData.service_img).into(service_img);
                         name.setText(itemData.service_name);
                         price.setText(itemData.service_price);
                     }
@@ -223,7 +224,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
 
                     @Override
                     public void showData(int position, MyComments itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.user_avatar).into(user_avatar);
+                        Picasso.with(mContext).load(itemData.user_avatar).into(user_avatar);
                         nickname.setText(itemData.user_nickname);
                         createtime.setText(itemData.createtime);
                         comment_content.setText(itemData.comment_content);
@@ -276,6 +277,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
             jsonObject.put("page", page);//页码
             jsonObject.put("user_id", user);//页码
+            jsonObject.put("flag", "detail");//页码
         } catch (JSONException j) {
 
         }
@@ -295,6 +297,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
             jsonObject.put("page", 1);//页码
             jsonObject.put("user_id", user);//页码
+            jsonObject.put("flag", "detail");//页码
         } catch (JSONException j) {
 
         }
@@ -307,6 +310,10 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
             evaluationListSwipeLayout.setRefreshing(false);
         }
         if (response!=null){
+            if (response.follow){
+                btnFollow.setText("已关注");
+                btnFollow.setClickable(false);
+            }
             if (response.comments.size()>0){
                 if (commentsListViewDataAdapter!=null){
                     commentsListViewDataAdapter.getDataList().clear();
@@ -324,7 +331,7 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
             }
             if (response.details!=null){
                 details=response.details;
-                Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + details.user_avatar).into(userAvatar);
+                Picasso.with(mContext).load(details.user_avatar).into(userAvatar);
 
                 tvName.setText(details.user_name);
                 tvSeniority.setText(details.user_seniority);
@@ -398,8 +405,19 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
     }
 
     @Override
-    public void setUserInfo(UserDetailResponse userInfo) {
+    public void setUserInfo(userdetailsResponse userInfo) {
 
+        if (userInfo.errno==0){
+            if (userInfo.follow){
+                btnFollow.setText("已关注");
+                btnFollow.setClickable(false);
+                showToast(userInfo.msg);
+            }
+        }else if (userInfo.errno==1){
+            showToast(userInfo.msg);
+        }else {
+            showToast(userInfo.msg);
+        }
     }
 
     @Override
@@ -437,6 +455,22 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                 finish();
                 break;
             case R.id.btn_follow:
+                //提交的参数封装
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                    jsonObject.put("version", Constants.ZSBVERSION);
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
+                    jsonObject.put("page", 1);//页码
+                    jsonObject.put("user_id", user);//页码
+                    jsonObject.put("flag", "follow");//页码
+
+                } catch (JSONException j) {
+
+                }
+                userDetailPresenter.onUserDetail(901, jsonObject);
                 break;
             case R.id.btn_appointment:
                 if (!StringUtils.StringIsEmpty(user)){

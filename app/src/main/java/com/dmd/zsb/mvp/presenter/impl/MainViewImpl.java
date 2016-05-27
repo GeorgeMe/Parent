@@ -31,6 +31,7 @@ public class MainViewImpl implements Presenter, BaseSingleLoadedListener<initdat
 
     @Override
     public void initialized() {
+        mMainView.showLoading(null);
         mMainView.initTabView();
         try{
             initdataRequest request=new initdataRequest();
@@ -45,6 +46,7 @@ public class MainViewImpl implements Presenter, BaseSingleLoadedListener<initdat
 
     @Override
     public void onSuccess(initdataResponse data) {
+        mMainView.hideLoading();
         if (data.errno == 0) {
             if (data.db_version > XmlDB.getInstance(mContext).getKeyIntValue("db_version",0)){
                 if (data.grades.size()>0){
@@ -64,11 +66,11 @@ public class MainViewImpl implements Presenter, BaseSingleLoadedListener<initdat
 
     @Override
     public void onError(String msg) {
-
+        mMainView.hideLoading();
     }
 
     @Override
     public void onException(String msg) {
-
+        onError(msg);
     }
 }

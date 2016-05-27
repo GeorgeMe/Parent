@@ -3,26 +3,18 @@ package com.dmd.zsb.parent.activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.dmd.pay.AliPayActivity;
 import com.dmd.pay.entity.PayInfo;
 import com.dmd.tutor.eventbus.EventCenter;
+import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
-import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.api.ApiConstants;
-import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.OrderEntity;
-import com.dmd.zsb.mvp.presenter.impl.ConfirmPayPresenterImpl;
 import com.dmd.zsb.mvp.view.ConfirmPayView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.protocol.response.confirmpayResponse;
-import com.squareup.picasso.Picasso;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.dmd.zsb.protocol.table.OrdersBean;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -32,34 +24,37 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     TextView topBarBack;
     @Bind(R.id.top_bar_title)
     TextView topBarTitle;
-    @Bind(R.id.img_header)
-    ImageView imgHeader;
-    @Bind(R.id.tv_name)
-    TextView tvName;
-    @Bind(R.id.tv_type)
-    TextView tvType;
-    @Bind(R.id.tv_sex)
-    TextView tvSex;
-    @Bind(R.id.tv_appointed_time)
-    TextView tvAppointedTime;
-    @Bind(R.id.tv_charging)
-    TextView tvCharging;
-    @Bind(R.id.tv_curriculum)
-    TextView tvCurriculum;
-    @Bind(R.id.tv_address)
-    TextView tvAddress;
-    @Bind(R.id.tv_place)
-    TextView tvPlace;
-    @Bind(R.id.tv_state)
-    TextView tvState;
     @Bind(R.id.btn_confirm_pay)
     Button btnConfirmPay;
 
-    private OrderEntity data;
-    private ConfirmPayPresenterImpl confirmPayPresenter;
+    @Bind(R.id.tv_oid)
+    TextView tvOid;
+    @Bind(R.id.tv_created_at)
+    TextView tvCreatedAt;
+    @Bind(R.id.tv_appointment_time)
+    TextView tvAppointmentTime;
+    @Bind(R.id.tv_subject)
+    TextView tvSubject;
+    @Bind(R.id.tv_text)
+    TextView tvText;
+    @Bind(R.id.tv_location)
+    TextView tvLocation;
+    @Bind(R.id.tv_offer_price)
+    TextView tvOfferPrice;
+    @Bind(R.id.tv_receiver_id)
+    TextView tvReceiverId;
+    @Bind(R.id.tv_distance)
+    TextView tvDistance;
+    @Bind(R.id.tv_order_status)
+    TextView tvOrderStatus;
+
+
+    private OrdersBean data;
+    //private ConfirmPayPresenterImpl confirmPayPresenter;
+
     @Override
     protected void getBundleExtras(Bundle extras) {
-        data = (OrderEntity) extras.getSerializable("data");
+        data = (OrdersBean) extras.getSerializable("data");
     }
 
     @Override
@@ -79,20 +74,20 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
 
     @Override
     protected void initViewsAndEvents() {
-        confirmPayPresenter=new ConfirmPayPresenterImpl(mContext,this);
-        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + data.getImg_header()).into(imgHeader);
-        tvName.setText(data.getName());
-        tvType.setText(data.getType());
-        tvSex.setText(data.getSex());
-        tvAppointedTime.setText(data.getAppointed_time());
-        tvCharging.setText(data.getCharging());
-        tvCurriculum.setText(data.getCurriculum());
-        tvAddress.setText(data.getAddress());
-        tvPlace.setText(data.getPlace());
-        if (data.getState().equals("2")) {
-            tvState.setText("未付款");
-        } else if (data.getState().equals("3")) {
-            tvState.setText("已付款");
+       // confirmPayPresenter = new ConfirmPayPresenterImpl(mContext, this);
+        tvOid.setText(data.oid);
+        tvCreatedAt.setText(data.created_at);
+        tvAppointmentTime.setText(data.appointment_time);
+        tvSubject.setText(data.subject);
+        tvText.setText(data.text);
+        tvLocation.setText(data.location);
+        tvOfferPrice.setText(data.offer_price);
+        tvReceiverId.setText(data.receiver_id);
+        tvDistance.setText(LocationManager.getDistance(Double.parseDouble(data.lat), Double.parseDouble(data.lon)));
+        if (data.order_status==2) {
+            tvOrderStatus.setText("未付款");
+        } else if (data.order_status==3) {
+            tvOrderStatus.setText("已付款");
         }
     }
 
@@ -134,19 +129,32 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
                 finish();
                 break;
             case R.id.btn_confirm_pay:
-                JSONObject jsonObject=new JSONObject();
+
+                PayInfo payInfo = new PayInfo();
+                payInfo.setName(data.subject);
+                payInfo.setDesc(data.text);
+                payInfo.setOrder_sn(data.order_sn);
+                payInfo.setPrice(Double.parseDouble(data.offer_price));
+                payInfo.setRate(1.0);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("payInfo", payInfo);
+                readyGoForResult(AliPayActivity.class, 110, bundle);
+
+/*
+                JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.put("appkey", Constants.ZSBAPPKEY);
                     jsonObject.put("version", Constants.ZSBVERSION);
-                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid","sid"));
-                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid","uid"));
-                    jsonObject.put("oid","");
-                }catch (JSONException j){
+                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                    jsonObject.put("oid", data.oid);
+                } catch (JSONException j) {
 
                 }
 
                 confirmPayPresenter.onConfirmPay(jsonObject);
 
+*/
 
                 break;
         }
@@ -154,16 +162,9 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
 
     @Override
     public void setConfirmPayView(confirmpayResponse response) {
-        if (response.errno==0){
-            PayInfo payInfo=new PayInfo();
-            payInfo.setName("课时费用");
-            payInfo.setDesc("授课完成，支付费用");
-            payInfo.setPrice(Double.parseDouble("0.1"));
-            payInfo.setRate(1.0);
-            Bundle bundle=new Bundle();
-            bundle.putSerializable("payInfo",payInfo);
-            readyGoForResult(AliPayActivity.class,110,bundle);
-        }else {
+        if (response.errno == 0) {
+
+        } else {
             showTip(response.msg);
         }
     }
@@ -172,4 +173,5 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     public void showTip(String msg) {
         showToast(msg);
     }
+
 }

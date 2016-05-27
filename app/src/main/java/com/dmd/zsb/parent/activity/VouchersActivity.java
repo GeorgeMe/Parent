@@ -15,9 +15,7 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.tutor.widgets.XSwipeRefreshLayout;
-import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.entity.VouchersEntity;
 import com.dmd.zsb.mvp.presenter.impl.VouchersPresenterImpl;
 import com.dmd.zsb.mvp.view.VouchersView;
 import com.dmd.zsb.parent.R;
@@ -101,7 +99,7 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
 
                     @Override
                     public void showData(int position, VouchersBean itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS+itemData.img_path).into(img_vouchers);
+                        Picasso.with(mContext).load(itemData.img_path).into(img_vouchers);
                     }
                 };
             }
@@ -149,14 +147,15 @@ public class VouchersActivity extends BaseActivity implements VouchersView, Load
     }
 
     @Override
-    public void navigateToVouchersDetail(int position, VouchersEntity itemData) {
-
+    public void navigateToVouchersDetail(int position, VouchersBean itemData) {
+        if (itemData!=null)
+            showToast(""+itemData.note);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        VouchersEntity vouchersEntity = (VouchersEntity) parent.getItemAtPosition(position);
-        navigateToVouchersDetail(position, vouchersEntity);
+        VouchersBean vouchersBean = (VouchersBean) parent.getAdapter().getItem(position);
+        navigateToVouchersDetail(position, vouchersBean);
     }
 
     @Override

@@ -300,6 +300,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,Si
                             break;
                         }
                         case 11: {
+                            XmlDB.getInstance(mContext).saveKey("ChangeAvatar",true);
                             showToast(msg.obj.toString());
                             break;
                         }

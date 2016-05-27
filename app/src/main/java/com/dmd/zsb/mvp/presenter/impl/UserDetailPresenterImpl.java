@@ -29,31 +29,38 @@ public class UserDetailPresenterImpl implements UserDetailPresenter,BaseMultiLoa
 
     @Override
     public void onUserDetail(int event_tag,JSONObject jsonObject) {
+        userDetailView.showLoading(null);
         userdetailsRequest request=new userdetailsRequest();
         try{
             request.fromJson(jsonObject);
             userDetailInteractor.getCommonListData(event_tag,request.toJson());
         }catch (JSONException j){
+
         }
 
     }
 
     @Override
     public void onSuccess(int event_tag, userdetailsResponse response) {
+        userDetailView.hideLoading();
         if (event_tag == Constants.EVENT_REFRESH_DATA) {
             userDetailView.refreshListData(response);
         } else if (event_tag == Constants.EVENT_LOAD_MORE_DATA) {
             userDetailView.addMoreListData(response);
+        }else if (event_tag==901){
+            if (response.errno==0){
+                userDetailView.setUserInfo(response);
+            }
         }
     }
 
     @Override
     public void onError(String msg) {
-
+        userDetailView.hideLoading();
     }
 
     @Override
     public void onException(String msg) {
-
+        userDetailView.hideLoading();
     }
 }

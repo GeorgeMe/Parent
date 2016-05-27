@@ -17,18 +17,20 @@ public class changepasswordRequest extends SugarRecord implements Serializable {
     public String version;
     public String   sid;
     public String   uid;
+    public String   nowPassword;
     public String   newPassword;
 
     public changepasswordRequest() {
         super();
     }
 
-    public changepasswordRequest(String appkey, String version, String sid, String uid, String newPassword) {
+    public changepasswordRequest(String appkey, String version, String sid, String uid,String   nowPassword, String newPassword) {
         super();
         this.appkey = appkey;
         this.version = version;
         this.sid = sid;
         this.uid = uid;
+        this.nowPassword = nowPassword;
         this.newPassword = newPassword;
     }
 
@@ -43,6 +45,7 @@ public class changepasswordRequest extends SugarRecord implements Serializable {
         this.version = jsonObject.optString("version");
         this.sid = jsonObject.optString("sid");
         this.uid = jsonObject.optString("uid");
+        this.nowPassword = jsonObject.optString("nowPassword");
         this.newPassword = jsonObject.optString("newPassword");
 
         return ;
@@ -55,6 +58,7 @@ public class changepasswordRequest extends SugarRecord implements Serializable {
         localItemObject.put("version", version);
         localItemObject.put("sid", sid);
         localItemObject.put("uid", uid);
+        localItemObject.put("nowPassword", nowPassword);
         localItemObject.put("newPassword", newPassword);
 
         return localItemObject;

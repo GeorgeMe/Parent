@@ -10,28 +10,23 @@ import java.io.Serializable;
 
 public class mineResponse extends SugarRecord implements Serializable
 {
-     public String   mineHeaderImg;
-     public String   mineName;
-     public String   mineAddress;
-     public String   mineGrade;
-     public String   mineSubjects;
-     public String   uid;
-     public int succeed;
+     public String   user_id;
+     public String   user_avatar;
+     public String   user_signature;
+     public String   user_large_img;
+     public int errno;
      public String msg;
 
      public mineResponse() {
           super();
      }
 
-     public mineResponse(String mineHeaderImg, String mineName, String mineAddress, String mineGrade, String mineSubjects, String uid, int succeed, String msg) {
-          super();
-          this.mineHeaderImg = mineHeaderImg;
-          this.mineName = mineName;
-          this.mineAddress = mineAddress;
-          this.mineGrade = mineGrade;
-          this.mineSubjects = mineSubjects;
-          this.uid = uid;
-          this.succeed = succeed;
+     public mineResponse(String user_id, String user_avatar, String user_signature, String user_large_img, int errno, String msg) {
+          this.user_id = user_id;
+          this.user_avatar = user_avatar;
+          this.user_signature = user_signature;
+          this.user_large_img = user_large_img;
+          this.errno = errno;
           this.msg = msg;
      }
 
@@ -43,12 +38,11 @@ public class mineResponse extends SugarRecord implements Serializable
 
           JSONArray subItemArray;
 
-          this.mineHeaderImg = jsonObject.optString("mineHeaderImg");
-          this.mineName = jsonObject.optString("mineName");
-          this.mineAddress = jsonObject.optString("mineAddress");
-          this.mineGrade = jsonObject.optString("mineGrade");
-          this.mineSubjects = jsonObject.optString("mineSubjects");
-          this.succeed = jsonObject.optInt("succeed");
+          this.user_id = jsonObject.optString("user_id");
+          this.user_avatar = jsonObject.optString("user_avatar");
+          this.user_signature = jsonObject.optString("user_signature");
+          this.user_large_img = jsonObject.optString("user_large_img");
+          this.errno = jsonObject.optInt("errno");
           this.msg = jsonObject.optString("msg");
 
           return ;
@@ -58,12 +52,11 @@ public class mineResponse extends SugarRecord implements Serializable
      {
           JSONObject localItemObject = new JSONObject();
           JSONArray itemJSONArray = new JSONArray();
-          localItemObject.put("mineHeaderImg", mineHeaderImg);
-          localItemObject.put("mineName", mineName);
-          localItemObject.put("mineAddress", mineAddress);
-          localItemObject.put("mineGrade", mineGrade);
-          localItemObject.put("mineSubjects", mineSubjects);
-          localItemObject.put("succeed", succeed);
+          localItemObject.put("user_id", user_id);
+          localItemObject.put("user_avatar", user_avatar);
+          localItemObject.put("user_signature", user_signature);
+          localItemObject.put("user_large_img", user_large_img);
+          localItemObject.put("errno", errno);
           localItemObject.put("msg", msg);
           return localItemObject;
      }

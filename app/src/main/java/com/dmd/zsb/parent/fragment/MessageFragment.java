@@ -55,11 +55,11 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     @Override
     protected void initViewsAndEvents() {
         topBarBack.setVisibility(View.GONE);
-        topBarTitle.setText("我的消息");
+        topBarTitle.setText("消息");
 
         SpannableString sp = new SpannableString("您尚未登录，点击登录");
         sp.setSpan(new ForegroundColorSpan(Color.BLUE), 8, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sp.setSpan(new RelativeSizeSpan(1.5f), 8, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);  //2.0f表示默认字体大小的两倍
+        sp.setSpan(new RelativeSizeSpan(1.4f), 8, 10, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);  //2.0f表示默认字体大小的两倍
         tvSignin.setText(sp);
 
         tvSignin.setOnClickListener(this);

@@ -24,7 +24,6 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.tutor.utils.CommonUtils;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.tutor.widgets.ProgressDialog;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.presenter.impl.SignInPresenterImpl;
 import com.dmd.zsb.mvp.view.SignInView;
@@ -59,9 +58,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     private static final String PASSWORD = "password";
 
     public static final String AUTO_LOGIN_STATE_ACTION = "com.dmd.zsb.parent.autoLoginStateActionn";
-    private ProgressDialog progressDialog=null;
-
-
 
     private BroadcastReceiver mAutoLoginStateReceiver = new BroadcastReceiver() {
         @Override
@@ -197,8 +193,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                     //signInPresenter.signIn(jsonObject);
                     signInPresenter.signIn(mobile,password);
 
-                    progressDialog=new ProgressDialog(mContext,getString(R.string.please_later_on));
-                    progressDialog.show();
                 }
                 break;
         }
@@ -219,10 +213,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
                 saveIdPasswordToLocal(etMobile.getText().toString(), etPassword.getText().toString());
 
                 btnLogin.setClickable(true);
-                if (progressDialog!=null){
-                    progressDialog.dismiss();
-                    progressDialog=null;
-                }
                 Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
                 YWLog.i(TAG, "login success!");
                 XmlDB.getInstance(mContext).saveKey("isLogin", true);
@@ -240,10 +230,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
 
             @Override
             public void onError(int errorCode, String errorMessage) {
-                if (progressDialog!=null){
-                    progressDialog.dismiss();
-                    progressDialog=null;
-                }
+
                 if (errorCode == YWLoginCode.LOGON_FAIL_INVALIDUSER) { //若用户不存在，则提示使用游客方式登陆
                    showTip(errorMessage);
                 } else {
@@ -257,10 +244,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
 
     @Override
     public void showTip(String msg) {
-        if (progressDialog!=null){
-            progressDialog.dismiss();
-            progressDialog=null;
-        }
         ToastView toast = new ToastView(this, msg);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
@@ -296,10 +279,6 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (progressDialog!=null){
-            progressDialog.dismiss();
-            progressDialog=null;
-        }
         myUnregisterReceiver();
     }
 
@@ -316,35 +295,22 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     private void handleAutoLoginState(int loginState) {
 
         if (loginState == YWLoginState.logining.getValue()) {
-            if (progressDialog==null) {
-                progressDialog=new ProgressDialog(mContext,getString(R.string.please_later_on));
-                progressDialog.show();
-            }
+
             btnLogin.setClickable(false);
         } else if (loginState == YWLoginState.success.getValue()) {
             btnLogin.setClickable(true);
-            if (progressDialog!=null){
-                progressDialog.dismiss();
-                progressDialog=null;
-            }
             readyGoThenKill(MainActivity.class);
         } else {
             YWIMKit imKit = LoginHelper.getInstance().getIMKit();
             if (imKit != null) {
                 if (imKit.getIMCore().getLoginState() == YWLoginState.success) {
                     btnLogin.setClickable(true);
-                    progressDialog.dismiss();
-                    progressDialog=null;
                     readyGoThenKill(MainActivity.class);
                     return;
                 }
             }
             //当作失败处理
             btnLogin.setClickable(true);
-            if (progressDialog!=null){
-                progressDialog.dismiss();
-                progressDialog=null;
-            }
         }
     }
 }

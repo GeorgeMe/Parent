@@ -201,7 +201,7 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 
                     @Override
                     public void showData(int position, UsersBean itemData) {
-                        Picasso.with(mContext).load(ApiConstants.Urls.API_IMG_BASE_URLS + itemData.avatar).into(teacher_avatar);
+                        Picasso.with(mContext).load(itemData.avatar).into(teacher_avatar);
                         teacher_name.setText(itemData.username);
                         teacher_gender.setText(itemData.gender);
                         teacher_signature.setText(itemData.signature);
@@ -250,10 +250,22 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
 //===============================HomeView============================================
 
     @Override
-    public void navigateToUserDetail(UsersBean data) {
-        Bundle bundle = new Bundle();
-        bundle.putString("user", data.user_id);
-        readyGo(UserDetailActivity.class, bundle);
+    public void navigateToUserDetail(UsersBean itemData) {
+        if (itemData!=null) {
+            Bundle bundle = new Bundle();
+            bundle.putString("user", itemData.user_id);
+            readyGo(UserDetailActivity.class, bundle);
+        }
+    }
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mListViewAdapter != null) {
+            int j = position + -1;
+            if (j >= 0 && j < mListViewAdapter.getDataList().size()) {
+                UsersBean data = (UsersBean) parent.getItemAtPosition(position);
+                navigateToUserDetail(data);
+            }
+        }
     }
 
     @Override
@@ -261,17 +273,20 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
         if (fragmentHomeListSwipeLayout != null)
             fragmentHomeListSwipeLayout.setRefreshing(false);
         if (response != null) {
-            if (response.users.size() >= 0) {//用户列表
+            if (response.users.size() >= 1) {//用户列表
                 if (mListViewAdapter != null) {
                     mListViewAdapter.getDataList().clear();
                     mListViewAdapter.getDataList().addAll(response.users);
                     mListViewAdapter.notifyDataSetChanged();
                 }
+            }else {
+                mListViewAdapter.getDataList().clear();
+                mListViewAdapter.notifyDataSetChanged();
             }
-            if (response.advertisements.size() >= 0) {//广告
+            if (response.advertisements.size() >= 1) {//广告
                 mRollPagerView.setAdapter(new HomeCarouselAdapter(mContext, response.advertisements));
             }
-            if (response.subjects.size() >= 0) {//科目
+            if (response.subjects.size() >= 1) {//科目
                 subjectList = new ArrayList<SubjectsBean>();
                 subjectList.addAll(response.subjects);
                 mNineGridlayout.setAdapter(new HomeCoursesAdapter(mContext, response.subjects, 5));
@@ -306,16 +321,6 @@ public class HomeFragment extends BaseFragment implements HomeView, LoadMoreList
     }
     //==============================AdapterView.OnItemClickListener=============================================
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        if (mListViewAdapter != null) {
-            int j = position + -1;
-            if (j >= 0 && j < mListViewAdapter.getDataList().size()) {
-                UsersBean data = (UsersBean) parent.getItemAtPosition(position);
-                navigateToUserDetail(data);
-            }
-        }
-    }
 
     @Override
     public void onItemClick(View view, int position) {

@@ -164,8 +164,8 @@ public class UriHelper {
     }
 
     //修改用户简介
-    public String changeprofile(JSONObject json){
-        return urlToString(true,ApiConstants.Urls.API_USER_CHANGEPROFILE,json);
+    public String changeBrief(JSONObject json){
+        return urlToString(true,ApiConstants.Urls.API_USER_CHANGEBRIEF,json);
     }
     //修改头像
     public String changeAvatar(JSONObject json){
@@ -213,10 +213,6 @@ public class UriHelper {
     //确认支付
     public String confirmpay(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_CONFIRMPAY,json);
-    }
-    //修改订单状态
-    public String updateOrderStatus(JSONObject json){
-        return urlToString(true,ApiConstants.Urls.API_ORDER_UPDATEORDERSTATUS,json);
     }
 
 }

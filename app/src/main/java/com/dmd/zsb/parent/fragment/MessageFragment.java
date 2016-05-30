@@ -1,5 +1,6 @@
 package com.dmd.zsb.parent.fragment;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -80,6 +81,7 @@ public class MessageFragment extends BaseFragment implements View.OnClickListene
     public void onClick(View v) {
         if (v == tvSignin) {
             readyGo(SignInActivity.class);
+            ((Activity)mContext).finish();
         }
     }
 

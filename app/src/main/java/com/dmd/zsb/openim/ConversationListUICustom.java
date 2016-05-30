@@ -55,6 +55,7 @@ public class ConversationListUICustom extends IMConversationListUI {
 
     public ConversationListUICustom(Pointcut pointcut) {
         super(pointcut);
+
     }
 
     /**
@@ -67,6 +68,7 @@ public class ConversationListUICustom extends IMConversationListUI {
      */
     @Override
     public View getCustomConversationListTitle(final Fragment fragment,final Context context, LayoutInflater inflater) {
+
         //TODO
         // 重要：必须以该形式初始化customView---［inflate(R.layout.**, new RelativeLayout(context),false)］------，
         // 以让inflater知道父布局的类型，否则布局xml**中定义的高度和宽度无效，均被默认的wrap_content替代
@@ -222,6 +224,7 @@ public class ConversationListUICustom extends IMConversationListUI {
     @Override
     public void onActivityCreated(Bundle savedInstanceState, Fragment fragment) {
         super.onActivityCreated(savedInstanceState, fragment);
+       // fragment.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
     }
 
     /**

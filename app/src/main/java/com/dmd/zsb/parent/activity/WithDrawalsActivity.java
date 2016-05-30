@@ -144,7 +144,7 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
             case R.id.tv_note:
                 //给个网页说明
                 Bundle bundle=new Bundle();
-                bundle.putString(BaseWebActivity.BUNDLE_KEY_URL,"http://www.cqdmd.com/");
+                bundle.putString(BaseWebActivity.BUNDLE_KEY_URL,"http://www.cqdmd.com/TutorClient/about/question.html");
                 bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE,"常见问题");
                 readyGo(BaseWebActivity.class,bundle);
                 break;

@@ -2,11 +2,14 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
+import com.alibaba.mobileim.IYWLoginService;
+import com.alibaba.mobileim.channel.event.IWxCallback;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.mvp.interactor.impl.SignOutInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignOutPresenter;
 import com.dmd.zsb.mvp.view.SignOutView;
+import com.dmd.zsb.openim.LoginHelper;
 import com.dmd.zsb.protocol.request.signoutRequest;
 import com.dmd.zsb.protocol.response.signoutResponse;
 
@@ -44,9 +47,28 @@ public class SignOutPresenterImpl implements SignOutPresenter,BaseSingleLoadedLi
     public void onSuccess(signoutResponse response) {
         signOutView.hideLoading();
         if (response.errno==0){
-            XmlDB.getInstance(mContext).saveKey("sid","");
-            XmlDB.getInstance(mContext).saveKey("uid","");
-            signOutView.onSuccess();
+            IYWLoginService mLoginService = LoginHelper.getInstance().getIMKit().getLoginService();
+            mLoginService.logout(new IWxCallback() {
+
+                @Override
+                public void onSuccess(Object... arg0) {
+                    XmlDB.getInstance(mContext).saveKey("sid","");
+                    XmlDB.getInstance(mContext).saveKey("uid","");
+                    XmlDB.getInstance(mContext).saveKey("isLogin",false);
+                    signOutView.onSuccess();
+                }
+
+                @Override
+                public void onProgress(int arg0) {
+
+                }
+
+                @Override
+                public void onError(int arg0, String arg1) {
+                    signOutView.showTip("退出报错");
+                }
+            });
+
         }
     }
 

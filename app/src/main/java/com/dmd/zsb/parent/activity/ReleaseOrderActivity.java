@@ -162,7 +162,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                 appointmentTime();
                 break;
             case R.id.publish_order_publish:
-
+                publishOrderPublish.setClickable(false);
                 int num = 0;
                 try {    // 判断预约时间是否大于当前时间
                     Date date = new Date();
@@ -179,21 +179,27 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                     }
                 } catch (ParseException e) {
                     // TODO Auto-generated catch block
+                    publishOrderPublish.setClickable(true);
                     e.printStackTrace();
                 }
 
                 if (publishOrderPrice.getText().toString().equals("")) {
+                    publishOrderPublish.setClickable(true);
                     showToast(getString(R.string.price_range));
                 } else if (publishOrderPrice.getText().toString().equals("0.")) {
+                    publishOrderPublish.setClickable(true);
                     showToast(getString(R.string.right_price));
                 } else if (publishOrderTime.getText().toString().equals("")) {
+                    publishOrderPublish.setClickable(true);
                     showToast(getString(R.string.appoint_time));
                 } else if (num < 0) {
+                    publishOrderPublish.setClickable(true);
                     showToast(getString(R.string.wrong_appoint_time_hint));
                 } else if (publishOrderLocation.getText().toString().equals("")) {
+                    publishOrderPublish.setClickable(true);
                     showToast(getString(R.string.appoint_location_hint));
                 } else {
-                    publishOrderPublish.setClickable(false);
+
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("appkey", Constants.ZSBAPPKEY);
@@ -211,7 +217,6 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
                     }catch (JSONException j){
 
                     }
-
                     releaseOrderPresenter.onReleaseOrder(jsonObject);
                 }
                 break;
@@ -227,6 +232,7 @@ public class ReleaseOrderActivity extends BaseActivity implements ReleaseOrderVi
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
+        finish();
     }
 
     @Override

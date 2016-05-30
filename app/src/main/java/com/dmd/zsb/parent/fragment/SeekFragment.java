@@ -220,22 +220,9 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     @Override
     public void onEventComming(EventCenter eventCenter) {
         if (eventCenter.getEventCode() == Constants.EVENT_RECOMMEND_COURSES_SEEK) {
-            //subid=eventCenter.getData().toString();
-            // showToast("000");
-        }
-    }
 
-/*
-    @Subscribe
-    @Override
-    public void onEventMainThread(EventCenter eventCenter){
-        super.onEventMainThread(eventCenter);
-        if (eventCenter.getEventCode() == Constants.EVENT_RECOMMEND_COURSES_SEEK) {
-            subid=eventCenter.getData().toString();
-           // showToast("000");
         }
     }
-*/
 
     @Override
     public void onClick(View v) {
@@ -302,7 +289,7 @@ public class SeekFragment extends BaseFragment implements SeekView, LoadMoreList
     public void navigateToUserDetail(UsersBean itemData) {
         if (itemData!=null) {
             Bundle bundle = new Bundle();
-            bundle.putSerializable("data", itemData);
+            bundle.putSerializable("user", itemData.user_id);
             readyGo(UserDetailActivity.class, bundle);
         }
     }

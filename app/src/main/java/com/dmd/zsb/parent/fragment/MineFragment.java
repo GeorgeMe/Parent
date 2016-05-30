@@ -1,5 +1,6 @@
 package com.dmd.zsb.parent.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -138,8 +139,11 @@ public class MineFragment extends BaseFragment implements MineView {
     public void setView(mineResponse response) {
         //fragment频繁切换imgTopBg和userAvatar有丢失的可能
         //解决方法  保存fragment状态 保存view
+        if (imgTopBg!=null)
         Picasso.with(mContext).load(response.user_large_img).into(imgTopBg);
+        if (userAvatar!=null)
         Picasso.with(mContext).load(response.user_avatar).into(userAvatar);
+        if (tvSignature!=null)
         tvSignature.setText(response.user_signature);
     }
 
@@ -164,6 +168,7 @@ public class MineFragment extends BaseFragment implements MineView {
         switch (view.getId()) {
             case R.id.tv_signin:
                 readyGo(SignInActivity.class);
+                ((Activity)mContext).finish();
                 break;
             case R.id.mine_wallet:
                 if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin", false)) {
@@ -202,7 +207,7 @@ public class MineFragment extends BaseFragment implements MineView {
                 break;
             case R.id.mine_about_us:
                 Bundle bundle = new Bundle();
-                bundle.putString(BaseWebActivity.BUNDLE_KEY_URL, "http://www.cqdmd.com/");
+                bundle.putString(BaseWebActivity.BUNDLE_KEY_URL, "http://www.cqdmd.com/TutorClient/about/about.html");
                 bundle.putString(BaseWebActivity.BUNDLE_KEY_TITLE, "关于我们");
                 readyGo(BaseWebActivity.class, bundle);
                 break;

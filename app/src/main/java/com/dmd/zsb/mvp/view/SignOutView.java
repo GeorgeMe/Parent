@@ -6,4 +6,5 @@ package com.dmd.zsb.mvp.view;
 public interface SignOutView  extends BaseView{
     void onSignOutView();
     void onSuccess();
+    void showTip(String msg);
 }

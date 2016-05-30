@@ -35,7 +35,9 @@ public class ChangeAvatarPresenterImpl implements ChangeAvatarPresenter,BaseSing
     @Override
     public void onSuccess(changeavatarResponse response) {
         changeAvatarView.hideLoading();
-        onError(response.msg);
+        if (response.msg.equals("success")){
+            changeAvatarView.showTip("头像设置成功");
+        }
     }
 
     @Override

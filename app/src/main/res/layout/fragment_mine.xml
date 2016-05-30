@@ -12,8 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
+
+            android:id="@+id/img_top_bg"
             android:scaleType="fitXY"
-            android:src="@drawable/vouchers"
+            android:src="@drawable/user_large_img_001"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <RelativeLayout
@@ -23,6 +26,14 @@
             android:paddingTop="10dp"
             android:gravity="center">
 
+            <TextView
+                android:id="@+id/tv_signin"
+                android:visibility="gone"
+                android:layout_margin="30dp"
+                android:text="点击登录"
+                android:gravity="center"
+                android:layout_width="65dp"
+                android:layout_height="45dp" />
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/user_avatar"
                 android:layout_width="75dp"
@@ -41,19 +52,20 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:background="@color/tab_pressed_color"
+
+            android:id="@+id/ll_signature"
+            android:background="@android:drawable/screen_background_light_transparent"
             android:layout_gravity="bottom"
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:gravity="center_horizontal|center_vertical">
             <TextView
+                android:id="@+id/tv_signature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/aliwx_bg_color_white"
                 android:text="我的在这里" />
         </LinearLayout>
     </FrameLayout>
-
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"

@@ -54,9 +54,12 @@ public class TutorApplication extends SugarApp {
         //会话列表UI相关
         AdviceBinder.bindAdvice(PointCutEnum.CONVERSATION_FRAGMENT_UI_POINTCUT, ConversationListUICustom.class);
         //初始化ImSDK
-        OpenIMAgent im = OpenIMAgent.getInstance(this);
-        im.init();
-
+/*        OpenIMAgent im = OpenIMAgent.getInstance(this);
+        im.init();*/
+        if(SysUtil.isMainProcess(this)){
+            OpenIMAgent im2 = OpenIMAgent.getInstance(this);
+            im2.init();
+        }
     }
 
     @Override

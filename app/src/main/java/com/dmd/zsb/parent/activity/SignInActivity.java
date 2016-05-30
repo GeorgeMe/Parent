@@ -211,14 +211,14 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
             @Override
             public void onSuccess(Object... arg0) {
                 saveIdPasswordToLocal(etMobile.getText().toString(), etPassword.getText().toString());
-
                 btnLogin.setClickable(true);
                 Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
                 YWLog.i(TAG, "login success!");
-                XmlDB.getInstance(mContext).saveKey("isLogin", true);
                 Bundle bundle=new Bundle();
                 bundle.putString(MainActivity.LOGIN_SUCCESS,"loginSuccess");
                 readyGo(MainActivity.class,bundle);
+                XmlDB.getInstance(mContext).saveKey("isLogin", true);
+                //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_SIGNIN));
                 finish();
 
             }
@@ -230,11 +230,11 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
 
             @Override
             public void onError(int errorCode, String errorMessage) {
-
+                hideLoading();
+                btnLogin.setClickable(true);
                 if (errorCode == YWLoginCode.LOGON_FAIL_INVALIDUSER) { //若用户不存在，则提示使用游客方式登陆
                    showTip(errorMessage);
                 } else {
-                    btnLogin.setClickable(true);
                     YWLog.w(TAG, "登录失败，错误码：" + errorCode + "  错误信息：" + errorMessage);
                     Notification.showToastMsg(mContext, errorMessage);
                 }
@@ -247,7 +247,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
         ToastView toast = new ToastView(this, msg);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
-
+        btnLogin.setClickable(true);
     }
     //=================================================open im========================================================
     private void init(String mobile, String appKey) {

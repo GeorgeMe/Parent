@@ -30,6 +30,7 @@ public class Constants {
 
     public static final int EVENT_RECOMMEND_COURSES_HOME = 100;
     public static final int EVENT_RECOMMEND_COURSES_SEEK = 101;
+    public static final int EVENT_RECOMMEND_COURSES_SIGNIN = 102;
 
     public static String imageName() {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");

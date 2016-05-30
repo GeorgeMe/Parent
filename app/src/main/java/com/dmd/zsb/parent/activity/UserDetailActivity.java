@@ -255,8 +255,10 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
         int totalHeight = 0;
         for (int i = 0; i < servicesListViewDataAdapter.getCount(); i++) {
             View listItem = servicesListViewDataAdapter.getView(i, null, serviceListView);
-            listItem.measure(0, 0);
-            totalHeight += listItem.getMeasuredHeight();
+            if (listItem!=null){
+                listItem.measure(0, 0);
+                totalHeight += listItem.getMeasuredHeight();
+            }
         }
 
         ViewGroup.LayoutParams params = serviceListView.getLayoutParams();

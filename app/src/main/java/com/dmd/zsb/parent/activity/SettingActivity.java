@@ -104,7 +104,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,Si
         ///settingPresenter=new SettingPresenterImpl(SettingActivity.this,this,this);
         topBarTitle.setText(getResources().getText(R.string.setting_title));
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
-            btnSignOut.setVisibility(View.VISIBLE);
+            btnSignOut.setVisibility(View.GONE);
         }else {
             btnSignOut.setVisibility(View.GONE);
         }
@@ -227,6 +227,7 @@ public class SettingActivity extends BaseActivity implements ChangeAvatarView,Si
 
     @Override
     public void onSuccess() {
+        showTip("退出成功");
         finish();
     }
 

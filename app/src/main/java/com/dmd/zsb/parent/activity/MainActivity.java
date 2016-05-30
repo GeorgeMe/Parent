@@ -8,7 +8,6 @@ import android.os.Looper;
 import android.support.v4.app.FragmentTabHost;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -101,7 +100,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
 
     @Override
     protected int getContentViewLayoutID() {
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+       // getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING);
         return R.layout.activity_main;
     }
     @Subscribe
@@ -113,6 +112,8 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
             SubjectsBean entity=(SubjectsBean) eventCenter.getData();
             //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_SEEK,entity.sub_id));
             XmlDB.getInstance(mContext).saveKey("subid",entity.sub_id);
+        }else if (eventCenter.getEventCode()== Constants.EVENT_RECOMMEND_COURSES_SIGNIN){
+
         }
     }
 
@@ -631,7 +632,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
 
             Intent intent = getIntent();
             if (intent != null && intent.getStringExtra(LOGIN_SUCCESS) != null){
-                tabhost.onTabChanged(TAB_MESSAGE);
+                tabhost.onTabChanged(TAB_HOME);
                 getIntent().removeExtra(LOGIN_SUCCESS);
             }
             YWLog.i(TAG, "onResume");

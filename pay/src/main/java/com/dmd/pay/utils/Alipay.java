@@ -1,24 +1,19 @@
 package com.dmd.pay.utils;
 
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
-
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
 import com.dmd.pay.entity.PayInfo;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
 
 /**
  * Created by Administrator on 2016/4/12.
@@ -50,7 +45,6 @@ public class Alipay {
             "8XLGWRZFFQHROpFxyM2UWxW381A83TwTaGMCICBY2aN/CE+bi7LiGuUq18usX+rc" +
             "7t9dfVRTpBvGZBUCcwIDAQAB";
 
-
     public static final int SDK_PAY_FLAG = 1;
 
     private Handler mHandler;
@@ -76,7 +70,8 @@ public class Alipay {
     public void pay(PayInfo payinfo) {
         // 订单
         DecimalFormat df = new DecimalFormat("0.00");
-        String orderInfo = getOrderInfo(payinfo.getName(), payinfo.getDesc()+ " ", df.format(payinfo.getPrice() * payinfo.getRate()));
+        this.orderNo=payinfo.getOrder_sn();
+        String orderInfo = getOrderInfo(payinfo.getOrder_sn(),payinfo.getName(), payinfo.getDesc()+ " ", df.format(payinfo.getPrice() * payinfo.getRate()));
         Log.e("Alipay",orderInfo);
         // 对订单做RSA 签名
         String sign = sign(orderInfo);
@@ -89,7 +84,7 @@ public class Alipay {
 
         // 完整的符合支付宝参数规范的订单信息
         final String payInfo = orderInfo + "&sign=\"" + sign + "\"&" + getSignType();
-
+        Log.e("Alipay",payInfo);
         Runnable payRunnable = new Runnable() {
 
             @Override
@@ -124,7 +119,7 @@ public class Alipay {
      * create the order info. 创建订单信息
      *
      */
-    public String getOrderInfo(String subject, String body, String price) {
+    public String getOrderInfo(String out_trade_no,String subject, String body, String price) {
         // 签约合作者身份ID
         String orderInfo = "partner=" + "\"" + PARTNER + "\"";
 
@@ -132,7 +127,7 @@ public class Alipay {
         orderInfo += "&seller_id=" + "\"" + SELLER + "\"";
 
         // 商户网站唯一订单号
-        orderInfo += "&out_trade_no=" + "\"" + getOutTradeNo() + "\"";
+        orderInfo += "&out_trade_no=" + "\"" + out_trade_no + "\"";
 
         // 商品名称
         orderInfo += "&subject=" + "\"" + subject + "\"";
@@ -173,23 +168,6 @@ public class Alipay {
         // orderInfo += "&paymethod=\"expressGateway\"";
 
         return orderInfo;
-    }
-
-    /**
-     * get the out_trade_no for an order. 生成商户订单号，该值在商户端应保持唯一（可自定义格式规范）
-     *
-     */
-    public String getOutTradeNo() {
-        SimpleDateFormat format = new SimpleDateFormat("MMddHHmmss", Locale.getDefault());
-        Date date = new Date();
-        String key = format.format(date);
-
-        Random r = new Random();
-        key = key + r.nextInt();
-        key = key.substring(0, 15);
-
-        this.orderNo = key;
-        return key;
     }
 
     /**

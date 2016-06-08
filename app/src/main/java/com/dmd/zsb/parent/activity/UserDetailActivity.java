@@ -466,8 +466,8 @@ public class UserDetailActivity extends BaseActivity implements UserDetailView, 
                     jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);//每页条数
                     jsonObject.put("page", 1);//页码
-                    jsonObject.put("user_id", user);//页码
-                    jsonObject.put("flag", "follow");//页码
+                    jsonObject.put("user_id", user);
+                    jsonObject.put("flag", "follow");
 
                 } catch (JSONException j) {
 

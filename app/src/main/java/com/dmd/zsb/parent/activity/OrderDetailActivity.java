@@ -10,11 +10,14 @@ import com.dmd.pay.entity.PayInfo;
 import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.netstatus.NetUtils;
+import com.dmd.tutor.utils.TLog;
 import com.dmd.zsb.mvp.view.ConfirmPayView;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
 import com.dmd.zsb.protocol.response.confirmpayResponse;
 import com.dmd.zsb.protocol.table.OrdersBean;
+
+import org.json.JSONException;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -55,6 +58,18 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     @Override
     protected void getBundleExtras(Bundle extras) {
         data = (OrdersBean) extras.getSerializable("data");
+        if (data!=null){
+            try {
+                TLog.enableLog();
+                TLog.e(TAG_LOG,data.toJson().toString());
+                TLog.disableLog();
+            }catch (JSONException j){
+
+            }
+
+        }
+
+
     }
 
     @Override
@@ -139,23 +154,6 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("payInfo", payInfo);
                 readyGoForResult(AliPayActivity.class, 110, bundle);
-
-/*
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.put("version", Constants.ZSBVERSION);
-                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    jsonObject.put("oid", data.oid);
-                } catch (JSONException j) {
-
-                }
-
-                confirmPayPresenter.onConfirmPay(jsonObject);
-
-*/
-
                 break;
         }
     }

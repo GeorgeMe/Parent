@@ -6,8 +6,10 @@ import com.dmd.zsb.mvp.interactor.impl.WithdrawalInterActorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.WithdrawalPresenter;
 import com.dmd.zsb.mvp.view.WithdrawalView;
+import com.dmd.zsb.protocol.request.withdrawalRequest;
 import com.dmd.zsb.protocol.response.withdrawalResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -45,6 +47,12 @@ public class WithdrawalPresenterImpl implements WithdrawalPresenter,BaseSingleLo
     @Override
     public void onWithdrawal(JSONObject jsonObject) {
         withdrawalView.showLoading(null);
-        withdrawalInterActor.getCommonSingleData(jsonObject);
+        withdrawalRequest request=new withdrawalRequest();
+        try {
+            request.fromJson(jsonObject);
+            withdrawalInterActor.getCommonSingleData(request.toJson());
+        }catch (JSONException j){
+
+        }
     }
 }

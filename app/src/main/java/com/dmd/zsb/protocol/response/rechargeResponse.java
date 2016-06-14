@@ -1,6 +1,6 @@
 package com.dmd.zsb.protocol.response;
 
-import com.dmd.zsb.protocol.table.UsersBean;
+import com.dmd.zsb.protocol.table.Recharge;
 import com.orm.SugarRecord;
 
 import org.json.JSONArray;
@@ -12,25 +12,20 @@ import java.io.Serializable;
 /**
  * Created by Administrator on 2016/5/4.
  */
-public class signupResponse extends SugarRecord implements Serializable {
+public class rechargeResponse extends SugarRecord implements Serializable {
 
-    public String   sid;
-    public String   uid;
     public int errno;
     public String msg;
-    public UsersBean user;
-
-    public signupResponse() {
+    public Recharge recharge;
+    public rechargeResponse() {
         super();
     }
 
-    public signupResponse(String sid, String uid, int errno, String msg, UsersBean user) {
+    public rechargeResponse(int errno, String msg,Recharge recharge) {
         super();
-        this.sid = sid;
-        this.uid = uid;
         this.errno = errno;
         this.msg = msg;
-        this.user = user;
+        this.recharge=recharge;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -40,25 +35,23 @@ public class signupResponse extends SugarRecord implements Serializable {
 
         JSONArray subItemArray;
 
-        this.sid = jsonObject.optString("sid");
-        this.uid = jsonObject.optString("uid");
         this.errno = jsonObject.optInt("errno");
         this.msg = jsonObject.optString("msg");
-        UsersBean user=new UsersBean();
-        user.fromJson(jsonObject.optJSONObject("user"));
-        this.user=user;
+        Recharge recharge=new Recharge();
+
+        recharge.fromJson(jsonObject.optJSONObject("recharge"));
+        this.recharge=recharge;
+
         return ;
     }
     public JSONObject  toJson() throws JSONException{
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
 
-        localItemObject.put("sid", sid);
-        localItemObject.put("uid", uid);
         localItemObject.put("errno", errno);
         localItemObject.put("msg", msg);
-        if (user!=null){
-            localItemObject.put("user",user.toJson());
+        if (recharge!=null){
+            localItemObject.put("recharge",recharge.toJson());
         }
         return localItemObject;
     }

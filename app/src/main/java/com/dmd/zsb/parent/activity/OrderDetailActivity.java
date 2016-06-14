@@ -1,5 +1,6 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -171,5 +172,16 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     public void showTip(String msg) {
         showToast(msg);
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==110){
+            if (resultCode==111) {
+                setResult(10001);
+                hideLoading();
+                finish();
+            }
+        }
 
+    }
 }

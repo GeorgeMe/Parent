@@ -91,7 +91,7 @@ public class LoginHelper {
      *
      * @param context
      */
-    public void initSDK_Sample(Application context) {
+    public void initOpenImSDK(Application context) {
         mApp = context;
         APP_KEY = OpenIMAgent.getInstance(context).getMessageBCAppkey();
 
@@ -144,8 +144,8 @@ public class LoginHelper {
      */
     //------------------请特别注意，OpenIMSDK会自动对所有输入的用户ID转成小写处理-------------------
     //所以开发者在注册用户信息时，尽量用小写
-    public void login_Sample(String userId, String password, String appKey,
-                             IWxCallback callback) {
+    public void login(String userId, String password, String appKey,
+                      IWxCallback callback) {
 
         if (mIMKit == null) {
             return;
@@ -253,7 +253,7 @@ public class LoginHelper {
     /**
      * 登出
      */
-    public void loginOut_Sample() {
+    public void loginOut() {
         if (mIMKit == null) {
             return;
         }

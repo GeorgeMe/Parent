@@ -1,5 +1,6 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -142,13 +143,13 @@ public class WalletActivity extends BaseActivity implements WalletView{
                 readyGo(TransactionDetailActivity.class,transaction);
                 break;
             case R.id.wallet_recharge:
-                readyGo(RechargeActivity.class);
+                readyGoForResult(RechargeActivity.class,100);
                 break;
             case R.id.wallet_withdrawals:
                 Bundle withdrawals=new Bundle();
                 withdrawals.putString("bank_card",bank_card);
                 withdrawals.putString("transfer_amount",balance);
-                readyGo(WithDrawalsActivity.class,withdrawals);
+                readyGoForResult(WithDrawalsActivity.class,101,withdrawals);
                 break;
             case R.id.wallet_bank_card:
                 Bundle bankCard=new Bundle();
@@ -157,4 +158,23 @@ public class WalletActivity extends BaseActivity implements WalletView{
                 break;
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100){
+            if (resultCode==10001) {
+                this.initViewsAndEvents();
+            }
+        }else if (requestCode==101){
+            if (resultCode==10002) {
+                if (data.getIntExtra("errno",-2)==0){
+                    showToast(data.getStringExtra("msg"));
+                }else {
+                    showToast(data.getStringExtra("msg"));
+                }
+                this.initViewsAndEvents();
+            }
+        }
+    }
+
 }

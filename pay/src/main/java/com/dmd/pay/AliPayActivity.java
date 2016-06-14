@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dmd.pay.R;
 import com.dmd.pay.entity.PayInfo;
 import com.dmd.pay.entity.PayResult;
 import com.dmd.pay.utils.Alipay;
@@ -60,7 +59,9 @@ public class AliPayActivity extends Activity {
                             Toast.makeText(AliPayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
                         }
                     }
-                    setResult(110);
+/*                    Intent data=new Intent();
+                    data.putExtra("resultStatus",resultStatus);*/
+                    setResult(111);
                     finish();
                     payInfo = null;
                     break;

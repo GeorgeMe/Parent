@@ -127,7 +127,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
 
 
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
-            LoginHelper.getInstance().initSDK_Sample(getBaseApplication());
+            LoginHelper.getInstance().initOpenImSDK(getBaseApplication());
             mIMKit = LoginHelper.getInstance().getIMKit();
             if (mIMKit == null) {
                 return;
@@ -617,7 +617,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
     protected void onResume() {
         super.onResume();
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
-            LoginHelper.getInstance().initSDK_Sample(getBaseApplication());
+            LoginHelper.getInstance().initOpenImSDK(getBaseApplication());
             if (LoginHelper.getInstance().getIMKit()==null){
                 return;
             }

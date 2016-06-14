@@ -1,6 +1,8 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -127,19 +129,28 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
                 finish();
                 break;
             case R.id.withdrawals:
-                JSONObject jsonObject=new JSONObject();
+                if (TextUtils.isEmpty(transferAmount.getText().toString())){
+                    showToast("请输入提现金额");
+                }else if (Double.parseDouble(transferAmount.getText().toString())<0){
+                    showToast("金额要小于零，不能提现");
+                }else if (Double.parseDouble(transferAmount.getText().toString())>Double.parseDouble(balance)){
+                    showToast("金额不足");
+                }else{
+                    JSONObject jsonObject=new JSONObject();
 
-                try {
-                    jsonObject.put("appkey", Constants.ZSBAPPKEY);
-                    jsonObject.put("version", Constants.ZSBVERSION);
-                    jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
-                    jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
-                    jsonObject.put("category", "余额转出");
-                    jsonObject.put("transfer_amount", balance);
-                }catch (JSONException j){
+                    try {
+                        jsonObject.put("appkey", Constants.ZSBAPPKEY);
+                        jsonObject.put("version", Constants.ZSBVERSION);
+                        jsonObject.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+                        jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+                        jsonObject.put("category", "余额转出");
+                        jsonObject.put("transfer_amount", transferAmount.getText().toString());
+                    }catch (JSONException j){
 
+                    }
+                    withdrawalPresenter.onWithdrawal(jsonObject);
                 }
-                withdrawalPresenter.onWithdrawal(jsonObject);
+
                 break;
             case R.id.tv_note:
                 //给个网页说明
@@ -153,10 +164,10 @@ public class WithDrawalsActivity extends BaseActivity implements WithdrawalView 
 
     @Override
     public void onWithdrawal(withdrawalResponse response) {
-        if(response.errno==0){
-            showToast(response.msg);
-        }else {
-            showToast(response.msg);
-        }
+        Intent intent=new Intent();
+        intent.putExtra("errno",response.errno);
+        intent.putExtra("msg",response.msg);
+        setResult(10002,intent);
+        finish();
     }
 }

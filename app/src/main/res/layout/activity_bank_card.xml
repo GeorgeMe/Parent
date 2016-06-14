@@ -98,7 +98,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="15dp"
-                android:background="@drawable/feed_item_bg"
+                android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -160,7 +160,7 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/ll_001"
-            android:background="@drawable/feed_item_bg"
+            android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"

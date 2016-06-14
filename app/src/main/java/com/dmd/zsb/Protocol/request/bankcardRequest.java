@@ -1,12 +1,9 @@
 package com.dmd.zsb.protocol.request;
 
-
 import com.orm.SugarRecord;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.Serializable;
 
 /**

@@ -1,6 +1,8 @@
 package com.dmd.zsb.parent.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.dmd.dialog.DialogAction;
+import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.adapter.ListViewDataAdapter;
 import com.dmd.tutor.adapter.ViewHolderBase;
 import com.dmd.tutor.adapter.ViewHolderCreator;
@@ -220,9 +224,22 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
     @Override
     public void navigateToOrderDetail(OrdersBean itemData) {
         if (itemData!=null){
-            Bundle bundle=new Bundle();
-            bundle.putSerializable("data",itemData);
-            readyGo(OrderDetailActivity.class,bundle);
+            if (itemData.order_status==2){
+                Bundle bundle=new Bundle();
+                bundle.putSerializable("data",itemData);
+                readyGoForResult(OrderDetailActivity.class,100,bundle);
+            }else if (itemData.order_status==3){
+                new MaterialDialog.Builder(mContext)
+                        .content("该订单已经支付啦")
+                        .negativeText("确定")
+                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                }).show();
+            }
+
         }
     }
     @Override
@@ -362,6 +379,16 @@ public class OrderActivity extends BaseActivity implements OrderView, LoadMoreLi
                 }
                 orderPresenter.onOrder(Constants.EVENT_REFRESH_DATA, recent_completed);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100){
+            if (resultCode==10001) {
+                this.initViewsAndEvents();
+            }
         }
     }
 

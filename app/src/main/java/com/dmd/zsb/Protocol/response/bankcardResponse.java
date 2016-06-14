@@ -14,15 +14,16 @@ import java.io.Serializable;
 public class bankcardResponse extends SugarRecord implements Serializable {
     public int errno;
     public String msg;
-
+    public String   bank_card;
     public bankcardResponse() {
         super();
     }
 
-    public bankcardResponse(int errno, String msg) {
+    public bankcardResponse(int errno, String msg,String bank_card) {
         super();
         this.errno = errno;
         this.msg = msg;
+        this.bank_card = bank_card;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException {
@@ -34,6 +35,7 @@ public class bankcardResponse extends SugarRecord implements Serializable {
 
         this.errno = jsonObject.optInt("errno");
         this.msg = jsonObject.optString("msg");
+        this.bank_card = jsonObject.optString("bank_card");
 
 
         return ;
@@ -44,6 +46,7 @@ public class bankcardResponse extends SugarRecord implements Serializable {
 
         localItemObject.put("errno", errno);
         localItemObject.put("msg", msg);
+        localItemObject.put("bank_card", bank_card);
 
         return localItemObject;
     }

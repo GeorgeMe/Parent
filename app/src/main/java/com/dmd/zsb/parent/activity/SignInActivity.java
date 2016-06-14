@@ -206,7 +206,7 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     @Override
     public void navigateToHome() {
 
-        LoginHelper.getInstance().login_Sample(etMobile.getText().toString(), etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
+        LoginHelper.getInstance().login(etMobile.getText().toString(), etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
 
             @Override
             public void onSuccess(Object... arg0) {

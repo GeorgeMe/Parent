@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.MinekInteractorImpl;
+import com.dmd.zsb.mvp.interactor.MinekInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.MinePresenter;
 import com.dmd.zsb.mvp.view.MineView;

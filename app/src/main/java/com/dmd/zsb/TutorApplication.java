@@ -16,6 +16,8 @@ import com.dmd.zsb.utils.VolleyHelper;
 import com.orm.SugarApp;
 import com.umeng.openim.OpenIMAgent;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 /**
  * Created by George on 2015/12/6.
@@ -40,10 +42,12 @@ public class TutorApplication extends SugarApp {
         //定位信息
         LocationManager locationManager = new LocationManager(this);
         locationManager.refreshLocation();
-
+        TLog.e("Volley",getTime());
         //Volley初始化
         VolleyHelper.getInstance().init(this);
+        TLog.e("Volley",getTime());
 
+        TLog.e("OpenIMAgent",getTime());
         //todo Application.onCreate中，首先执行这部分代码，以下代码固定在此处，不要改动，这里return是为了退出Application.onCreate！！！
         if(mustRunFirstInsideApplicationOnCreate()){
             //todo 如果在":TCMSSevice"进程中，无需进行openIM和app业务的初始化，以节省内存
@@ -60,6 +64,7 @@ public class TutorApplication extends SugarApp {
             OpenIMAgent im2 = OpenIMAgent.getInstance(this);
             im2.init();
         }
+        TLog.e("OpenIMAgent",getTime());
     }
 
     @Override
@@ -96,5 +101,10 @@ public class TutorApplication extends SugarApp {
         TLog.d("UUID    ", uniqueId);
         return uniqueId;
     }
-
+    private String getTime(){
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+        Date date = new Date();
+        String time = format.format(date);
+        return time;
+    }
 }

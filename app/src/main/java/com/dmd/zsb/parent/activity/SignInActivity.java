@@ -33,6 +33,7 @@ import com.dmd.zsb.openim.NotificationInitHelper;
 import com.dmd.zsb.openim.UserProfileHelper;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.response.signinResponse;
 import com.dmd.zsb.widgets.ToastView;
 import com.squareup.otto.Subscribe;
 
@@ -204,23 +205,25 @@ public class SignInActivity extends BaseActivity implements SignInView, View.OnC
     }
 
     @Override
-    public void navigateToHome() {
+    public void navigateToHome(final signinResponse response) {
 
         LoginHelper.getInstance().login(etMobile.getText().toString(), etPassword.getText().toString(), getString(R.string.app_key), new IWxCallback() {
 
             @Override
             public void onSuccess(Object... arg0) {
-                saveIdPasswordToLocal(etMobile.getText().toString(), etPassword.getText().toString());
-                btnLogin.setClickable(true);
+
+                YWLog.i(TAG_LOG, "login success!");
+                hideLoading();
                 Toast.makeText(mContext, "登录成功",Toast.LENGTH_SHORT).show();
-                YWLog.i(TAG, "login success!");
+                btnLogin.setClickable(true);
+                saveIdPasswordToLocal(etMobile.getText().toString(), etPassword.getText().toString());
+                XmlDB.getInstance(mContext).saveKey("uid",response.uid);
+                XmlDB.getInstance(mContext).saveKey("sid",response.sid);
+                XmlDB.getInstance(mContext).saveKey("isLogin", true);
                 Bundle bundle=new Bundle();
                 bundle.putString(MainActivity.LOGIN_SUCCESS,"loginSuccess");
                 readyGo(MainActivity.class,bundle);
-                XmlDB.getInstance(mContext).saveKey("isLogin", true);
-                //BusHelper.post(new EventCenter(Constants.EVENT_RECOMMEND_COURSES_SIGNIN));
                 finish();
-
             }
 
             @Override

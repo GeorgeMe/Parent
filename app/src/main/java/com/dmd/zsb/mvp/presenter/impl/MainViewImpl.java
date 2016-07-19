@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.MainViewInteractorImpl;
+import com.dmd.zsb.mvp.interactor.MainViewInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.Presenter;
 import com.dmd.zsb.mvp.view.MainView;

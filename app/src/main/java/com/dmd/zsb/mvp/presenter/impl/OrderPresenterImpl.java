@@ -3,7 +3,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.OrderInteractorImpl;
+import com.dmd.zsb.mvp.interactor.OrderInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.OrderPresenter;
 import com.dmd.zsb.mvp.view.OrderView;

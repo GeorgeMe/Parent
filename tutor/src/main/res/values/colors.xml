@@ -5,7 +5,11 @@
     <color name="sr_window_background">#FFFEFEFE</color>
     <color name="search_layover_bg">#80000000</color>
     <color name="default_image_background">#FFDEDEDE</color>
-
+	
+    <color name="uncompleted_color">#A3E0D9</color>
+    <color name="uncompleted_text_color">#F8F8F8</color>
+	
+	
     <color name="alpha_05_white">#0DFFFFFF</color>
     <color name="alpha_10_white">#1AFFFFFF</color>
     <color name="alpha_15_white">#26FFFFFF</color>

@@ -214,5 +214,8 @@ public class UriHelper {
     public String confirmpay(JSONObject json){
         return urlToString(true,ApiConstants.Urls.API_ORDER_CONFIRMPAY,json);
     }
-
+    //完成订单
+    public String workdone(JSONObject json){
+        return urlToString(true,ApiConstants.Urls.API_ORDER_WORKDONE,json);
+    }
 }

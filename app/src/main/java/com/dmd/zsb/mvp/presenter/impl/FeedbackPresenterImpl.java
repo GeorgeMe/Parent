@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.FeedbackInteractorImpl;
+import com.dmd.zsb.mvp.interactor.FeedbackInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.FeedbackPresenter;
 import com.dmd.zsb.mvp.view.FeedbackView;

@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.NickNameInteractorImpl;
+import com.dmd.zsb.mvp.interactor.NickNameInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.NickNamePresenter;
 import com.dmd.zsb.mvp.view.NickNameView;

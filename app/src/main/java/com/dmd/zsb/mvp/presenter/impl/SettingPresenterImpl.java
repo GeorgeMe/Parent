@@ -3,7 +3,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.tutor.utils.OnUploadProcessListener;
-import com.dmd.zsb.mvp.interactor.impl.SettingInteracterImpl;
+import com.dmd.zsb.mvp.interactor.SettingInteracterImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SettingPresenter;
 import com.dmd.zsb.mvp.view.SettingView;

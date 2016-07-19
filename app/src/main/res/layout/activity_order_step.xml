@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.dmd.zsb.parent.activity.OrderStepActivity">
+
+    <include layout="@layout/top_view" />
+
+    <com.dmd.tutor.overscroll.OverScrollLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:background="@color/uncompleted_color"
+            android:layout_height="match_parent">
+                <com.dmd.tutor.stepview.VerticalStepView
+                    android:layout_gravity="center"
+                    android:id="@+id/step_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp"/>
+        </ScrollView>
+    </com.dmd.tutor.overscroll.OverScrollLayout>
+
+
+</LinearLayout>

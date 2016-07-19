@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.SeekInteractorImpl;
+import com.dmd.zsb.mvp.interactor.SeekInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.SeekPresenter;
 import com.dmd.zsb.mvp.view.SeekView;

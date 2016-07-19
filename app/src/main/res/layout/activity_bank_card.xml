@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:gravity="center_horizontal"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -153,34 +153,77 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/rl_change_card"
-        android:layout_margin="20dp"
+        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/ll_001"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="已绑定卡号：" />
-            <TextView
-                android:id="@+id/bound_card"
-                android:layout_width="wrap_content"
+                android:background="@color/white"
+                android:weightSum="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="@dimen/big_small_text"
+                    android:text="持卡人：" />
+                <TextView
+                    android:id="@+id/tv_cardholder"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textSize="@dimen/big_small_text"
+                    android:text="龙邦" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="622844824568721"/>
+                android:background="@color/white"
+                android:weightSum="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textSize="@dimen/big_small_text"
+                    android:text="银行卡号：" />
+                <TextView
+                    android:id="@+id/tv_bank_card"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.7"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:textSize="@dimen/big_small_text"
+                    android:text="622844824568721" />
+            </LinearLayout>
+
         </LinearLayout>
+
         <Button
             android:layout_below="@+id/ll_001"
             android:id="@+id/change_bank_card"
             android:layout_width="fill_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="30dp"
+            android:layout_margin="20dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/c1_apply_btn_select"
             android:text="修改银行卡"

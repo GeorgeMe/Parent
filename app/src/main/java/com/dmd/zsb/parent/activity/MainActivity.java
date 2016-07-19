@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.FragmentTabHost;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TabHost;
@@ -48,6 +49,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class MainActivity extends BaseActivity implements MainView,TabHost.OnTabChangeListener {
+
     private final static String TAG=MainActivity.TAG_LOG;
     @Bind(android.R.id.tabhost)
     FragmentTabHost tabhost;
@@ -125,6 +127,7 @@ public class MainActivity extends BaseActivity implements MainView,TabHost.OnTab
     @Override
     protected void initViewsAndEvents() {
 
+        Log.e(TAG_LOG,""+XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false));
 
         if (XmlDB.getInstance(mContext).getKeyBooleanValue("isLogin",false)){
             LoginHelper.getInstance().initOpenImSDK(getBaseApplication());

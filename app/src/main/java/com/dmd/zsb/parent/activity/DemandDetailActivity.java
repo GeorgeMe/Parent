@@ -7,12 +7,14 @@ import com.dmd.tutor.eventbus.EventCenter;
 import com.dmd.tutor.netstatus.NetUtils;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
+import com.dmd.zsb.protocol.table.DemandsBean;
 
 public class DemandDetailActivity extends BaseActivity {
+    private DemandsBean demand;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
-
+        demand=(DemandsBean)extras.getSerializable("demand");
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.content.Context;
 import com.dmd.tutor.lbs.LocationManager;
 import com.dmd.tutor.utils.XmlDB;
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.SignInInteractorImpl;
+import com.dmd.zsb.mvp.interactor.SignInInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignInPresenter;
 import com.dmd.zsb.mvp.view.SignInView;
@@ -32,9 +32,7 @@ public class SignInPresenterImpl implements SignInPresenter,BaseSingleLoadedList
     public void onSuccess(signinResponse response) {
         signInView.hideLoading();
         if (response.errno==0){
-            XmlDB.getInstance(mContext).saveKey("uid",response.uid);
-            XmlDB.getInstance(mContext).saveKey("sid",response.sid);
-            signInView.navigateToHome();
+            signInView.navigateToHome(response);
         }else {
             onError("登录失败");
         }

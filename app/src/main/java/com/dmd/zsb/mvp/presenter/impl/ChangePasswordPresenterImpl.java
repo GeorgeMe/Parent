@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.ChangePasswordInteractorImpl;
+import com.dmd.zsb.mvp.interactor.ChangePasswordInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.ChangePasswordPresenter;
 import com.dmd.zsb.mvp.view.ChangePasswordView;

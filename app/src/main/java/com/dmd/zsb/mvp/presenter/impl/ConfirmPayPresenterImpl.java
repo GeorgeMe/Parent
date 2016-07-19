@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.ConfirmPayInteractorImpl;
+import com.dmd.zsb.mvp.interactor.ConfirmPayInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.ConfirmPayPresenter;
 import com.dmd.zsb.mvp.view.ConfirmPayView;

@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.WithdrawalInterActorImpl;
+import com.dmd.zsb.mvp.interactor.WithdrawalInterActorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.WithdrawalPresenter;
 import com.dmd.zsb.mvp.view.WithdrawalView;

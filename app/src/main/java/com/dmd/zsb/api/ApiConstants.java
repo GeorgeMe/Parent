@@ -49,7 +49,7 @@ public class ApiConstants {
         public static final String API_ORDER_CANCEL = "p_order_cancel.action?";//取消订单
         public static final String API_ORDER_PAY = "p_order_pay.action?";//支付订单
         public static final String API_ORDER_CONFIRMPAY = "p_order_confirmpay.action?";//确认支付
-
+        public static final String API_ORDER_WORKDONE = "t_order_workdone.action?";//完成订单
     }
 
     public static final class Integers {

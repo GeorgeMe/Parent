@@ -21,6 +21,7 @@ import com.dmd.zsb.protocol.table.OrdersBean;
 import org.json.JSONException;
 
 import butterknife.Bind;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OrderDetailActivity extends BaseActivity implements ConfirmPayView {
@@ -51,6 +52,8 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     TextView tvDistance;
     @Bind(R.id.tv_order_status)
     TextView tvOrderStatus;
+    @Bind(R.id.show_order_status)
+    TextView showOrderStatus;
 
 
     private OrdersBean data;
@@ -59,12 +62,12 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     @Override
     protected void getBundleExtras(Bundle extras) {
         data = (OrdersBean) extras.getSerializable("data");
-        if (data!=null){
+        if (data != null) {
             try {
                 TLog.enableLog();
-                TLog.e(TAG_LOG,data.toJson().toString());
+                TLog.e(TAG_LOG, data.toJson().toString());
                 TLog.disableLog();
-            }catch (JSONException j){
+            } catch (JSONException j) {
 
             }
 
@@ -90,7 +93,7 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
 
     @Override
     protected void initViewsAndEvents() {
-       // confirmPayPresenter = new ConfirmPayPresenterImpl(mContext, this);
+        // confirmPayPresenter = new ConfirmPayPresenterImpl(mContext, this);
         tvOid.setText(data.oid);
         tvCreatedAt.setText(data.created_at);
         tvAppointmentTime.setText(data.appointment_time);
@@ -100,11 +103,12 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
         tvOfferPrice.setText(data.offer_price);
         tvReceiverId.setText(data.receiver_id);
         tvDistance.setText(LocationManager.getDistance(Double.parseDouble(data.lat), Double.parseDouble(data.lon)));
-        if (data.order_status==2) {
+        if (data.order_status == 2) {
             tvOrderStatus.setText("未付款");
-        } else if (data.order_status==3) {
+        } else if (data.order_status == 3) {
             tvOrderStatus.setText("已付款");
         }
+
     }
 
     @Override
@@ -172,16 +176,31 @@ public class OrderDetailActivity extends BaseActivity implements ConfirmPayView 
     public void showTip(String msg) {
         showToast(msg);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==110){
-            if (resultCode==111) {
+        if (requestCode == 110) {
+            if (resultCode == 111) {
                 setResult(10001);
                 hideLoading();
                 finish();
             }
         }
 
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
+
+    @OnClick(R.id.show_order_status)
+    public void onClick() {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("order_status", data.order_status);
+        readyGo(OrderStepActivity.class);
     }
 }

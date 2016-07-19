@@ -4,8 +4,7 @@ import android.content.Context;
 import android.view.animation.Animation;
 
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.mvp.interactor.SplashInteractor;
-import com.dmd.zsb.mvp.interactor.impl.SplashInteractorImpl;
+import com.dmd.zsb.mvp.interactor.SplashInteractorImpl;
 import com.dmd.zsb.mvp.presenter.Presenter;
 import com.dmd.zsb.mvp.view.SplashView;
 
@@ -14,7 +13,7 @@ public class SplashPresenterImpl implements Presenter{
 
     private Context mContext = null;
     private SplashView mSplashView = null;
-    private SplashInteractor mSplashInteractor = null;
+    private SplashInteractorImpl mSplashInteractor = null;
 
 
     public SplashPresenterImpl(Context context, SplashView splashView) {

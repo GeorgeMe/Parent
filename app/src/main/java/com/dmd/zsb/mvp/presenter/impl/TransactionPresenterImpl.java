@@ -3,7 +3,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.TransactionInteractorImpl;
+import com.dmd.zsb.mvp.interactor.TransactionInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.TransactionPresenter;
 import com.dmd.zsb.mvp.view.TransactionView;

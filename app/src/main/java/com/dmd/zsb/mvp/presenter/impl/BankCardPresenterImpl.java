@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.BankCardInteractorImpl;
+import com.dmd.zsb.mvp.interactor.BankCardInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.BankCardPresenter;
 import com.dmd.zsb.mvp.view.BankCardView;

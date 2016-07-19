@@ -46,7 +46,7 @@ public class BankCardActivity extends BaseActivity implements BankCardView {
     Button saveBankCard;
     @Bind(R.id.rl_add_card)
     RelativeLayout rlAddCard;
-    @Bind(R.id.bound_card)
+    @Bind(R.id.tv_bank_card)
     TextView boundCard;
     @Bind(R.id.change_bank_card)
     Button changeBankCard;

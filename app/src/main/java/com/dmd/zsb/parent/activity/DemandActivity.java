@@ -1,16 +1,17 @@
 package com.dmd.zsb.parent.activity;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.dmd.dialog.DialogAction;
+import com.dmd.dialog.MaterialDialog;
 import com.dmd.tutor.adapter.ListViewDataAdapter;
 import com.dmd.tutor.adapter.ViewHolderBase;
 import com.dmd.tutor.adapter.ViewHolderCreator;
@@ -21,15 +22,16 @@ import com.dmd.tutor.widgets.XSwipeRefreshLayout;
 import com.dmd.zsb.api.ApiConstants;
 import com.dmd.zsb.common.Constants;
 import com.dmd.zsb.mvp.presenter.impl.DemandPresenterImpl;
+import com.dmd.zsb.mvp.presenter.impl.WorkDonePresenterImpl;
 import com.dmd.zsb.mvp.view.DemandView;
+import com.dmd.zsb.protocol.response.demandResponse;
+import com.dmd.zsb.protocol.response.workdoneResponse;
+import com.dmd.zsb.protocol.table.DemandsBean;
 import com.dmd.zsb.parent.R;
 import com.dmd.zsb.parent.activity.base.BaseActivity;
-import com.dmd.zsb.protocol.response.demandResponse;
-import com.dmd.zsb.protocol.table.DemandsBean;
 import com.dmd.zsb.utils.UriHelper;
 import com.dmd.zsb.widgets.LoadMoreListView;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,8 +60,10 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
     TextView topBarBack;
 
     private DemandPresenterImpl demandPresenter;
+    private WorkDonePresenterImpl workDonePresenter;
     private ListViewDataAdapter<DemandsBean> mListViewAdapter;
     private int page = 1;
+    private int order_status = 0;
 
     @Override
     protected void getBundleExtras(Bundle extras) {
@@ -101,11 +105,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                             jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                             jsonObject.put("page", page);
                             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                            if (demandLevyConcentration.isChecked()) {
-                                jsonObject.put("order_status", 0);
-                            } else if (demandToBeCompleted.isChecked()) {
-                                jsonObject.put("order_status", 1);
-                            }
+                            jsonObject.put("sort", 0);
+                            jsonObject.put("order_status", order_status);
                         }catch (JSONException j){
 
                         }
@@ -126,11 +127,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                         jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                         jsonObject.put("page", page);
                         jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                        if (demandLevyConcentration.isChecked()) {
-                            jsonObject.put("order_status", 0);
-                        } else if (demandToBeCompleted.isChecked()) {
-                            jsonObject.put("order_status", 1);
-                        }
+                        jsonObject.put("sort", 0);
+                        jsonObject.put("order_status", order_status);
                     }catch (JSONException j){
 
                     }
@@ -141,86 +139,64 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
         }
 
         mListViewAdapter = new ListViewDataAdapter<DemandsBean>(new ViewHolderCreator<DemandsBean>() {
+
             @Override
             public ViewHolderBase<DemandsBean> createViewHolder(int position) {
                 return new ViewHolderBase<DemandsBean>() {
-
-                    ImageView img_header;
-                    TextView tv_zjz, tv_name, tv_type, tv_sex, tv_sex2, tv_type2, tv_appointed_time, tv_charging, tv_curriculum, tv_address, tv_place, tv_state, tv_mode, tv_praise;
-                    LinearLayout l_zjz, l_zjh, l_zjz_p, l_zjh_m, l_zjh_s;
+                    TextView tv_oid,
+                            tv_pid,
+                            tv_location,
+                            tv_offer_price,
+                            tv_appointment_time,
+                            tv_text,
+                            tv_order_status,
+                            tv_subid;
 
                     @Override
                     public View createView(LayoutInflater layoutInflater) {
-                        View view = layoutInflater.inflate(R.layout.demand_list_item, null);
-                        tv_zjz = ButterKnife.findById(view, R.id.tv_zjz);
-                        l_zjz = ButterKnife.findById(view, R.id.l_zjz);
-                        l_zjz_p = ButterKnife.findById(view, R.id.l_zjz_p);
-                        l_zjh_m = ButterKnife.findById(view, R.id.l_zjh_m);
-                        l_zjh_s = ButterKnife.findById(view, R.id.l_zjh_s);
-                        l_zjh = ButterKnife.findById(view, R.id.l_zjh);
-                        tv_praise = ButterKnife.findById(view, R.id.tv_praise);
-                        img_header = ButterKnife.findById(view, R.id.img_header);
-                        tv_name = ButterKnife.findById(view, R.id.tv_name);
-                        tv_mode = ButterKnife.findById(view, R.id.tv_mode);
-                        tv_state = ButterKnife.findById(view, R.id.tv_state);
-                        tv_type = ButterKnife.findById(view, R.id.tv_type);
-                        tv_sex = ButterKnife.findById(view, R.id.tv_sex);
-                        tv_type2 = ButterKnife.findById(view, R.id.tv_type2);
-                        tv_sex2 = ButterKnife.findById(view, R.id.tv_sex2);
-                        tv_appointed_time = ButterKnife.findById(view, R.id.tv_appointed_time);
-                        tv_charging = ButterKnife.findById(view, R.id.tv_charging);
-                        tv_curriculum = ButterKnife.findById(view, R.id.tv_curriculum);
-                        tv_address = ButterKnife.findById(view, R.id.tv_address);
-                        tv_place = ButterKnife.findById(view, R.id.tv_place);
+                        View view = layoutInflater.inflate(R.layout.tutor_demand_list_item, null);
+                        tv_oid = ButterKnife.findById(view, R.id.tv_oid);
+                        tv_pid = ButterKnife.findById(view, R.id.tv_pid);
+                        tv_location = ButterKnife.findById(view, R.id.tv_location);
+                        tv_offer_price = ButterKnife.findById(view, R.id.tv_offer_price);
+                        tv_appointment_time = ButterKnife.findById(view, R.id.tv_appointment_time);
+                        tv_text = ButterKnife.findById(view, R.id.tv_text);
+                        tv_order_status = ButterKnife.findById(view, R.id.tv_order_status);
+                        tv_subid = ButterKnife.findById(view, R.id.tv_subid);
                         return view;
                     }
 
                     @Override
                     public void showData(int position, DemandsBean itemData) {
-                        if (demandLevyConcentration.isChecked()) {
-                            tv_zjz.setVisibility(View.VISIBLE);
-                            img_header.setVisibility(View.GONE);
-                            l_zjh.setVisibility(View.GONE);
-                            l_zjz_p.setVisibility(View.VISIBLE);
-                            l_zjh_m.setVisibility(View.GONE);
-                            l_zjh_s.setVisibility(View.GONE);
-                            l_zjz.setVisibility(View.VISIBLE);
+                        tv_oid.setText(itemData.oid);
+                        tv_pid.setText(itemData.pid);
+                        tv_location.setText(itemData.location);
+                        tv_offer_price.setText(itemData.offer_price);
+                        tv_appointment_time.setText(itemData.appointment_time);
+                        tv_text.setText(itemData.text);
 
-                            tv_type.setText(itemData.type);
-                            tv_sex.setText(itemData.sex);
-                            tv_praise.setText(itemData.praise);
-
-                        } else if (demandToBeCompleted.isChecked()) {
-                            tv_zjz.setVisibility(View.GONE);
-                            img_header.setVisibility(View.VISIBLE);
-                            l_zjh.setVisibility(View.VISIBLE);
-                            l_zjz.setVisibility(View.GONE);
-                            l_zjz_p.setVisibility(View.GONE);
-                            l_zjh_m.setVisibility(View.VISIBLE);
-                            l_zjh_s.setVisibility(View.GONE);
-
-                            Picasso.with(mContext).load(itemData.img_header).into(img_header);
-                            tv_type2.setText(itemData.type);
-                            tv_sex2.setText(itemData.sex);
-                            tv_name.setText(itemData.name);
-                            if (itemData.mode.equals("1")) {
-                                tv_mode.setText("一对一");
-                            } else if (itemData.mode.equals("2")) {
-                                tv_mode.setText("一对多");
-                            }
-
+                        if (itemData.order_status==0){
+                            tv_order_status.setText("征集中");
+                        }else if (itemData.order_status==1){
+                            tv_order_status.setText("已接单");
+                        }else if (itemData.order_status==2){
+                            tv_order_status.setText("");
+                        }else if (itemData.order_status==3){
+                            tv_order_status.setText("");
+                        }else if (itemData.order_status==4){
+                            tv_order_status.setText("");
+                        }else if (itemData.order_status==5){
+                            tv_order_status.setText("");
+                        }else if (itemData.order_status==6){
+                            tv_order_status.setText("");
                         }
-
-                        tv_appointed_time.setText(itemData.appointed_time);
-                        tv_charging.setText(itemData.charging);
-                        tv_curriculum.setText(itemData.curriculum);
-                        tv_address.setText(itemData.address);
-                        tv_place.setText(itemData.place);
-
+                        tv_subid.setText(itemData.subid);
+                        //teacher_distance.setText(LocationManager.getDistance(Double.parseDouble(itemData.lat), Double.parseDouble(itemData.lon)));
                     }
                 };
             }
         });
+        demandLevyConcentration.setChecked(true);
         fragmentDemandListView.setAdapter(mListViewAdapter);
         fragmentDemandListView.setOnLoadMoreListener(this);
         fragmentDemandListView.setOnItemClickListener(this);
@@ -232,7 +208,7 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 getResources().getColor(R.color.gplus_color_4));
         fragmentDemandListSwipeLayout.setOnRefreshListener(this);
 
-        demandLevyConcentration.setChecked(true);
+
     }
 
     @Override
@@ -247,14 +223,59 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
 
     @Override
     public void navigateToDemandDetail(int position, DemandsBean itemData) {
-        if (itemData!=null)
-        showToast("我们"+itemData.appointed_time);
+        if (itemData != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("demand", itemData);
+            readyGo(DemandDetailActivity.class, bundle);
+        }
     }
+    private void workdonepush(DemandsBean demandsBean) {
+        JSONObject workdone = new JSONObject();
+        try {
+            workdone.put("appkey", Constants.ZSBAPPKEY);
+            workdone.put("version", Constants.ZSBVERSION);
+            workdone.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
+            workdone.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
+            workdone.put("oid", demandsBean.oid);
+            workdone.put("order_status", demandsBean.order_status);
+        } catch (JSONException j) {
 
+        }
+        workDonePresenter=new WorkDonePresenterImpl(mContext,this);
+        workDonePresenter.onWorkDone(workdone);
+    }
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        DemandsBean demandsBean = (DemandsBean) parent.getAdapter().getItem(position);
-        navigateToDemandDetail(position, demandsBean);
+        final DemandsBean demandsBean = (DemandsBean) parent.getAdapter().getItem(position);
+        if (demandToBeCompleted.isChecked()){
+            if (demandsBean.order_status==9){//1
+                new MaterialDialog.Builder(mContext).content("确定授课完成了吗？").positiveText("确定").negativeText("取消").onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        dialog.dismiss();
+                    }
+                }).onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //提交的参数封装
+                        workdonepush(demandsBean);
+                        dialog.dismiss();
+                    }
+
+
+                }).show();
+            }else{
+                //showToast("数据错误");
+            }
+
+        }else if (demandLevyConcentration.isChecked()){
+            if (demandsBean.order_status==9){//0
+                navigateToDemandDetail(position,demandsBean);
+            }else{
+                //showToast("数据错误");
+            }
+        }
+
     }
 
     @Override
@@ -306,11 +327,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
             jsonObject.put("page", page);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-            if (demandLevyConcentration.isChecked()) {
-                jsonObject.put("order_status", 0);
-            } else if (demandToBeCompleted.isChecked()) {
-                jsonObject.put("order_status", 1);
-            }
+            jsonObject.put("sort", 0);
+            jsonObject.put("order_status", order_status);
         }catch (JSONException j){
 
         }
@@ -328,11 +346,8 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
             jsonObject.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
             jsonObject.put("page", 1);
             jsonObject.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-            if (demandLevyConcentration.isChecked()) {
-                jsonObject.put("order_status", 0);
-            } else if (demandToBeCompleted.isChecked()) {
-                jsonObject.put("order_status", 1);
-            }
+            jsonObject.put("sort", 0);
+            jsonObject.put("order_status", order_status);
         }catch (JSONException j){
 
         }
@@ -371,13 +386,15 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 mListViewAdapter.notifyDataSetChanged();
                 JSONObject demand_levy_concentration=new JSONObject();
                 try {
+                    order_status=0;
                     demand_levy_concentration.put("appkey", Constants.ZSBAPPKEY);
                     demand_levy_concentration.put("version", Constants.ZSBVERSION);
                     demand_levy_concentration.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     demand_levy_concentration.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     demand_levy_concentration.put("page", 1);
                     demand_levy_concentration.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    demand_levy_concentration.put("order_status", 0);
+                    demand_levy_concentration.put("sort", 0);
+                    demand_levy_concentration.put("order_status", order_status);
                 }catch (JSONException j){
 
                 }
@@ -389,13 +406,15 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
                 mListViewAdapter.notifyDataSetChanged();
                 JSONObject demand_to_be_completed=new JSONObject();
                 try {
+                    order_status=1;
                     demand_to_be_completed.put("appkey", Constants.ZSBAPPKEY);
                     demand_to_be_completed.put("version", Constants.ZSBVERSION);
                     demand_to_be_completed.put("sid", XmlDB.getInstance(mContext).getKeyString("sid", "sid"));
                     demand_to_be_completed.put("uid", XmlDB.getInstance(mContext).getKeyString("uid", "uid"));
                     demand_to_be_completed.put("page", 1);
                     demand_to_be_completed.put("rows", ApiConstants.Integers.PAGE_LIMIT);
-                    demand_to_be_completed.put("order_status", 1);
+                    demand_to_be_completed.put("sort", 0);
+                    demand_to_be_completed.put("order_status", order_status);
                 }catch (JSONException j){
 
                 }
@@ -405,4 +424,12 @@ public class DemandActivity extends BaseActivity implements DemandView, LoadMore
         }
     }
 
+    @Override
+    public void workdone(workdoneResponse response) {
+        if (response.errno==0){
+            this.onRefresh();
+        }else {
+            showToast(response.msg);
+        }
+    }
 }

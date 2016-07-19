@@ -5,7 +5,7 @@ import android.content.Context;
 import com.alibaba.mobileim.IYWLoginService;
 import com.alibaba.mobileim.channel.event.IWxCallback;
 import com.dmd.tutor.utils.XmlDB;
-import com.dmd.zsb.mvp.interactor.impl.SignOutInteractorImpl;
+import com.dmd.zsb.mvp.interactor.SignOutInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.SignOutPresenter;
 import com.dmd.zsb.mvp.view.SignOutView;

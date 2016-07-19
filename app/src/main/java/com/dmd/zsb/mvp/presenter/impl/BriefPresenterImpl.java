@@ -2,7 +2,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 
 import android.content.Context;
 
-import com.dmd.zsb.mvp.interactor.impl.BriefInteractorImpl;
+import com.dmd.zsb.mvp.interactor.BriefInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseSingleLoadedListener;
 import com.dmd.zsb.mvp.presenter.BriefPresenter;
 import com.dmd.zsb.mvp.view.BriefView;

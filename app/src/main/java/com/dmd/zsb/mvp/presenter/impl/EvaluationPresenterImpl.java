@@ -3,7 +3,7 @@ package com.dmd.zsb.mvp.presenter.impl;
 import android.content.Context;
 
 import com.dmd.zsb.common.Constants;
-import com.dmd.zsb.mvp.interactor.impl.EvaluationInteractorImpl;
+import com.dmd.zsb.mvp.interactor.EvaluationInteractorImpl;
 import com.dmd.zsb.mvp.listeners.BaseMultiLoadedListener;
 import com.dmd.zsb.mvp.presenter.EvaluationPresenter;
 import com.dmd.zsb.mvp.view.EvaluationView;

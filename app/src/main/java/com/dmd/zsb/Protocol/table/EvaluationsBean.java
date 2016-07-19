@@ -13,31 +13,31 @@ import java.io.Serializable;
  */
 public class EvaluationsBean  extends SugarRecord implements Serializable {
 
-    public String img_header;//头像
-    public String name;//姓名
-    public String type;//职业类型
-    public String sex;//性别
-    public String appointed_time;//约定时间
-    public String charging;//计费
-    public String curriculum;//课程
-    public String note;//评论内容
-    public String comment_level;//评论等级
-
+    public String cid;
+    public String teacher;
+    public String parent;
+    public String appointed_time;
+    public String offer_price;
+    public String subject;
+    public String text;
+    public String content;
+    public String rank;
+    public String status;
     public EvaluationsBean() {
         super();
     }
 
-    public EvaluationsBean(String img_header, String name, String type, String sex, String appointed_time, String charging, String curriculum, String note, String comment_level) {
-        super();
-        this.img_header = img_header;
-        this.name = name;
-        this.type = type;
-        this.sex = sex;
+    public EvaluationsBean(String cid,String teacher, String parent, String appointed_time, String offer_price, String subject, String text, String content, String rank,String status) {
+        this.cid = cid;
+        this.teacher = teacher;
+        this.parent = parent;
         this.appointed_time = appointed_time;
-        this.charging = charging;
-        this.curriculum = curriculum;
-        this.note = note;
-        this.comment_level = comment_level;
+        this.offer_price = offer_price;
+        this.subject = subject;
+        this.text = text;
+        this.content = content;
+        this.rank = rank;
+        this.status = status;
     }
 
     public void  fromJson(JSONObject jsonObject)  throws JSONException
@@ -48,15 +48,16 @@ public class EvaluationsBean  extends SugarRecord implements Serializable {
 
         JSONArray subItemArray;
 
-        this.img_header = jsonObject.optString("img_header");
-        this.name = jsonObject.optString("name");
-        this.type = jsonObject.optString("type");
-        this.sex = jsonObject.optString("sex");
+        this.cid = jsonObject.optString("cid");
+        this.teacher = jsonObject.optString("teacher");
+        this.parent = jsonObject.optString("parent");
         this.appointed_time = jsonObject.optString("appointed_time");
-        this.charging = jsonObject.optString("charging");
-        this.curriculum = jsonObject.optString("curriculum");
-        this.note = jsonObject.optString("note");
-        this.comment_level = jsonObject.optString("comment_level");
+        this.offer_price = jsonObject.optString("offer_price");
+        this.subject = jsonObject.optString("subject");
+        this.text = jsonObject.optString("text");
+        this.content = jsonObject.optString("content");
+        this.rank = jsonObject.optString("rank");
+        this.status = jsonObject.optString("status");
         return ;
     }
 
@@ -64,14 +65,16 @@ public class EvaluationsBean  extends SugarRecord implements Serializable {
     {
         JSONObject localItemObject = new JSONObject();
         JSONArray itemJSONArray = new JSONArray();
-        localItemObject.put("img_header", img_header);
-        localItemObject.put("name", name);
-        localItemObject.put("sex", sex);
+        localItemObject.put("cid", cid);
+        localItemObject.put("teacher", teacher);
+        localItemObject.put("parent", parent);
         localItemObject.put("appointed_time", appointed_time);
-        localItemObject.put("charging", charging);
-        localItemObject.put("curriculum", curriculum);
-        localItemObject.put("note", note);
-        localItemObject.put("comment_level", comment_level);
+        localItemObject.put("offer_price", offer_price);
+        localItemObject.put("subject", subject);
+        localItemObject.put("text", text);
+        localItemObject.put("content", content);
+        localItemObject.put("rank", rank);
+        localItemObject.put("status", status);
         return localItemObject;
     }
 }
